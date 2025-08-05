@@ -670,6 +670,7 @@
     <div class="container">
         <div class="header">
             <h1>Project Ralph</h1>
+            <button onclick="forceRefreshFromCloud()" style="position: absolute; top: 20px; right: 20px; background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Force refresh from cloud">🔄 Refresh</button>
         </div>
 
         <!-- Project Status Overview -->
@@ -994,11 +995,23 @@
 
 
 
+        // Force refresh from cloud
+        async function forceRefreshFromCloud() {
+            console.log('Force refreshing from cloud...');
+            // Clear local cache
+            localStorage.removeItem('projectRalphData');
+            // Reload data from cloud
+            await loadDataFromCloud();
+            console.log('Force refresh complete');
+        }
+
         // Save data to both localStorage and cloud
         async function saveDataToCloud() {
             try {
                 // Update projectData with current values
                 updateProjectDataFromDOM();
+                
+                console.log('Saving data to cloud:', projectData);
                 
                 // Save to localStorage as backup
                 localStorage.setItem('projectRalphData', JSON.stringify(projectData));
@@ -1013,6 +1026,8 @@
                         url = `${JSONBIN_URL}/${JSONBIN_BIN_ID}`;
                         method = 'PUT';
                     }
+                    
+                    console.log('Saving to cloud URL:', url, 'Method:', method);
                     
                     const response = await fetch(url, {
                         method: method,
@@ -1035,6 +1050,8 @@
                     } else {
                         console.error('Failed to save to cloud:', response.statusText);
                     }
+                } else {
+                    console.log('Cloud saving skipped - missing API key');
                 }
             } catch (error) {
                 console.error('Error saving data:', error);
@@ -1049,6 +1066,7 @@
                 // Try to load from cloud first for latest data
                 if (JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY' && JSONBIN_BIN_ID) {
                     try {
+                        console.log('Loading from cloud...');
                         const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest`, {
                             headers: {
                                 'X-Master-Key': JSONBIN_API_KEY
@@ -1060,15 +1078,22 @@
                             const cloudData = result.record;
                             
                             if (cloudData) {
+                                console.log('Cloud data loaded:', cloudData);
                                 projectData = cloudData;
                                 applyProjectDataToDOM();
                                 localStorage.setItem('projectRalphData', JSON.stringify(cloudData));
                                 return; // Exit early since we got cloud data
+                            } else {
+                                console.log('No cloud data found');
                             }
+                        } else {
+                            console.log('Cloud response not OK:', response.status);
                         }
                     } catch (error) {
-                        // Silently fall back to localStorage
+                        console.log('Cloud load failed:', error);
                     }
+                } else {
+                    console.log('Cloud loading skipped - missing API key or bin ID');
                 }
                 
                 // Fallback to localStorage if cloud load failed
@@ -1078,9 +1103,12 @@
                         data = JSON.parse(localData);
                         projectData = data;
                         applyProjectDataToDOM();
+                        console.log('Loaded from localStorage');
                     } catch (error) {
                         console.error('Error parsing localStorage data:', error);
                     }
+                } else {
+                    console.log('No local data found');
                 }
                 
             } catch (error) {
