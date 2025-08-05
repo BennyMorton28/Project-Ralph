@@ -999,8 +999,27 @@
         // Force refresh from cloud
         async function forceRefreshFromCloud() {
             console.log('Force refreshing from cloud...');
-            // Clear local cache
+            // Clear ALL local cache
             localStorage.removeItem('projectRalphData');
+            localStorage.removeItem('projectRalphTodos');
+            localStorage.removeItem('projectRalphTierData');
+            localStorage.removeItem('projectRalphFeatures');
+            localStorage.removeItem('interactionProgress');
+            localStorage.removeItem('interactionCount');
+            localStorage.removeItem('dealershipProgress');
+            localStorage.removeItem('dealershipCount');
+            
+            // Clear browser cache for this page
+            if ('caches' in window) {
+                try {
+                    const cacheNames = await caches.keys();
+                    await Promise.all(cacheNames.map(name => caches.delete(name)));
+                    console.log('Browser cache cleared');
+                } catch (error) {
+                    console.log('Could not clear browser cache:', error);
+                }
+            }
+            
             // Reload data from cloud
             await loadDataFromCloud();
             console.log('Force refresh complete');
@@ -1012,20 +1031,34 @@
             
             // Check local data
             const localData = localStorage.getItem('projectRalphData');
-            console.log('Local data:', localData ? JSON.parse(localData) : 'null');
+            const localParsed = localData ? JSON.parse(localData) : null;
+            console.log('Local data:', localParsed);
+            console.log('Local lastUpdated:', localParsed ? localParsed.lastUpdated : 'N/A');
             
             // Check cloud data
             if (JSONBIN_BIN_ID) {
                 try {
-                    const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest`, {
+                    const cacheBuster = new Date().getTime();
+                    const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest?t=${cacheBuster}`, {
                         headers: {
-                            'X-Master-Key': JSONBIN_API_KEY
+                            'X-Master-Key': JSONBIN_API_KEY,
+                            'Cache-Control': 'no-cache'
                         }
                     });
                     
                     if (response.ok) {
                         const result = await response.json();
                         console.log('Cloud data:', result.record);
+                        console.log('Cloud lastUpdated:', result.record ? result.record.lastUpdated : 'N/A');
+                        
+                        // Compare timestamps
+                        if (localParsed && result.record) {
+                            const localTime = new Date(localParsed.lastUpdated);
+                            const cloudTime = new Date(result.record.lastUpdated);
+                            console.log('Local time:', localTime);
+                            console.log('Cloud time:', cloudTime);
+                            console.log('Is cloud newer?', cloudTime > localTime);
+                        }
                     } else {
                         console.log('Could not fetch cloud data');
                     }
@@ -1103,9 +1136,13 @@
                 if (JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY' && JSONBIN_BIN_ID) {
                     try {
                         console.log('Loading from cloud...');
-                        const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest`, {
+                        // Add cache-busting parameter to prevent browser caching
+                        const cacheBuster = new Date().getTime();
+                        const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest?t=${cacheBuster}`, {
                             headers: {
-                                'X-Master-Key': JSONBIN_API_KEY
+                                'X-Master-Key': JSONBIN_API_KEY,
+                                'Cache-Control': 'no-cache',
+                                'Pragma': 'no-cache'
                             }
                         });
                         
@@ -1121,6 +1158,7 @@
                                 projectData = cloudData;
                                 applyProjectDataToDOM();
                                 localStorage.setItem('projectRalphData', JSON.stringify(cloudData));
+                                console.log('Cloud data applied successfully');
                                 return; // Exit early since we got cloud data
                             } else {
                                 console.log('No cloud data found');
@@ -1135,14 +1173,15 @@
                     console.log('Cloud loading skipped - missing API key or bin ID');
                 }
                 
-                // Fallback to localStorage if cloud load failed
+                // Only fallback to localStorage if cloud load completely failed
+                console.log('Falling back to localStorage...');
                 const localData = localStorage.getItem('projectRalphData');
                 if (localData) {
                     try {
                         data = JSON.parse(localData);
                         projectData = data;
                         applyProjectDataToDOM();
-                        console.log('Loaded from localStorage');
+                        console.log('Loaded from localStorage (fallback)');
                     } catch (error) {
                         console.error('Error parsing localStorage data:', error);
                     }
