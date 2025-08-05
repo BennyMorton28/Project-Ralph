@@ -671,6 +671,7 @@
         <div class="header">
             <h1>Project Ralph</h1>
             <button onclick="forceRefreshFromCloud()" style="position: absolute; top: 20px; right: 20px; background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Force refresh from cloud">🔄 Refresh</button>
+            <button onclick="checkCloudVsLocal()" style="position: absolute; top: 20px; right: 120px; background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Check cloud vs local">🔍 Check</button>
         </div>
 
         <!-- Project Status Overview -->
@@ -1005,6 +1006,37 @@
             console.log('Force refresh complete');
         }
 
+        // Check current state vs cloud
+        async function checkCloudVsLocal() {
+            console.log('=== CHECKING CLOUD VS LOCAL ===');
+            
+            // Check local data
+            const localData = localStorage.getItem('projectRalphData');
+            console.log('Local data:', localData ? JSON.parse(localData) : 'null');
+            
+            // Check cloud data
+            if (JSONBIN_BIN_ID) {
+                try {
+                    const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest`, {
+                        headers: {
+                            'X-Master-Key': JSONBIN_API_KEY
+                        }
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        console.log('Cloud data:', result.record);
+                    } else {
+                        console.log('Could not fetch cloud data');
+                    }
+                } catch (error) {
+                    console.log('Error fetching cloud data:', error);
+                }
+            }
+            
+            console.log('=== END CHECK ===');
+        }
+
         // Save data to both localStorage and cloud
         async function saveDataToCloud() {
             try {
@@ -1063,6 +1095,10 @@
             try {
                 let data = null;
                 
+                console.log('=== LOADING DATA ===');
+                console.log('JSONBIN_BIN_ID:', JSONBIN_BIN_ID);
+                console.log('JSONBIN_API_KEY check:', JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY');
+                
                 // Try to load from cloud first for latest data
                 if (JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY' && JSONBIN_BIN_ID) {
                     try {
@@ -1073,12 +1109,15 @@
                             }
                         });
                         
+                        console.log('Cloud response status:', response.status);
+                        
                         if (response.ok) {
                             const result = await response.json();
                             const cloudData = result.record;
                             
                             if (cloudData) {
                                 console.log('Cloud data loaded:', cloudData);
+                                console.log('Todos in cloud data:', cloudData.todos);
                                 projectData = cloudData;
                                 applyProjectDataToDOM();
                                 localStorage.setItem('projectRalphData', JSON.stringify(cloudData));
@@ -1208,6 +1247,8 @@
             
             // Apply todos
             if (projectData.todos && projectData.todos.length > 0) {
+                console.log('Applying todos:', projectData.todos);
+                
                 // Clear existing todos
                 document.getElementById('daily-todo-list').innerHTML = '';
                 document.getElementById('weekly-todo-list').innerHTML = '';
@@ -1231,10 +1272,13 @@
                     const targetList = document.getElementById(`${todo.type || 'daily'}-todo-list`);
                     if (targetList) {
                         targetList.appendChild(li);
+                        console.log('Added todo to', todo.type, 'list:', todo.text);
                     }
                 });
                 
                 updateTodoStats();
+            } else {
+                console.log('No todos to apply or todos array is empty');
             }
             
             // Apply features
