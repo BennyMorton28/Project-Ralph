@@ -1,4 +1,4 @@
-# Project Ralph - Car Buying Assistant Dashboard
+# Project Ralph
 
 A comprehensive visual project tracker for your car buying assistant project targeting South Florida dealerships.
 
@@ -6,21 +6,45 @@ A comprehensive visual project tracker for your car buying assistant project tar
 
 1. **Local Use**: Simply open `index.html` in any modern web browser
 2. **Team Sharing**: Deploy to GitHub Pages (instructions below)
-3. **Real-time Updates**: Dashboard updates automatically every 5 seconds
+3. **One-Click Deployment**: Use the deployment script (see below)
 4. **Persistent Tasks**: Todo list saves automatically using browser storage
 
-## GitHub Pages Deployment
+## One-Click Deployment
 
-### Step 1: Create GitHub Repository
+### Using the Deployment Script
+
+**Mac/Linux:**
+```bash
+./deploy.sh
+```
+
+**Windows:**
+```cmd
+deploy.bat
+```
+
+**What the script does:**
+- ✅ Checks for changes to deploy
+- ✅ Prompts for commit message (or uses default)
+- ✅ Adds all files automatically
+- ✅ Commits changes with your message
+- ✅ Pushes to GitHub
+- ✅ Shows deployment status and next steps
+
+### Manual Deployment
+
+If you prefer manual deployment:
+
+**Step 1: Create GitHub Repository**
 1. Go to [GitHub](https://github.com) and create a new repository
-2. Name it something like `project-ralph-dashboard`
+2. Name it something like `Project-Ralph`
 3. Make it public (required for free GitHub Pages)
 
-### Step 2: Upload Files
+**Step 2: Upload Files**
 1. Upload `index.html` and `README.md` to your repository
 2. Or use GitHub Desktop/CLI to push your files
 
-### Step 3: Enable GitHub Pages
+**Step 3: Enable GitHub Pages**
 1. Go to your repository on GitHub
 2. Click **Settings** tab
 3. Scroll down to **Pages** section
@@ -28,8 +52,8 @@ A comprehensive visual project tracker for your car buying assistant project tar
 5. Choose **main** branch and **/(root)** folder
 6. Click **Save**
 
-### Step 4: Access Your Dashboard
-- Your dashboard will be available at: `https://yourusername.github.io/project-ralph-dashboard`
+**Step 4: Access Your Dashboard**
+- Your dashboard will be available at: `https://yourusername.github.io/Project-Ralph`
 - Share this URL with your team!
 
 ## Project Overview
