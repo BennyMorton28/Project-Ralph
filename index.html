@@ -202,6 +202,32 @@
             font-weight: 700;
             color: #0f172a;
             margin-bottom: 4px;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .metric-value:hover {
+            background: #f1f5f9;
+        }
+
+        .metric-value.editing {
+            background: white;
+            border: 2px solid #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .metric-input {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: #0f172a;
+            background: transparent;
+            border: none;
+            outline: none;
+            width: 100%;
+            text-align: center;
+            font-family: inherit;
         }
 
         .metric-label {
@@ -701,10 +727,10 @@
                 </div>
                 <div class="metrics-grid">
                     <div class="metric" onclick="editDealershipCount()">
-                        <div class="metric-value" id="dealership-count">200</div>
+                        <div class="metric-value" id="dealership-count" onclick="editDealershipCount(event)">200</div>
                         <div class="metric-label">Dealerships</div>
                     </div>
-                    <div class="metric" onclick="updateMetric('interactions')">
+                    <div class="metric">
                         <div class="metric-value" id="interaction-count">2,000</div>
                         <div class="metric-label">Interactions</div>
                     </div>
@@ -933,13 +959,17 @@
             const dealershipProgress = parseInt(localStorage.getItem('dealershipProgress') || '50');
             const interactionProgress = parseInt(localStorage.getItem('interactionProgress') || '500');
             
-            document.getElementById('dealership-progress').textContent = `${dealershipProgress}/200`;
-            document.getElementById('dealership-progress-bar').style.width = `${(dealershipProgress/200)*100}%`;
+            // Get target values from current display or localStorage
+            const dealershipTarget = parseInt(localStorage.getItem('dealershipCount') || '200');
+            const interactionTarget = parseInt(localStorage.getItem('interactionCount') || '2000');
             
-            document.getElementById('interaction-progress').textContent = `${interactionProgress}/2,000`;
-            document.getElementById('interaction-progress-bar').style.width = `${(interactionProgress/2000)*100}%`;
+            document.getElementById('dealership-progress').textContent = `${dealershipProgress}/${dealershipTarget}`;
+            document.getElementById('dealership-progress-bar').style.width = `${(dealershipProgress/dealershipTarget)*100}%`;
             
-            const overallProgress = Math.round(((dealershipProgress/200) + (interactionProgress/2000)) / 2 * 100);
+            document.getElementById('interaction-progress').textContent = `${interactionProgress}/${interactionTarget.toLocaleString()}`;
+            document.getElementById('interaction-progress-bar').style.width = `${(interactionProgress/interactionTarget)*100}%`;
+            
+            const overallProgress = Math.round(((dealershipProgress/dealershipTarget) + (interactionProgress/interactionTarget)) / 2 * 100);
             document.getElementById('overall-progress').textContent = `${overallProgress}%`;
             document.getElementById('overall-progress-bar').style.width = `${overallProgress}%`;
         }
@@ -978,6 +1008,65 @@
                 const current = parseInt(metricElement.textContent.replace(',', ''));
                 metricElement.textContent = (current + Math.floor(Math.random() * 50) + 10).toLocaleString();
             }
+        }
+
+        // Edit dealership count
+        function editDealershipCount(event) {
+            if (event) {
+                event.stopPropagation(); // Prevent triggering the parent onclick
+            }
+            
+            const dealershipElement = document.getElementById('dealership-count');
+            const currentValue = dealershipElement.textContent;
+            
+            // Convert to editing mode
+            dealershipElement.classList.add('editing');
+            dealershipElement.innerHTML = `<input type="number" class="metric-input" value="${currentValue}" onkeypress="handleDealershipKeyPress(event, this)" onblur="saveDealershipCount(this)" min="1" max="9999">`;
+            
+            // Focus and select all text
+            const input = dealershipElement.querySelector('.metric-input');
+            input.focus();
+            input.select();
+        }
+
+        function handleDealershipKeyPress(event, input) {
+            if (event.key === 'Enter') {
+                saveDealershipCount(input);
+            } else if (event.key === 'Escape') {
+                cancelDealershipEdit(input);
+            }
+        }
+
+        function saveDealershipCount(input) {
+            const newValue = parseInt(input.value);
+            const dealershipElement = document.getElementById('dealership-count');
+            
+            if (newValue && newValue > 0 && newValue <= 9999) {
+                // Save dealership count
+                dealershipElement.textContent = newValue;
+                dealershipElement.classList.remove('editing');
+                
+                // Update interactions (10x dealership count)
+                const interactionElement = document.getElementById('interaction-count');
+                interactionElement.textContent = (newValue * 10).toLocaleString();
+                
+                // Update progress calculations
+                updateProgress();
+                
+                // Save to localStorage
+                localStorage.setItem('dealershipCount', newValue.toString());
+                localStorage.setItem('interactionCount', (newValue * 10).toString());
+            } else {
+                // Invalid value, revert to original
+                cancelDealershipEdit(input);
+            }
+        }
+
+        function cancelDealershipEdit(input) {
+            const dealershipElement = document.getElementById('dealership-count');
+            const savedValue = localStorage.getItem('dealershipCount') || '200';
+            dealershipElement.textContent = savedValue;
+            dealershipElement.classList.remove('editing');
         }
 
         // Timeline interaction
@@ -1279,8 +1368,22 @@
             }
         }
 
+        // Load saved metric values
+        function loadSavedMetrics() {
+            const savedDealershipCount = localStorage.getItem('dealershipCount');
+            const savedInteractionCount = localStorage.getItem('interactionCount');
+            
+            if (savedDealershipCount) {
+                document.getElementById('dealership-count').textContent = savedDealershipCount;
+            }
+            if (savedInteractionCount) {
+                document.getElementById('interaction-count').textContent = parseInt(savedInteractionCount).toLocaleString();
+            }
+        }
+
         // Initialize everything
         updateDateDisplay();
+        loadSavedMetrics(); // Load saved metric values
         updateProgress();
         updateTodoStats();
         loadTodos(); // Load todos from localStorage on page load
