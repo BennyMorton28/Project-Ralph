@@ -670,8 +670,6 @@
     <div class="container">
         <div class="header">
             <h1>Project Ralph</h1>
-            <button onclick="forceRefreshFromCloud()" style="position: absolute; top: 20px; right: 20px; background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Force refresh from cloud">🔄 Refresh</button>
-            <button onclick="checkCloudVsLocal()" style="position: absolute; top: 20px; right: 120px; background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Check cloud vs local">🔍 Check</button>
         </div>
 
         <!-- Project Status Overview -->
@@ -844,35 +842,35 @@
                     <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1rem; font-weight: 600;">Tier Descriptions</h4>
                     <div class="description-grid" style="display: grid; gap: 16px;">
                         <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
-                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Order of the Coif</strong>
                             </div>
-                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">Highest tier for dealers with exceptional transparency and customer service. These dealers consistently provide honest pricing, clear communication, and go above and beyond for their customers.</textarea>
+                            <div class="description-text" onclick="editTierDescription(this)" style="font-size: 0.875rem; line-height: 1.5; color: #64748b; cursor: pointer; padding: 8px; border-radius: 4px; transition: background 0.2s ease; min-height: 60px; display: flex; align-items: center;">Highest tier for dealers with exceptional transparency and customer service. These dealers consistently provide honest pricing, clear communication, and go above and beyond for their customers.</div>
                         </div>
                         
                         <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
-                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Dean's List</strong>
                             </div>
-                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">High-performing dealers with good transparency practices. These dealers generally provide fair pricing and good customer service with minimal issues.</textarea>
+                            <div class="description-text" onclick="editTierDescription(this)" style="font-size: 0.875rem; line-height: 1.5; color: #64748b; cursor: pointer; padding: 8px; border-radius: 4px; transition: background 0.2s ease; min-height: 60px; display: flex; align-items: center;">High-performing dealers with good transparency practices. These dealers generally provide fair pricing and good customer service with minimal issues.</div>
                         </div>
                         
                         <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
-                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #2563eb); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Honor Roll</strong>
                             </div>
-                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">Average dealers with acceptable business practices. These dealers meet basic standards but may have occasional issues with transparency or customer service.</textarea>
+                            <div class="description-text" onclick="editTierDescription(this)" style="font-size: 0.875rem; line-height: 1.5; color: #64748b; cursor: pointer; padding: 8px; border-radius: 4px; transition: background 0.2s ease; min-height: 60px; display: flex; align-items: center;">Average dealers with acceptable business practices. These dealers meet basic standards but may have occasional issues with transparency or customer service.</div>
                         </div>
                         
                         <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
-                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                            <div style="display: flex; align-items: center; margin-bottom: 12px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #ef4444, #dc2626); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Detention</strong>
                             </div>
-                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">Dealers with poor transparency practices or customer service issues. These dealers may engage in deceptive practices, hidden fees, or provide poor customer experiences.</textarea>
+                            <div class="description-text" onclick="editTierDescription(this)" style="font-size: 0.875rem; line-height: 1.5; color: #64748b; cursor: pointer; padding: 8px; border-radius: 4px; transition: background 0.2s ease; min-height: 60px; display: flex; align-items: center;">Dealers with poor transparency practices or customer service issues. These dealers may engage in deceptive practices, hidden fees, or provide poor customer experiences.</div>
                         </div>
                     </div>
                 </div>
@@ -1133,6 +1131,16 @@
                 console.log('JSONBIN_BIN_ID:', JSONBIN_BIN_ID);
                 console.log('JSONBIN_API_KEY check:', JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY');
                 
+                // Clear old localStorage data first to prevent flash of old data
+                localStorage.removeItem('projectRalphData');
+                localStorage.removeItem('projectRalphTodos');
+                localStorage.removeItem('projectRalphTierData');
+                localStorage.removeItem('projectRalphFeatures');
+                localStorage.removeItem('interactionProgress');
+                localStorage.removeItem('interactionCount');
+                localStorage.removeItem('dealershipProgress');
+                localStorage.removeItem('dealershipCount');
+                
                 // Try to load from cloud first for latest data
                 if (JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY' && JSONBIN_BIN_ID) {
                     try {
@@ -1240,7 +1248,7 @@
             // Update tier data
             const tierNameInputs = document.querySelectorAll('.tier-name-input');
             const tierCountInputs = document.querySelectorAll('.tier-count-input');
-            const descriptions = document.querySelectorAll('.description-textarea');
+            const descriptions = document.querySelectorAll('.description-text');
             
             projectData.tierData.names = {};
             projectData.tierData.counts = {};
@@ -1249,7 +1257,7 @@
             tierNameInputs.forEach((nameInput, index) => {
                 projectData.tierData.names[`tier${index}`] = nameInput.value;
                 projectData.tierData.counts[`tier${index}`] = tierCountInputs[index].value;
-                projectData.tierData.descriptions[`tier${index}`] = descriptions[index].value;
+                projectData.tierData.descriptions[`tier${index}`] = descriptions[index].textContent;
             });
             
             projectData.lastUpdated = new Date().toISOString();
@@ -1342,7 +1350,7 @@
             if (projectData.tierData) {
                 const tierNameInputs = document.querySelectorAll('.tier-name-input');
                 const tierCountInputs = document.querySelectorAll('.tier-count-input');
-                const descriptions = document.querySelectorAll('.description-textarea');
+                const descriptions = document.querySelectorAll('.description-text');
                 
                 tierNameInputs.forEach((nameInput, index) => {
                     if (projectData.tierData.names[`tier${index}`]) {
@@ -1352,7 +1360,8 @@
                         tierCountInputs[index].value = projectData.tierData.counts[`tier${index}`];
                     }
                     if (projectData.tierData.descriptions[`tier${index}`]) {
-                        descriptions[index].value = projectData.tierData.descriptions[`tier${index}`];
+                        descriptions[index].textContent = projectData.tierData.descriptions[`tier${index}`];
+                        descriptions[index].onclick = () => editTierDescription(descriptions[index]);
                     }
                 });
                 
@@ -1610,6 +1619,62 @@
             });
         }
 
+        // Edit tier description functionality
+        function editTierDescription(element) {
+            const currentText = element.textContent;
+            const descriptionItem = element.closest('.description-item');
+            
+            // Convert to editing mode
+            descriptionItem.classList.add('editing');
+            element.innerHTML = `
+                <textarea class="description-textarea-inline" onkeypress="handleTierDescriptionKeyPress(event, this)" onblur="saveTierDescription(this)" style="width: 100%; border: 1px solid #3b82f6; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.5; color: #64748b; background: white; resize: none; min-height: 60px; outline: none; font-family: inherit; box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);">${currentText}</textarea>
+            `;
+            
+            // Focus and select all text
+            const textarea = element.querySelector('.description-textarea-inline');
+            textarea.focus();
+            textarea.select();
+        }
+
+        function handleTierDescriptionKeyPress(event, textarea) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                saveTierDescription(textarea);
+            } else if (event.key === 'Escape') {
+                cancelTierDescriptionEdit(textarea);
+            }
+        }
+
+        function saveTierDescription(textarea) {
+            const text = textarea.value.trim();
+            const descriptionItem = textarea.closest('.description-item');
+            const descriptionText = descriptionItem.querySelector('.description-text');
+            
+            if (text) {
+                // Convert back to display mode
+                descriptionItem.classList.remove('editing');
+                descriptionText.innerHTML = text;
+                descriptionText.onclick = () => editTierDescription(descriptionText);
+                
+                // Save to cloud
+                saveTierData();
+                saveDataToCloud();
+            } else {
+                // Revert to original text if empty
+                cancelTierDescriptionEdit(textarea);
+            }
+        }
+
+        function cancelTierDescriptionEdit(textarea) {
+            const descriptionItem = textarea.closest('.description-item');
+            const descriptionText = descriptionItem.querySelector('.description-text');
+            
+            // Revert to original text (you might want to store the original text somewhere)
+            descriptionItem.classList.remove('editing');
+            descriptionText.innerHTML = descriptionText.getAttribute('data-original-text') || descriptionText.textContent;
+            descriptionText.onclick = () => editTierDescription(descriptionText);
+        }
+
         // Save tier data to localStorage and cloud
         function saveTierData() {
             const tierData = {
@@ -1626,10 +1691,10 @@
                 tierData.counts[`tier${index}`] = tierCountInputs[index].value;
             });
             
-            // Save descriptions
-            const descriptions = document.querySelectorAll('.description-textarea');
+            // Save descriptions (now using description-text elements)
+            const descriptions = document.querySelectorAll('.description-text');
             descriptions.forEach((desc, index) => {
-                tierData.descriptions[`tier${index}`] = desc.value;
+                tierData.descriptions[`tier${index}`] = desc.textContent;
             });
             
             // Update description titles
@@ -1657,11 +1722,12 @@
                     }
                 });
                 
-                // Load descriptions
-                const descriptions = document.querySelectorAll('.description-textarea');
+                // Load descriptions (now using description-text elements)
+                const descriptions = document.querySelectorAll('.description-text');
                 descriptions.forEach((desc, index) => {
                     if (tierData.descriptions[`tier${index}`]) {
-                        desc.value = tierData.descriptions[`tier${index}`];
+                        desc.textContent = tierData.descriptions[`tier${index}`];
+                        desc.onclick = () => editTierDescription(desc);
                     }
                 });
                 
@@ -1990,24 +2056,96 @@
 
         // Initialize everything with proper loading sequence
         async function initializeApp() {
+            // Show loading state
+            showLoadingState();
+            
             // Set up date display immediately
             updateDateDisplay();
             
-            // Load all data in parallel for faster loading
-            const loadPromises = [
-                loadDataFromCloud(),
-                loadSavedMetrics(),
-                loadTodos(),
-                loadTierData(),
-                loadFeatures()
-            ];
-            
-            // Wait for all data to load
-            await Promise.all(loadPromises);
-            
-            // Update all displays
-            updateProgress();
-            updateTodoStats();
+            try {
+                // Small delay to ensure loading state is visible
+                await new Promise(resolve => setTimeout(resolve, 100));
+                
+                // Load cloud data first (most important)
+                await loadDataFromCloud();
+                
+                // Load other data in parallel
+                const loadPromises = [
+                    loadSavedMetrics(),
+                    loadTodos(),
+                    loadTierData(),
+                    loadFeatures()
+                ];
+                
+                // Wait for all data to load
+                await Promise.all(loadPromises);
+                
+                // Update all displays
+                updateProgress();
+                updateTodoStats();
+                
+                // Small delay before hiding loading state for smooth transition
+                await new Promise(resolve => setTimeout(resolve, 200));
+                
+                // Hide loading state
+                hideLoadingState();
+            } catch (error) {
+                console.error('Error during initialization:', error);
+                hideLoadingState();
+            }
+        }
+
+        // Show loading state
+        function showLoadingState() {
+            // Create loading overlay if it doesn't exist
+            if (!document.getElementById('loading-overlay')) {
+                const overlay = document.createElement('div');
+                overlay.id = 'loading-overlay';
+                overlay.style.cssText = `
+                    position: fixed;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background: rgba(255, 255, 255, 0.9);
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    z-index: 9999;
+                    backdrop-filter: blur(2px);
+                `;
+                overlay.innerHTML = `
+                    <div style="text-align: center;">
+                        <div style="width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top: 4px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 16px;"></div>
+                        <div style="color: #64748b; font-weight: 500;">Loading latest data...</div>
+                    </div>
+                `;
+                document.body.appendChild(overlay);
+                
+                // Add CSS animation
+                const style = document.createElement('style');
+                style.textContent = `
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+        }
+
+        // Hide loading state
+        function hideLoadingState() {
+            const overlay = document.getElementById('loading-overlay');
+            if (overlay) {
+                overlay.style.opacity = '0';
+                overlay.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => {
+                    if (overlay.parentNode) {
+                        overlay.parentNode.removeChild(overlay);
+                    }
+                }, 300);
+            }
         }
 
         // Initialize the app when DOM is ready
