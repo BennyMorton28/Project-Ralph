@@ -478,6 +478,28 @@
             border-color: #10b981;
         }
 
+        .todo-item.editing {
+            background: white;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .todo-input-inline {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid #3b82f6;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            outline: none;
+            background: white;
+            margin: 0 8px;
+        }
+
+        .todo-input-inline:focus {
+            border-color: #2563eb;
+            box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+        }
+
         .todo-checkbox {
             margin-right: 12px;
             width: 18px;
@@ -505,10 +527,31 @@
             font-size: 0.75rem;
             cursor: pointer;
             transition: background 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .todo-item:hover .todo-delete {
+            opacity: 1;
+            visibility: visible;
         }
 
         .todo-delete:hover {
             background: #dc2626;
+        }
+
+        .todo-text {
+            flex: 1;
+            font-size: 0.875rem;
+            color: #374151;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .todo-text:hover {
+            background: #f1f5f9;
         }
 
         .todo-stats {
@@ -554,7 +597,6 @@
     <div class="container">
         <div class="header">
             <h1>Project Ralph</h1>
-            <p>South Florida Market Analysis</p>
         </div>
 
         <div class="date-display">
@@ -569,32 +611,71 @@
                     <div class="card-icon">
                         <i class="fas fa-tasks"></i>
                     </div>
-                    <div class="card-title">Today's Tasks</div>
+                    <div class="card-title">Tasks</div>
                 </div>
                 <div class="todo-section">
-                    <div class="todo-input-container">
-                        <input type="text" class="todo-input" id="todo-input" placeholder="Add a new task..." onkeypress="handleTodoKeyPress(event)">
-                        <button class="add-todo-btn" onclick="addTodo()">Add</button>
+                    <!-- Daily Tasks -->
+                    <div class="task-category">
+                        <h4 style="margin: 20px 0 12px 0; color: #0f172a; font-size: 1rem; font-weight: 600; border-bottom: 2px solid #3b82f6; padding-bottom: 4px;">Daily Tasks</h4>
+                        <ul class="todo-list" id="daily-todo-list">
+                            <li class="todo-item" data-type="daily">
+                                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete">
+                                <span class="todo-text" onclick="editExistingTask(this)">Contact 10 new dealerships</span>
+                                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                            </li>
+                            <li class="todo-item" data-type="daily">
+                                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete">
+                                <span class="todo-text" onclick="editExistingTask(this)">Review AI email responses</span>
+                                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                            </li>
+                        </ul>
+                        <button class="add-task-btn" onclick="addNewTaskRow('daily')" style="background: #3b82f6; color: white; border: none; padding: 8px; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;" aria-label="Add daily task">
+                            <i class="fas fa-plus"></i>
+                        </button>
                     </div>
-                    <ul class="todo-list" id="todo-list">
-                        <li class="todo-item">
-                            <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)">
-                            <span class="todo-text">Contact 10 new dealerships</span>
-                            <button class="todo-delete" onclick="deleteTodo(this)">×</button>
-                        </li>
-                        <li class="todo-item">
-                            <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)">
-                            <span class="todo-text">Review AI email responses</span>
-                            <button class="todo-delete" onclick="deleteTodo(this)">×</button>
-                        </li>
-                        <li class="todo-item">
-                            <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)">
-                            <span class="todo-text">Update progress metrics</span>
-                            <button class="todo-delete" onclick="deleteTodo(this)">×</button>
-                        </li>
-                    </ul>
+                    
+                    <!-- Weekly Tasks -->
+                    <div class="task-category">
+                        <h4 style="margin: 20px 0 12px 0; color: #0f172a; font-size: 1rem; font-weight: 600; border-bottom: 2px solid #10b981; padding-bottom: 4px;">Weekly Tasks</h4>
+                        <ul class="todo-list" id="weekly-todo-list">
+                            <li class="todo-item" data-type="weekly">
+                                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete">
+                                <span class="todo-text" onclick="editExistingTask(this)">Update progress metrics</span>
+                                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                            </li>
+                            <li class="todo-item" data-type="weekly">
+                                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete">
+                                <span class="todo-text" onclick="editExistingTask(this)">Review dealer ratings</span>
+                                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                            </li>
+                        </ul>
+                        <button class="add-task-btn" onclick="addNewTaskRow('weekly')" style="background: #10b981; color: white; border: none; padding: 8px; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;" aria-label="Add weekly task">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
+                    <!-- Overall Tasks -->
+                    <div class="task-category">
+                        <h4 style="margin: 20px 0 12px 0; color: #0f172a; font-size: 1rem; font-weight: 600; border-bottom: 2px solid #f59e0b; padding-bottom: 4px;">Overall Tasks</h4>
+                        <ul class="todo-list" id="overall-todo-list">
+                            <li class="todo-item" data-type="overall">
+                                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete">
+                                <span class="todo-text" onclick="editExistingTask(this)">Complete market analysis</span>
+                                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                            </li>
+                            <li class="todo-item" data-type="overall">
+                                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete">
+                                <span class="todo-text" onclick="editExistingTask(this)">Launch product</span>
+                                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                            </li>
+                        </ul>
+                        <button class="add-task-btn" onclick="addNewTaskRow('overall')" style="background: #f59e0b; color: white; border: none; padding: 8px; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;" aria-label="Add overall task">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                    
                     <div class="todo-stats">
-                        <span id="todo-stats">3 tasks remaining</span>
+                        <span id="todo-stats">6 tasks remaining</span>
                         <span id="todo-completed">0 completed</span>
                         <button onclick="clearAllTodos()" style="background: #ef4444; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer;">Clear All</button>
                     </div>
@@ -619,7 +700,7 @@
                     </div>
                 </div>
                 <div class="metrics-grid">
-                    <div class="metric" onclick="updateMetric('dealerships')">
+                    <div class="metric" onclick="editDealershipCount()">
                         <div class="metric-value" id="dealership-count">200</div>
                         <div class="metric-label">Dealerships</div>
                     </div>
@@ -720,19 +801,69 @@
                 <div class="dealer-tiers">
                     <div class="tier-card tier-coif" onclick="updateTierCount(this)">
                         <div class="tier-count">0</div>
-                        <div class="tier-name">Order of the Coif</div>
+                        <div class="tier-name" onclick="editTierName(this, event)">Order of the Coif</div>
                     </div>
                     <div class="tier-card tier-deans" onclick="updateTierCount(this)">
                         <div class="tier-count">0</div>
-                        <div class="tier-name">Dean's List</div>
+                        <div class="tier-name" onclick="editTierName(this, event)">Dean's List</div>
                     </div>
                     <div class="tier-card tier-honor" onclick="updateTierCount(this)">
                         <div class="tier-count">0</div>
-                        <div class="tier-name">Honor Roll</div>
+                        <div class="tier-name" onclick="editTierName(this, event)">Honor Roll</div>
                     </div>
                     <div class="tier-card tier-detention" onclick="updateTierCount(this)">
                         <div class="tier-count">0</div>
-                        <div class="tier-name">Detention</div>
+                        <div class="tier-name" onclick="editTierName(this, event)">Detention</div>
+                    </div>
+                </div>
+                
+                <!-- Tier Descriptions -->
+                <div class="tier-descriptions" style="margin-top: 24px;">
+                    <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1rem; font-weight: 600;">Tier Descriptions</h4>
+                    <div class="description-grid" style="display: grid; gap: 16px;">
+                        <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); margin-right: 8px;"></div>
+                                <strong style="color: #0f172a;">Order of the Coif</strong>
+                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
+                            </div>
+                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
+                                Highest tier for dealers with exceptional transparency and customer service. These dealers consistently provide honest pricing, clear communication, and go above and beyond for their customers.
+                            </div>
+                        </div>
+                        
+                        <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); margin-right: 8px;"></div>
+                                <strong style="color: #0f172a;">Dean's List</strong>
+                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
+                            </div>
+                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
+                                High-performing dealers with good transparency practices. These dealers generally provide fair pricing and good customer service with minimal issues.
+                            </div>
+                        </div>
+                        
+                        <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #2563eb); margin-right: 8px;"></div>
+                                <strong style="color: #0f172a;">Honor Roll</strong>
+                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
+                            </div>
+                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
+                                Average dealers with acceptable business practices. These dealers meet basic standards but may have occasional issues with transparency or customer service.
+                            </div>
+                        </div>
+                        
+                        <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
+                            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                                <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #ef4444, #dc2626); margin-right: 8px;"></div>
+                                <strong style="color: #0f172a;">Detention</strong>
+                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
+                            </div>
+                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
+                                Dealers with poor transparency practices or customer service issues. These dealers may engage in deceptive practices, hidden fees, or provide poor customer experiences.
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -871,6 +1002,108 @@
             countElement.textContent = current + 1;
         }
 
+        // Edit tier name
+        function editTierName(element, event) {
+            event.stopPropagation(); // Prevent triggering the parent onclick
+            const currentName = element.textContent;
+            const newName = prompt('Enter new tier name:', currentName);
+            if (newName && newName.trim() !== '') {
+                element.textContent = newName.trim();
+                // Update corresponding description title
+                const descriptionItems = document.querySelectorAll('.description-item');
+                descriptionItems.forEach(item => {
+                    const title = item.querySelector('strong');
+                    if (title.textContent === currentName) {
+                        title.textContent = newName.trim();
+                    }
+                });
+                saveTierData();
+            }
+        }
+
+        // Edit description
+        function editDescription(element, event) {
+            if (event) {
+                event.stopPropagation(); // Prevent triggering other onclick events
+            }
+            
+            let descriptionText = '';
+            if (element.classList.contains('description-text')) {
+                descriptionText = element.textContent;
+            } else {
+                // If it's the edit button, find the description text
+                const descriptionElement = element.parentElement.nextElementSibling;
+                descriptionText = descriptionElement.textContent;
+            }
+            
+            const newDescription = prompt('Enter new description:', descriptionText);
+            if (newDescription && newDescription.trim() !== '') {
+                if (element.classList.contains('description-text')) {
+                    element.textContent = newDescription.trim();
+                } else {
+                    const descriptionElement = element.parentElement.nextElementSibling;
+                    descriptionElement.textContent = newDescription.trim();
+                }
+                saveTierData();
+            }
+        }
+
+        // Save tier data to localStorage
+        function saveTierData() {
+            const tierData = {
+                names: {},
+                descriptions: {}
+            };
+            
+            // Save tier names
+            const tierNames = document.querySelectorAll('.tier-name');
+            tierNames.forEach((name, index) => {
+                tierData.names[`tier${index}`] = name.textContent;
+            });
+            
+            // Save descriptions
+            const descriptions = document.querySelectorAll('.description-text');
+            descriptions.forEach((desc, index) => {
+                tierData.descriptions[`tier${index}`] = desc.textContent;
+            });
+            
+            localStorage.setItem('projectRalphTierData', JSON.stringify(tierData));
+        }
+
+        // Load tier data from localStorage
+        function loadTierData() {
+            const savedData = localStorage.getItem('projectRalphTierData');
+            if (savedData) {
+                const tierData = JSON.parse(savedData);
+                
+                // Load tier names
+                const tierNames = document.querySelectorAll('.tier-name');
+                tierNames.forEach((name, index) => {
+                    if (tierData.names[`tier${index}`]) {
+                        name.textContent = tierData.names[`tier${index}`];
+                    }
+                });
+                
+                // Load descriptions
+                const descriptions = document.querySelectorAll('.description-text');
+                descriptions.forEach((desc, index) => {
+                    if (tierData.descriptions[`tier${index}`]) {
+                        desc.textContent = tierData.descriptions[`tier${index}`];
+                    }
+                });
+                
+                // Update description titles to match tier names
+                const descriptionItems = document.querySelectorAll('.description-item');
+                const tierNameElements = document.querySelectorAll('.tier-name');
+                descriptionItems.forEach((item, index) => {
+                    const title = item.querySelector('strong');
+                    if (tierNameElements[index]) {
+                        title.textContent = tierNameElements[index].textContent;
+                    }
+                });
+            }
+        }
+
         // Feature toggle
         function toggleFeature(element) {
             element.style.opacity = element.style.opacity === '0.5' ? '1' : '0.5';
@@ -887,30 +1120,72 @@
         }
 
         // Todo list functionality
-        function addTodo() {
-            const input = document.getElementById('todo-input');
-            const text = input.value.trim();
+        function addNewTaskRow(taskType) {
+            const todoList = document.getElementById(`${taskType}-todo-list`);
+            const li = document.createElement('li');
+            li.className = 'todo-item editing';
+            li.setAttribute('data-type', taskType);
+            li.innerHTML = `
+                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete" disabled>
+                <input type="text" class="todo-input-inline" placeholder="Type your task here..." onkeypress="handleInlineKeyPress(event, this)" onblur="saveInlineTask(this)" style="flex: 1; padding: 8px 12px; border: 1px solid #3b82f6; border-radius: 4px; font-size: 0.875rem; outline: none; background: white;">
+                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+            `;
+            todoList.appendChild(li);
             
-            if (text) {
-                const todoList = document.getElementById('todo-list');
-                const li = document.createElement('li');
-                li.className = 'todo-item';
-                li.innerHTML = `
-                    <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)">
-                    <span class="todo-text">${text}</span>
-                    <button class="todo-delete" onclick="deleteTodo(this)">×</button>
-                `;
-                todoList.appendChild(li);
-                input.value = '';
-                updateTodoStats();
-                saveTodos();
+            // Focus on the input
+            const input = li.querySelector('.todo-input-inline');
+            input.focus();
+        }
+
+        function handleInlineKeyPress(event, input) {
+            if (event.key === 'Enter') {
+                saveInlineTask(input);
+            } else if (event.key === 'Escape') {
+                cancelInlineTask(input);
             }
         }
 
-        function handleTodoKeyPress(event) {
-            if (event.key === 'Enter') {
-                addTodo();
+        function saveInlineTask(input) {
+            const text = input.value.trim();
+            const todoItem = input.closest('.todo-item');
+            
+            if (text) {
+                // Convert to regular task item
+                todoItem.classList.remove('editing');
+                todoItem.innerHTML = `
+                    <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete">
+                    <span class="todo-text" onclick="editExistingTask(this)">${text}</span>
+                    <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                `;
+                updateTodoStats();
+                saveTodos();
+            } else {
+                // Remove empty task
+                todoItem.remove();
             }
+        }
+
+        function editExistingTask(element) {
+            const currentText = element.textContent;
+            const todoItem = element.closest('.todo-item');
+            
+            // Convert to editing mode
+            todoItem.classList.add('editing');
+            todoItem.innerHTML = `
+                <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" aria-label="Mark task as complete" disabled>
+                <input type="text" class="todo-input-inline" value="${currentText}" onkeypress="handleInlineKeyPress(event, this)" onblur="saveInlineTask(this)" style="flex: 1; padding: 8px 12px; border: 1px solid #3b82f6; border-radius: 4px; font-size: 0.875rem; outline: none; background: white;">
+                <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+            `;
+            
+            // Focus and select all text
+            const input = todoItem.querySelector('.todo-input-inline');
+            input.focus();
+            input.select();
+        }
+
+        function cancelInlineTask(input) {
+            const todoItem = input.closest('.todo-item');
+            todoItem.remove();
         }
 
         function toggleTodo(checkbox) {
@@ -947,9 +1222,11 @@
             todoItems.forEach(item => {
                 const checkbox = item.querySelector('.todo-checkbox');
                 const text = item.querySelector('.todo-text').textContent;
+                const type = item.getAttribute('data-type') || 'daily';
                 todos.push({
                     text: text,
-                    completed: checkbox.checked
+                    completed: checkbox.checked,
+                    type: type
                 });
             });
             
@@ -961,22 +1238,30 @@
             const savedTodos = localStorage.getItem('projectRalphTodos');
             if (savedTodos) {
                 const todos = JSON.parse(savedTodos);
-                const todoList = document.getElementById('todo-list');
-                todoList.innerHTML = ''; // Clear existing todos
+                
+                // Clear existing todos from all lists
+                document.getElementById('daily-todo-list').innerHTML = '';
+                document.getElementById('weekly-todo-list').innerHTML = '';
+                document.getElementById('overall-todo-list').innerHTML = '';
                 
                 todos.forEach(todo => {
                     const li = document.createElement('li');
                     li.className = 'todo-item';
+                    li.setAttribute('data-type', todo.type || 'daily');
                     if (todo.completed) {
                         li.classList.add('completed');
                     }
                     
                     li.innerHTML = `
-                        <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" ${todo.completed ? 'checked' : ''}>
-                        <span class="todo-text">${todo.text}</span>
-                        <button class="todo-delete" onclick="deleteTodo(this)">×</button>
+                        <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" ${todo.completed ? 'checked' : ''} aria-label="Mark task as complete">
+                        <span class="todo-text" onclick="editExistingTask(this)">${todo.text}</span>
+                        <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
                     `;
-                    todoList.appendChild(li);
+                    
+                    const targetList = document.getElementById(`${todo.type || 'daily'}-todo-list`);
+                    if (targetList) {
+                        targetList.appendChild(li);
+                    }
                 });
                 
                 updateTodoStats();
@@ -987,7 +1272,9 @@
         function clearAllTodos() {
             if (confirm('Are you sure you want to clear all tasks?')) {
                 localStorage.removeItem('projectRalphTodos');
-                document.getElementById('todo-list').innerHTML = '';
+                document.getElementById('daily-todo-list').innerHTML = '';
+                document.getElementById('weekly-todo-list').innerHTML = '';
+                document.getElementById('overall-todo-list').innerHTML = '';
                 updateTodoStats();
             }
         }
@@ -997,6 +1284,7 @@
         updateProgress();
         updateTodoStats();
         loadTodos(); // Load todos from localStorage on page load
+        loadTierData(); // Load tier data from localStorage on page load
 
         // Update date display every minute
         setInterval(updateDateDisplay, 60000);
