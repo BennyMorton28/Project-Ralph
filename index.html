@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Ralph - Car Buying Assistant</title>
+    <title>Project Ralph</title>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -650,6 +650,7 @@
                     <div class="progress-text">
                         <span>Dealerships Contacted</span>
                         <span id="dealership-progress">50/200</span>
+                        <button onclick="editProgress('dealership')" style="background: #3b82f6; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; margin-left: 8px;">Edit</button>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="dealership-progress-bar" style="width: 25%"></div>
@@ -659,6 +660,7 @@
                     <div class="progress-text">
                         <span>Interactions Completed</span>
                         <span id="interaction-progress">500/2,000</span>
+                        <button onclick="editProgress('interaction')" style="background: #3b82f6; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; margin-left: 8px;">Edit</button>
                     </div>
                     <div class="progress-bar">
                         <div class="progress-fill" id="interaction-progress-bar" style="width: 25%"></div>
@@ -796,9 +798,9 @@
 
         // Interactive functionality
         function updateProgress() {
-            // Simulate real-time updates
-            const dealershipProgress = Math.min(50 + Math.floor(Math.random() * 10), 200);
-            const interactionProgress = Math.min(500 + Math.floor(Math.random() * 50), 2000);
+            // Get current values from localStorage or use defaults
+            const dealershipProgress = parseInt(localStorage.getItem('dealershipProgress') || '50');
+            const interactionProgress = parseInt(localStorage.getItem('interactionProgress') || '500');
             
             document.getElementById('dealership-progress').textContent = `${dealershipProgress}/200`;
             document.getElementById('dealership-progress-bar').style.width = `${(dealershipProgress/200)*100}%`;
@@ -809,6 +811,30 @@
             const overallProgress = Math.round(((dealershipProgress/200) + (interactionProgress/2000)) / 2 * 100);
             document.getElementById('overall-progress').textContent = `${overallProgress}%`;
             document.getElementById('overall-progress-bar').style.width = `${overallProgress}%`;
+        }
+
+        // Edit progress values
+        function editProgress(type) {
+            const currentValue = type === 'dealership' ? 
+                parseInt(localStorage.getItem('dealershipProgress') || '50') :
+                parseInt(localStorage.getItem('interactionProgress') || '500');
+            
+            const maxValue = type === 'dealership' ? 200 : 2000;
+            const newValue = prompt(`Enter new ${type} progress (0-${maxValue}):`, currentValue);
+            
+            if (newValue !== null && !isNaN(newValue)) {
+                const numValue = parseInt(newValue);
+                if (numValue >= 0 && numValue <= maxValue) {
+                    if (type === 'dealership') {
+                        localStorage.setItem('dealershipProgress', numValue.toString());
+                    } else {
+                        localStorage.setItem('interactionProgress', numValue.toString());
+                    }
+                    updateProgress();
+                } else {
+                    alert(`Please enter a number between 0 and ${maxValue}`);
+                }
+            }
         }
 
         // Interactive metric updates
@@ -972,9 +998,6 @@
         updateTodoStats();
         loadTodos(); // Load todos from localStorage on page load
 
-        // Update progress every 5 seconds
-        setInterval(updateProgress, 5000);
-        
         // Update date display every minute
         setInterval(updateDateDisplay, 60000);
     </script>
