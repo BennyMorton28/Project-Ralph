@@ -7,6 +7,15 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        /* Prevent flash of unstyled content */
+        html {
+            visibility: hidden;
+        }
+        
+        html.loaded {
+            visibility: visible;
+        }
+        
         * {
             margin: 0;
             padding: 0;
@@ -658,12 +667,63 @@
                 text-align: center;
             }
         }
+
+        /* Loading state styles */
+        .container {
+            transition: opacity 0.3s ease;
+        }
+
+        .loading-indicator {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: rgba(255, 255, 255, 0.95);
+            padding: 20px 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+            display: none;
+            align-items: center;
+            gap: 12px;
+            font-weight: 500;
+            color: #3b82f6;
+        }
+
+        .loading-indicator.show {
+            display: flex;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e2e8f0;
+            border-top: 2px solid #3b82f6;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
 </head>
 <body>
+    <!-- Loading indicator -->
+    <div class="loading-indicator" id="loading-indicator">
+        <div class="loading-spinner"></div>
+        <span>Loading Project Ralph...</span>
+    </div>
+    
     <div class="container">
         <div class="header">
             <h1>Project Ralph</h1>
+            <button onclick="forceRefreshFromCloud()" style="position: absolute; top: 20px; right: 20px; background: #3b82f6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Force refresh from cloud">🔄 Refresh</button>
+            <button onclick="debugCurrentState()" style="position: absolute; top: 20px; right: 120px; background: #10b981; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Debug current state">🐛 Debug</button>
+            <button onclick="createNewBinAndSync()" style="position: absolute; top: 20px; right: 220px; background: #f59e0b; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Sync with live site">🔗 Sync</button>
+            <button onclick="compareWithLiveSite()" style="position: absolute; top: 20px; right: 320px; background: #8b5cf6; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Compare with live site">📊 Compare</button>
+            <button onclick="updateCloudWithLiveData()" style="position: absolute; top: 20px; right: 420px; background: #ef4444; color: white; border: none; padding: 8px 16px; border-radius: 6px; font-size: 0.875rem; cursor: pointer; opacity: 0.7; transition: opacity 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'" title="Update cloud with live data">☁️ Update Cloud</button>
         </div>
 
         <!-- Project Status Overview -->
@@ -962,8 +1022,8 @@
 
     <script>
         // Cloud storage configuration
-        const JSONBIN_API_KEY = '$2a$10$SEnNfh62rZ5cbmvsRc5iGu5FElaadU.JCpjWywSTIWkdZWEWvt3.i'; // You'll need to get this from jsonbin.io
-        let JSONBIN_BIN_ID = localStorage.getItem('projectRalphBinId') || null; // This will be created when you first save data
+        const JSONBIN_API_KEY = '$2a$10$SEnNfh62rZ5cbmvsRc5iGu5FElaadU.JCpjWywSTIWkdZWEWvt3.i';
+        let JSONBIN_BIN_ID = localStorage.getItem('projectRalphBinId') || null;
         const JSONBIN_URL = 'https://api.jsonbin.io/v3/b';
 
         // Data structure for cloud storage
@@ -985,6 +1045,36 @@
             },
             lastUpdated: new Date().toISOString()
         };
+
+        // Show loading state
+        function showLoadingState() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const container = document.querySelector('.container');
+            
+            if (loadingIndicator) {
+                loadingIndicator.classList.add('show');
+            }
+            if (container) {
+                container.style.opacity = '0.7';
+                container.style.transition = 'opacity 0.3s ease';
+            }
+        }
+
+        // Hide loading state
+        function hideLoadingState() {
+            const loadingIndicator = document.getElementById('loading-indicator');
+            const container = document.querySelector('.container');
+            
+            if (loadingIndicator) {
+                loadingIndicator.classList.remove('show');
+            }
+            if (container) {
+                container.style.opacity = '1';
+            }
+            
+            // Show the page
+            document.documentElement.classList.add('loaded');
+        }
 
         // Save data to both localStorage and cloud
         async function saveDataToCloud() {
@@ -1033,43 +1123,74 @@
             }
         }
 
-        // Load data from cloud and localStorage
+        // Load data from cloud and localStorage with proper fallback
         async function loadDataFromCloud() {
             try {
                 let data = null;
                 
-                // Try to load from cloud first if API key is configured and we have a bin ID
+                // Try to load from cloud first for latest data
                 if (JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY' && JSONBIN_BIN_ID) {
                     try {
+                        console.log('Attempting to load from cloud...');
+                        console.log('JSONBIN_BIN_ID:', JSONBIN_BIN_ID);
+                        
                         const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest`, {
                             headers: {
                                 'X-Master-Key': JSONBIN_API_KEY
                             }
                         });
                         
+                        console.log('Cloud response status:', response.status);
+                        
                         if (response.ok) {
                             const result = await response.json();
-                            data = result.record;
-                            console.log('Data loaded from cloud successfully');
+                            console.log('Cloud response data:', result);
+                            
+                            const cloudData = result.record;
+                            
+                            if (cloudData) {
+                                console.log('Cloud data found, applying to DOM...');
+                                console.log('Cloud data details:', {
+                                    interactions: cloudData.interactions,
+                                    dealerships: cloudData.dealerships,
+                                    todos: cloudData.todos,
+                                    features: cloudData.features,
+                                    lastUpdated: cloudData.lastUpdated
+                                });
+                                
+                                projectData = cloudData;
+                                applyProjectDataToDOM();
+                                localStorage.setItem('projectRalphData', JSON.stringify(cloudData));
+                                console.log('Data loaded from cloud successfully');
+                                return; // Exit early since we got cloud data
+                            } else {
+                                console.log('No cloud data found in response');
+                            }
+                        } else {
+                            console.log('Cloud response not OK:', response.statusText);
                         }
                     } catch (error) {
-                        console.log('Could not load from cloud, using localStorage:', error);
+                        console.log('Could not load from cloud, trying localStorage:', error);
                     }
+                } else {
+                    console.log('Cloud loading skipped - API key or bin ID missing');
+                    console.log('JSONBIN_API_KEY check:', JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY');
+                    console.log('JSONBIN_BIN_ID:', JSONBIN_BIN_ID);
                 }
                 
                 // Fallback to localStorage if cloud load failed
-                if (!data) {
-                    const localData = localStorage.getItem('projectRalphData');
-                    if (localData) {
+                const localData = localStorage.getItem('projectRalphData');
+                if (localData) {
+                    try {
                         data = JSON.parse(localData);
+                        projectData = data;
+                        applyProjectDataToDOM();
                         console.log('Data loaded from localStorage');
+                    } catch (error) {
+                        console.error('Error parsing localStorage data:', error);
                     }
-                }
-                
-                // Apply loaded data
-                if (data) {
-                    projectData = data;
-                    applyProjectDataToDOM();
+                } else {
+                    console.log('No local data found');
                 }
                 
             } catch (error) {
@@ -1139,18 +1260,40 @@
 
         // Apply projectData to DOM
         function applyProjectDataToDOM() {
+            console.log('=== APPLYING PROJECT DATA TO DOM ===');
+            console.log('projectData to apply:', projectData);
+            
             // Apply interactions
             if (projectData.interactions) {
-                document.getElementById('interaction-current-display').textContent = projectData.interactions.current;
-                document.getElementById('interaction-target-display').textContent = projectData.interactions.target.toLocaleString();
+                console.log('Applying interactions:', projectData.interactions);
+                const currentElement = document.getElementById('interaction-current-display');
+                const targetElement = document.getElementById('interaction-target-display');
+                
+                if (currentElement) {
+                    currentElement.textContent = projectData.interactions.current;
+                    console.log('Set interaction-current-display to:', projectData.interactions.current);
+                }
+                if (targetElement) {
+                    targetElement.textContent = projectData.interactions.target.toLocaleString();
+                    console.log('Set interaction-target-display to:', projectData.interactions.target.toLocaleString());
+                }
+                
                 localStorage.setItem('interactionProgress', projectData.interactions.current.toString());
                 localStorage.setItem('interactionCount', projectData.interactions.target.toString());
             }
             
             // Apply dealerships
             if (projectData.dealerships) {
+                console.log('Applying dealerships:', projectData.dealerships);
                 localStorage.setItem('dealershipProgress', projectData.dealerships.current.toString());
                 localStorage.setItem('dealershipCount', projectData.dealerships.target.toString());
+                
+                // Also update the dealership count display
+                const dealershipElement = document.getElementById('dealership-count');
+                if (dealershipElement) {
+                    dealershipElement.textContent = projectData.dealerships.target;
+                    console.log('Set dealership-count to:', projectData.dealerships.target);
+                }
             }
             
             // Apply todos
@@ -1704,6 +1847,228 @@
             }
         }
 
+        // Force refresh from cloud (for debugging)
+        function forceRefreshFromCloud() {
+            if (confirm('This will clear local cache and reload from cloud. Continue?')) {
+                // Clear all localStorage data
+                localStorage.removeItem('projectRalphData');
+                localStorage.removeItem('projectRalphTodos');
+                localStorage.removeItem('projectRalphTierData');
+                localStorage.removeItem('projectRalphFeatures');
+                localStorage.removeItem('interactionProgress');
+                localStorage.removeItem('interactionCount');
+                localStorage.removeItem('dealershipProgress');
+                localStorage.removeItem('dealershipCount');
+                
+                // Reload the page
+                location.reload();
+            }
+        }
+
+        // Debug function to check current state
+        function debugCurrentState() {
+            console.log('=== DEBUG CURRENT STATE ===');
+            console.log('JSONBIN_BIN_ID:', JSONBIN_BIN_ID);
+            console.log('projectData:', projectData);
+            
+            const localData = localStorage.getItem('projectRalphData');
+            console.log('localStorage projectRalphData:', localData ? JSON.parse(localData) : 'null');
+            
+            console.log('Current DOM values:');
+            console.log('interaction-current-display:', document.getElementById('interaction-current-display')?.textContent);
+            console.log('interaction-target-display:', document.getElementById('interaction-target-display')?.textContent);
+            console.log('dealership-count:', document.getElementById('dealership-count')?.textContent);
+            console.log('interaction-count:', document.getElementById('interaction-count')?.textContent);
+            
+            console.log('localStorage values:');
+            console.log('interactionProgress:', localStorage.getItem('interactionProgress'));
+            console.log('interactionCount:', localStorage.getItem('interactionCount'));
+            console.log('dealershipProgress:', localStorage.getItem('dealershipProgress'));
+            console.log('dealershipCount:', localStorage.getItem('dealershipCount'));
+            console.log('=== END DEBUG ===');
+        }
+
+        // Function to get bin ID from live site
+        async function getBinIdFromLiveSite() {
+            try {
+                console.log('Attempting to get bin ID from live site...');
+                const response = await fetch('https://bennymorton28.github.io/Project-Ralph/');
+                const html = await response.text();
+                
+                // Look for the bin ID in the HTML
+                const binIdMatch = html.match(/JSONBIN_BIN_ID.*?localStorage\.getItem\('projectRalphBinId'\) \|\| '([^']+)'/);
+                if (binIdMatch && binIdMatch[1]) {
+                    const liveBinId = binIdMatch[1];
+                    console.log('Found bin ID from live site:', liveBinId);
+                    return liveBinId;
+                }
+                
+                console.log('Could not find bin ID in live site HTML');
+                return null;
+            } catch (error) {
+                console.error('Error getting bin ID from live site:', error);
+                return null;
+            }
+        }
+
+        // Function to create a new bin and sync with live data
+        async function createNewBinAndSync() {
+            try {
+                console.log('Creating new bin and syncing with live data...');
+                
+                // First, try to get the bin ID from the live site
+                const liveBinId = await getBinIdFromLiveSite();
+                
+                if (liveBinId) {
+                    // Use the live site's bin ID
+                    JSONBIN_BIN_ID = liveBinId;
+                    localStorage.setItem('projectRalphBinId', liveBinId);
+                    console.log('Using bin ID from live site:', liveBinId);
+                } else {
+                    // Create a new bin
+                    console.log('Creating new bin...');
+                    const response = await fetch(JSONBIN_URL, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': JSONBIN_API_KEY
+                        },
+                        body: JSON.stringify(projectData)
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        JSONBIN_BIN_ID = result.metadata.id;
+                        localStorage.setItem('projectRalphBinId', JSONBIN_BIN_ID);
+                        console.log('Created new bin with ID:', JSONBIN_BIN_ID);
+                    } else {
+                        console.error('Failed to create new bin');
+                        return false;
+                    }
+                }
+                
+                // Now load the data from the cloud
+                await loadDataFromCloud();
+                return true;
+            } catch (error) {
+                console.error('Error creating new bin:', error);
+                return false;
+            }
+        }
+
+        // Function to compare live site data with local data
+        async function compareWithLiveSite() {
+            try {
+                console.log('=== COMPARING WITH LIVE SITE ===');
+                
+                // Get the live site's HTML
+                const response = await fetch('https://bennymorton28.github.io/Project-Ralph/');
+                const html = await response.text();
+                
+                // Extract values from the live site HTML
+                const interactionCurrentMatch = html.match(/interaction-current-display.*?(\d+)/);
+                const interactionTargetMatch = html.match(/interaction-target-display.*?(\d{1,3}(?:,\d{3})*)/);
+                const dealershipCountMatch = html.match(/dealership-count.*?(\d+)/);
+                
+                console.log('Live site values:');
+                console.log('interaction-current:', interactionCurrentMatch ? interactionCurrentMatch[1] : 'not found');
+                console.log('interaction-target:', interactionTargetMatch ? interactionTargetMatch[1] : 'not found');
+                console.log('dealership-count:', dealershipCountMatch ? dealershipCountMatch[1] : 'not found');
+                
+                console.log('Local values:');
+                console.log('interaction-current:', document.getElementById('interaction-current-display')?.textContent);
+                console.log('interaction-target:', document.getElementById('interaction-target-display')?.textContent);
+                console.log('dealership-count:', document.getElementById('dealership-count')?.textContent);
+                
+                console.log('=== END COMPARISON ===');
+                
+                // Return the live site values for potential use
+                return {
+                    interactionCurrent: interactionCurrentMatch ? parseInt(interactionCurrentMatch[1]) : null,
+                    interactionTarget: interactionTargetMatch ? parseInt(interactionTargetMatch[1].replace(/,/g, '')) : null,
+                    dealershipCount: dealershipCountMatch ? parseInt(dealershipCountMatch[1]) : null
+                };
+            } catch (error) {
+                console.error('Error comparing with live site:', error);
+                return null;
+            }
+        }
+
+        // Function to update cloud with live site data
+        async function updateCloudWithLiveData() {
+            try {
+                console.log('=== UPDATING CLOUD WITH LIVE DATA ===');
+                
+                // Get the live site data
+                const liveData = await compareWithLiveSite();
+                
+                if (liveData) {
+                    // Create updated project data with live site values
+                    const updatedProjectData = {
+                        interactions: {
+                            current: liveData.interactionCurrent || 500,
+                            target: liveData.interactionTarget || 2000
+                        },
+                        dealerships: {
+                            current: 50, // Default value
+                            target: liveData.dealershipCount || 200
+                        },
+                        todos: [],
+                        features: [],
+                        tierData: {
+                            names: {},
+                            counts: {},
+                            descriptions: {}
+                        },
+                        lastUpdated: new Date().toISOString()
+                    };
+                    
+                    console.log('Updated project data to save:', updatedProjectData);
+                    
+                    // Save to cloud
+                    if (JSONBIN_BIN_ID) {
+                        const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}`, {
+                            method: 'PUT',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'X-Master-Key': JSONBIN_API_KEY
+                            },
+                            body: JSON.stringify(updatedProjectData)
+                        });
+                        
+                        if (response.ok) {
+                            console.log('Cloud updated successfully with live data');
+                            
+                            // Update local data
+                            projectData = updatedProjectData;
+                            applyProjectDataToDOM();
+                            localStorage.setItem('projectRalphData', JSON.stringify(updatedProjectData));
+                            
+                            // Update localStorage values
+                            localStorage.setItem('interactionProgress', updatedProjectData.interactions.current.toString());
+                            localStorage.setItem('interactionCount', updatedProjectData.interactions.target.toString());
+                            localStorage.setItem('dealershipCount', updatedProjectData.dealerships.target.toString());
+                            
+                            console.log('Local data updated to match live site');
+                            return true;
+                        } else {
+                            console.error('Failed to update cloud');
+                            return false;
+                        }
+                    } else {
+                        console.error('No bin ID available');
+                        return false;
+                    }
+                } else {
+                    console.error('Could not get live site data');
+                    return false;
+                }
+            } catch (error) {
+                console.error('Error updating cloud with live data:', error);
+                return false;
+            }
+        }
+
         // Feature editing functionality
         function editFeature(element) {
             const currentText = element.textContent;
@@ -1845,20 +2210,51 @@
             }
         }
 
-        // Initialize everything
+        // Initialize everything with proper loading sequence
         async function initializeApp() {
+            console.log('=== INITIALIZING APP ===');
+            
+            // Show loading state
+            showLoadingState();
+            
+            // Set up date display immediately
             updateDateDisplay();
-            await loadDataFromCloud(); // Load data from cloud first
-            loadSavedMetrics(); // Load saved metric values
+            
+            // Check if we have a bin ID, if not try to sync
+            if (!JSONBIN_BIN_ID) {
+                console.log('No bin ID found, attempting to sync with live site...');
+                await createNewBinAndSync();
+            }
+            
+            // Load all data in parallel for faster loading
+            const loadPromises = [
+                loadDataFromCloud(),
+                loadSavedMetrics(),
+                loadTodos(),
+                loadTierData(),
+                loadFeatures()
+            ];
+            
+            // Wait for all data to load
+            await Promise.all(loadPromises);
+            
+            // Update all displays
             updateProgress();
             updateTodoStats();
-            loadTodos(); // Load todos from localStorage on page load
-            loadTierData(); // Load tier data from localStorage on page load
-            loadFeatures(); // Load features from localStorage on page load
+            
+            // Debug the final state
+            setTimeout(() => {
+                debugCurrentState();
+                hideLoadingState();
+            }, 100);
         }
 
-        // Initialize the app
-        initializeApp();
+        // Initialize the app when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeApp);
+        } else {
+            initializeApp();
+        }
 
         // Update date display every minute
         setInterval(updateDateDisplay, 60000);
