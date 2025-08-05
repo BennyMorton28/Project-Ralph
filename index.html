@@ -355,7 +355,6 @@
             display: flex;
             align-items: center;
             color: #374151;
-            cursor: pointer;
             transition: all 0.2s ease;
         }
 
@@ -374,6 +373,48 @@
             color: #3b82f6;
             width: 16px;
             text-align: center;
+        }
+
+        .feature-text {
+            flex: 1;
+            font-size: 0.875rem;
+            color: #374151;
+            cursor: pointer;
+            padding: 4px 8px;
+            border-radius: 4px;
+            transition: background 0.2s ease;
+        }
+
+        .feature-text:hover {
+            background: #f1f5f9;
+        }
+
+        .feature-delete {
+            background: #ef4444;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 4px 8px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .feature-item:hover .feature-delete {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .feature-delete:hover {
+            background: #dc2626;
+        }
+
+        .feature-item.editing {
+            background: white;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
         }
 
         .data-visualization {
@@ -625,6 +666,50 @@
             <h1>Project Ralph</h1>
         </div>
 
+        <!-- Project Status Overview -->
+        <div class="project-status-overview" style="background: white; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+            <!-- Overall Progress Bar -->
+            <div class="overall-progress-section" style="margin-bottom: 24px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-weight: 600; color: #0f172a;">Overall Progress</span>
+                    <span id="overall-progress-display" style="font-weight: 700; color: #3b82f6; font-size: 1.1rem;">25%</span>
+                </div>
+                <div style="width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden;">
+                    <div id="overall-progress-bar-display" style="height: 100%; background: linear-gradient(90deg, #3b82f6, #1d4ed8); border-radius: 6px; transition: width 0.3s ease; width: 25%;"></div>
+                </div>
+            </div>
+            
+            <!-- Project Timeline -->
+            <div class="progress-timeline" style="margin-bottom: 20px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <span style="font-weight: 600; color: #0f172a;">Timeline</span>
+                    <span style="font-size: 0.875rem; color: #64748b;">Week 2 of 4</span>
+                </div>
+                <div style="position: relative; height: 8px; background: #e2e8f0; border-radius: 4px; overflow: hidden;">
+                    <div style="position: absolute; top: 0; left: 0; height: 100%; background: linear-gradient(90deg, #10b981, #059669); border-radius: 4px; width: 25%;"></div>
+                    <div style="position: absolute; top: 0; left: 25%; height: 100%; background: linear-gradient(90deg, #3b82f6, #2563eb); border-radius: 4px; width: 25%;"></div>
+                    <div style="position: absolute; top: 0; left: 50%; height: 100%; background: #f1f5f9; border-radius: 4px; width: 25%;"></div>
+                    <div style="position: absolute; top: 0; left: 75%; height: 100%; background: #f1f5f9; border-radius: 4px; width: 25%;"></div>
+                    <!-- Current position indicator -->
+                    <div style="position: absolute; top: -4px; left: 25%; width: 16px; height: 16px; background: #3b82f6; border: 3px solid white; border-radius: 50%; box-shadow: 0 2px 4px rgba(0,0,0,0.1);"></div>
+                </div>
+                <div style="display: flex; justify-content: space-between; margin-top: 8px; font-size: 0.75rem; color: #64748b;">
+                    <span>Week 1</span>
+                    <span>Week 2</span>
+                    <span>Week 3</span>
+                    <span>Week 4</span>
+                </div>
+            </div>
+            
+            <!-- Current Status -->
+            <div class="current-status" style="display: flex; gap: 16px; flex-wrap: wrap;">
+                <div style="flex: 1; min-width: 120px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
+                    <div style="font-size: 0.75rem; color: #64748b; margin-bottom: 4px;">INTERACTIONS</div>
+                    <div style="font-weight: 600; color: #0f172a;"><span id="interaction-current-display" onclick="editInteractionCurrent(event)" style="cursor: pointer; padding: 2px 4px; border-radius: 3px; transition: background 0.2s ease;">500</span> / <span id="interaction-target-display" onclick="editInteractionTarget(event)" style="cursor: pointer; padding: 2px 4px; border-radius: 3px; transition: background 0.2s ease;">2,000</span></div>
+                </div>
+            </div>
+        </div>
+
         <div class="date-display">
             <div class="current-date" id="current-date"></div>
             <div class="days-until-launch" id="days-until-launch"></div>
@@ -708,115 +793,7 @@
                 </div>
             </div>
 
-            <!-- Project Overview -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-line"></i>
-                    </div>
-                    <div class="card-title">Project Overview</div>
-                </div>
-                <div class="progress-section">
-                    <div class="progress-text">
-                        <span>Overall Progress</span>
-                        <span id="overall-progress">25%</span>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="overall-progress-bar" style="width: 25%"></div>
-                    </div>
-                </div>
-                <div class="metrics-grid">
-                    <div class="metric" onclick="editDealershipCount()">
-                        <div class="metric-value" id="dealership-count" onclick="editDealershipCount(event)">200</div>
-                        <div class="metric-label">Dealerships</div>
-                    </div>
-                    <div class="metric">
-                        <div class="metric-value" id="interaction-count">2,000</div>
-                        <div class="metric-label">Interactions</div>
-                    </div>
-                    <div class="metric" onclick="updateMetric('weeks')">
-                        <div class="metric-value">4</div>
-                        <div class="metric-label">Weeks</div>
-                    </div>
-                    <div class="metric" onclick="updateMetric('launch')">
-                        <div class="metric-value">Sep 1</div>
-                        <div class="metric-label">Launch</div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Data Collection Status -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-database"></i>
-                    </div>
-                    <div class="card-title">Data Collection</div>
-                </div>
-                <div class="progress-section">
-                    <div class="progress-text">
-                        <span>Dealerships Contacted</span>
-                        <span id="dealership-progress">50/200</span>
-                        <button onclick="editProgress('dealership')" style="background: #3b82f6; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; margin-left: 8px;">Edit</button>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="dealership-progress-bar" style="width: 25%"></div>
-                    </div>
-                </div>
-                <div class="progress-section">
-                    <div class="progress-text">
-                        <span>Interactions Completed</span>
-                        <span id="interaction-progress">500/2,000</span>
-                        <button onclick="editProgress('interaction')" style="background: #3b82f6; color: white; border: none; padding: 2px 8px; border-radius: 4px; font-size: 0.7rem; cursor: pointer; margin-left: 8px;">Edit</button>
-                    </div>
-                    <div class="progress-bar">
-                        <div class="progress-fill" id="interaction-progress-bar" style="width: 25%"></div>
-                    </div>
-                </div>
-                <div class="status-badge status-active">Active</div>
-            </div>
-
-            <!-- Launch Timeline -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-calendar-alt"></i>
-                    </div>
-                    <div class="card-title">Launch Timeline</div>
-                </div>
-                <div class="timeline">
-                    <div class="timeline-item" onclick="toggleTimelineItem(this)">
-                        <div class="timeline-dot completed"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-title">Week 1: Setup & Planning</div>
-                            <div class="timeline-date">August 1-7</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item" onclick="toggleTimelineItem(this)">
-                        <div class="timeline-dot active"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-title">Week 2: Data Collection</div>
-                            <div class="timeline-date">August 8-14</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item" onclick="toggleTimelineItem(this)">
-                        <div class="timeline-dot pending"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-title">Week 3: Analysis & Design</div>
-                            <div class="timeline-date">August 15-21</div>
-                        </div>
-                    </div>
-                    <div class="timeline-item" onclick="toggleTimelineItem(this)">
-                        <div class="timeline-dot pending"></div>
-                        <div class="timeline-content">
-                            <div class="timeline-title">Week 4: Launch Preparation</div>
-                            <div class="timeline-date">August 22-31</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Dealer Ratings Preview -->
+            <!-- Dealer Rating Tiers -->
             <div class="card">
                 <div class="card-header">
                     <div class="card-icon">
@@ -824,22 +801,33 @@
                     </div>
                     <div class="card-title">Dealer Rating Tiers</div>
                 </div>
-                <div class="dealer-tiers">
-                    <div class="tier-card tier-coif" onclick="updateTierCount(this)">
-                        <div class="tier-count">0</div>
-                        <div class="tier-name" onclick="editTierName(this, event)">Order of the Coif</div>
+                <div class="tier-inputs" style="display: grid; gap: 16px; margin-bottom: 24px;">
+                    <div class="tier-input-group" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); flex-shrink: 0;"></div>
+                        <input type="text" class="tier-name-input" value="Order of the Coif" title="Edit tier name" placeholder="Enter tier name" style="flex: 1; border: none; background: transparent; font-weight: 600; color: #0f172a; font-size: 0.875rem; outline: none; padding: 4px 8px; border-radius: 4px; transition: background 0.2s ease;" onfocus="this.style.background='white'; this.style.boxShadow='0 0 0 2px rgba(59, 130, 246, 0.2)'" onblur="this.style.background='transparent'; this.style.boxShadow='none'; saveTierData(); updateDescriptionTitles()">
+                        <span style="color: #64748b; font-size: 0.875rem;">Count:</span>
+                        <input type="number" class="tier-count-input" value="0" min="0" title="Edit tier count" placeholder="0" style="width: 60px; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; text-align: center; font-size: 0.875rem; outline: none;" onchange="saveTierData()">
                     </div>
-                    <div class="tier-card tier-deans" onclick="updateTierCount(this)">
-                        <div class="tier-count">0</div>
-                        <div class="tier-name" onclick="editTierName(this, event)">Dean's List</div>
+                    
+                    <div class="tier-input-group" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); flex-shrink: 0;"></div>
+                        <input type="text" class="tier-name-input" value="Dean's List" title="Edit tier name" placeholder="Enter tier name" style="flex: 1; border: none; background: transparent; font-weight: 600; color: #0f172a; font-size: 0.875rem; outline: none; padding: 4px 8px; border-radius: 4px; transition: background 0.2s ease;" onfocus="this.style.background='white'; this.style.boxShadow='0 0 0 2px rgba(59, 130, 246, 0.2)'" onblur="this.style.background='transparent'; this.style.boxShadow='none'; saveTierData(); updateDescriptionTitles()">
+                        <span style="color: #64748b; font-size: 0.875rem;">Count:</span>
+                        <input type="number" class="tier-count-input" value="0" min="0" title="Edit tier count" placeholder="0" style="width: 60px; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; text-align: center; font-size: 0.875rem; outline: none;" onchange="saveTierData()">
                     </div>
-                    <div class="tier-card tier-honor" onclick="updateTierCount(this)">
-                        <div class="tier-count">0</div>
-                        <div class="tier-name" onclick="editTierName(this, event)">Honor Roll</div>
+                    
+                    <div class="tier-input-group" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #2563eb); flex-shrink: 0;"></div>
+                        <input type="text" class="tier-name-input" value="Honor Roll" title="Edit tier name" placeholder="Enter tier name" style="flex: 1; border: none; background: transparent; font-weight: 600; color: #0f172a; font-size: 0.875rem; outline: none; padding: 4px 8px; border-radius: 4px; transition: background 0.2s ease;" onfocus="this.style.background='white'; this.style.boxShadow='0 0 0 2px rgba(59, 130, 246, 0.2)'" onblur="this.style.background='transparent'; this.style.boxShadow='none'; saveTierData(); updateDescriptionTitles()">
+                        <span style="color: #64748b; font-size: 0.875rem;">Count:</span>
+                        <input type="number" class="tier-count-input" value="0" min="0" title="Edit tier count" placeholder="0" style="width: 60px; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; text-align: center; font-size: 0.875rem; outline: none;" onchange="saveTierData()">
                     </div>
-                    <div class="tier-card tier-detention" onclick="updateTierCount(this)">
-                        <div class="tier-count">0</div>
-                        <div class="tier-name" onclick="editTierName(this, event)">Detention</div>
+                    
+                    <div class="tier-input-group" style="display: flex; align-items: center; gap: 12px; padding: 12px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px;">
+                        <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #ef4444, #dc2626); flex-shrink: 0;"></div>
+                        <input type="text" class="tier-name-input" value="Detention" title="Edit tier name" placeholder="Enter tier name" style="flex: 1; border: none; background: transparent; font-weight: 600; color: #0f172a; font-size: 0.875rem; outline: none; padding: 4px 8px; border-radius: 4px; transition: background 0.2s ease;" onfocus="this.style.background='white'; this.style.boxShadow='0 0 0 2px rgba(59, 130, 246, 0.2)'" onblur="this.style.background='transparent'; this.style.boxShadow='none'; saveTierData(); updateDescriptionTitles()">
+                        <span style="color: #64748b; font-size: 0.875rem;">Count:</span>
+                        <input type="number" class="tier-count-input" value="0" min="0" title="Edit tier count" placeholder="0" style="width: 60px; border: 1px solid #e2e8f0; border-radius: 4px; padding: 4px 8px; text-align: center; font-size: 0.875rem; outline: none;" onchange="saveTierData()">
                     </div>
                 </div>
                 
@@ -851,48 +839,77 @@
                             <div style="display: flex; align-items: center; margin-bottom: 8px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #fbbf24, #f59e0b); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Order of the Coif</strong>
-                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
                             </div>
-                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
-                                Highest tier for dealers with exceptional transparency and customer service. These dealers consistently provide honest pricing, clear communication, and go above and beyond for their customers.
-                            </div>
+                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">Highest tier for dealers with exceptional transparency and customer service. These dealers consistently provide honest pricing, clear communication, and go above and beyond for their customers.</textarea>
                         </div>
                         
                         <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
                             <div style="display: flex; align-items: center; margin-bottom: 8px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #10b981, #059669); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Dean's List</strong>
-                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
                             </div>
-                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
-                                High-performing dealers with good transparency practices. These dealers generally provide fair pricing and good customer service with minimal issues.
-                            </div>
+                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">High-performing dealers with good transparency practices. These dealers generally provide fair pricing and good customer service with minimal issues.</textarea>
                         </div>
                         
                         <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
                             <div style="display: flex; align-items: center; margin-bottom: 8px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #3b82f6, #2563eb); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Honor Roll</strong>
-                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
                             </div>
-                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
-                                Average dealers with acceptable business practices. These dealers meet basic standards but may have occasional issues with transparency or customer service.
-                            </div>
+                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">Average dealers with acceptable business practices. These dealers meet basic standards but may have occasional issues with transparency or customer service.</textarea>
                         </div>
                         
                         <div class="description-item" style="border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; background: #f8fafc;">
                             <div style="display: flex; align-items: center; margin-bottom: 8px;">
                                 <div style="width: 16px; height: 16px; border-radius: 50%; background: linear-gradient(135deg, #ef4444, #dc2626); margin-right: 8px;"></div>
                                 <strong style="color: #0f172a;">Detention</strong>
-                                <button onclick="editDescription(this)" style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer; margin-left: auto;">Edit</button>
                             </div>
-                            <div class="description-text" onclick="editDescription(this, event)" style="color: #64748b; font-size: 0.875rem; line-height: 1.5; cursor: pointer; min-height: 20px;">
-                                Dealers with poor transparency practices or customer service issues. These dealers may engage in deceptive practices, hidden fees, or provide poor customer experiences.
-                            </div>
+                            <textarea class="description-textarea" style="width: 100%; border: 1px solid #e2e8f0; border-radius: 4px; padding: 8px; font-size: 0.875rem; line-height: 1.4; color: #64748b; background: white; resize: none; height: 80px; outline: none; font-family: inherit;" onchange="saveTierData()" placeholder="Enter tier description...">Dealers with poor transparency practices or customer service issues. These dealers may engage in deceptive practices, hidden fees, or provide poor customer experiences.</textarea>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- Project Goals -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon">
+                        <i class="fas fa-bullseye"></i>
+                    </div>
+                    <div class="card-title">Project Goals</div>
+                </div>
+                <div style="margin-bottom: 20px; padding: 16px; background: #f0f9ff; border: 1px solid #bae6fd; border-radius: 8px;">
+                    <div style="display: flex; align-items: center; margin-bottom: 8px;">
+                        <i class="fas fa-info-circle" style="color: #0ea5e9; margin-right: 8px;"></i>
+                        <span style="font-weight: 600; color: #0c4a6e;">Target Goals</span>
+                    </div>
+                    <p style="color: #0369a1; font-size: 0.875rem; margin: 0;">These are the targets we're working towards. Update the numbers to adjust your goals.</p>
+                </div>
+                <div class="metrics-grid">
+                    <div class="metric" onclick="editDealershipCount()">
+                        <div class="metric-value" id="dealership-count" onclick="editDealershipCount(event)">200</div>
+                        <div class="metric-label">Target Dealerships</div>
+                    </div>
+                    <div class="metric">
+                        <div class="metric-value" id="interaction-count">2,000</div>
+                        <div class="metric-label">Target Interactions</div>
+                    </div>
+                    <div class="metric" onclick="updateMetric('weeks')">
+                        <div class="metric-value">4</div>
+                        <div class="metric-label">Project Weeks</div>
+                    </div>
+                    <div class="metric" onclick="updateMetric('launch')">
+                        <div class="metric-value">Sep 1</div>
+                        <div class="metric-label">Launch Date</div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+
+
 
             <!-- Product Features -->
             <div class="card">
@@ -902,42 +919,44 @@
                     </div>
                     <div class="card-title">Product Features</div>
                 </div>
-                <ul class="feature-list">
-                    <li onclick="toggleFeature(this)"><i class="fas fa-headphones"></i> Live Earbud Support Device</li>
-                    <li onclick="toggleFeature(this)"><i class="fas fa-comments"></i> Real-time AI Coaching</li>
-                    <li onclick="toggleFeature(this)"><i class="fas fa-mobile-alt"></i> Mobile App Interface</li>
-                    <li onclick="toggleFeature(this)"><i class="fas fa-chart-bar"></i> Quote Comparison Tools</li>
-                    <li onclick="toggleFeature(this)"><i class="fas fa-file-contract"></i> Paperwork Walkthrough</li>
-                    <li onclick="toggleFeature(this)"><i class="fas fa-shield-alt"></i> Dealer Transparency Ratings</li>
+                <ul class="feature-list" id="feature-list">
+                    <li class="feature-item">
+                        <i class="fas fa-headphones"></i>
+                        <span class="feature-text" onclick="editFeature(this)">Live Earbud Support Device</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-comments"></i>
+                        <span class="feature-text" onclick="editFeature(this)">Real-time AI Coaching</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-mobile-alt"></i>
+                        <span class="feature-text" onclick="editFeature(this)">Mobile App Interface</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-chart-bar"></i>
+                        <span class="feature-text" onclick="editFeature(this)">Quote Comparison Tools</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-file-contract"></i>
+                        <span class="feature-text" onclick="editFeature(this)">Paperwork Walkthrough</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    </li>
+                    <li class="feature-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <span class="feature-text" onclick="editFeature(this)">Dealer Transparency Ratings</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    </li>
                 </ul>
+                <button class="add-feature-btn" onclick="addNewFeature()" style="background: #3b82f6; color: white; border: none; padding: 8px; border-radius: 50%; width: 32px; height: 32px; cursor: pointer; margin-top: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem;" aria-label="Add feature">
+                    <i class="fas fa-plus"></i>
+                </button>
             </div>
 
-            <!-- Data Visualization -->
-            <div class="card">
-                <div class="card-header">
-                    <div class="card-icon">
-                        <i class="fas fa-chart-pie"></i>
-                    </div>
-                    <div class="card-title">Response Analysis</div>
-                </div>
-                <div class="data-visualization">
-                    <div class="section-title">Dealer Response Patterns</div>
-                    <div class="chart-container">
-                        <div class="chart-bar" style="height: 60%;" onclick="updateChartBar(this)">
-                            <div class="chart-value">60%</div>
-                            <div class="chart-label">Transparent</div>
-                        </div>
-                        <div class="chart-bar" style="height: 25%;" onclick="updateChartBar(this)">
-                            <div class="chart-value">25%</div>
-                            <div class="chart-label">Mixed</div>
-                        </div>
-                        <div class="chart-bar" style="height: 15%;" onclick="updateChartBar(this)">
-                            <div class="chart-value">15%</div>
-                            <div class="chart-label">Deceptive</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
         </div>
     </div>
 
@@ -963,15 +982,30 @@
             const dealershipTarget = parseInt(localStorage.getItem('dealershipCount') || '200');
             const interactionTarget = parseInt(localStorage.getItem('interactionCount') || '2000');
             
+            // Update Data Collection section
             document.getElementById('dealership-progress').textContent = `${dealershipProgress}/${dealershipTarget}`;
             document.getElementById('dealership-progress-bar').style.width = `${(dealershipProgress/dealershipTarget)*100}%`;
             
             document.getElementById('interaction-progress').textContent = `${interactionProgress}/${interactionTarget.toLocaleString()}`;
             document.getElementById('interaction-progress-bar').style.width = `${(interactionProgress/interactionTarget)*100}%`;
             
-            const overallProgress = Math.round(((dealershipProgress/dealershipTarget) + (interactionProgress/interactionTarget)) / 2 * 100);
-            document.getElementById('overall-progress').textContent = `${overallProgress}%`;
-            document.getElementById('overall-progress-bar').style.width = `${overallProgress}%`;
+            // Update overall progress
+            updateOverallProgress();
+            
+            // Update current status display
+            document.getElementById('interaction-current-display').textContent = interactionProgress;
+            document.getElementById('interaction-target-display').textContent = interactionTarget.toLocaleString();
+        }
+
+        // Update overall progress bar based on interactions
+        function updateOverallProgress() {
+            const interactionProgress = parseInt(localStorage.getItem('interactionProgress') || '500');
+            const interactionTarget = parseInt(localStorage.getItem('interactionCount') || '2000');
+            
+            // Calculate overall progress based on interactions
+            const overallProgress = Math.round((interactionProgress/interactionTarget) * 100);
+            document.getElementById('overall-progress-display').textContent = `${overallProgress}%`;
+            document.getElementById('overall-progress-bar-display').style.width = `${overallProgress}%`;
         }
 
         // Edit progress values
@@ -1056,6 +1090,10 @@
                 // Save to localStorage
                 localStorage.setItem('dealershipCount', newValue.toString());
                 localStorage.setItem('interactionCount', (newValue * 10).toString());
+                
+                // Update top progress display targets
+                document.getElementById('dealership-target-display').textContent = newValue;
+                document.getElementById('interaction-target-display').textContent = (newValue * 10).toLocaleString();
             } else {
                 // Invalid value, revert to original
                 cancelDealershipEdit(input);
@@ -1069,92 +1107,112 @@
             dealershipElement.classList.remove('editing');
         }
 
-        // Timeline interaction
-        function toggleTimelineItem(element) {
-            const dot = element.querySelector('.timeline-dot');
-            if (dot.classList.contains('completed')) {
-                dot.classList.remove('completed');
-                dot.classList.add('active');
-            } else if (dot.classList.contains('active')) {
-                dot.classList.remove('active');
-                dot.classList.add('pending');
-            } else {
-                dot.classList.remove('pending');
-                dot.classList.add('completed');
-            }
-        }
+        // Edit top progress numbers
 
-        // Tier count updates
-        function updateTierCount(element) {
-            const countElement = element.querySelector('.tier-count');
-            const current = parseInt(countElement.textContent);
-            countElement.textContent = current + 1;
-        }
 
-        // Edit tier name
-        function editTierName(element, event) {
-            event.stopPropagation(); // Prevent triggering the parent onclick
-            const currentName = element.textContent;
-            const newName = prompt('Enter new tier name:', currentName);
-            if (newName && newName.trim() !== '') {
-                element.textContent = newName.trim();
-                // Update corresponding description title
-                const descriptionItems = document.querySelectorAll('.description-item');
-                descriptionItems.forEach(item => {
-                    const title = item.querySelector('strong');
-                    if (title.textContent === currentName) {
-                        title.textContent = newName.trim();
-                    }
-                });
-                saveTierData();
-            }
-        }
-
-        // Edit description
-        function editDescription(element, event) {
-            if (event) {
-                event.stopPropagation(); // Prevent triggering other onclick events
-            }
+        function editInteractionCurrent(event) {
+            event.stopPropagation();
+            const element = document.getElementById('interaction-current-display');
+            const currentValue = element.textContent;
             
-            let descriptionText = '';
-            if (element.classList.contains('description-text')) {
-                descriptionText = element.textContent;
-            } else {
-                // If it's the edit button, find the description text
-                const descriptionElement = element.parentElement.nextElementSibling;
-                descriptionText = descriptionElement.textContent;
-            }
+            element.innerHTML = `<input type="number" value="${currentValue}" onkeypress="handleTopNumberKeyPress(event, this, 'interaction-current')" onblur="saveTopNumber(this, 'interaction-current')" min="0" max="99999" style="width: 60px; border: 1px solid #3b82f6; border-radius: 3px; padding: 2px 4px; font-size: inherit; font-weight: inherit;">`;
             
-            const newDescription = prompt('Enter new description:', descriptionText);
-            if (newDescription && newDescription.trim() !== '') {
-                if (element.classList.contains('description-text')) {
-                    element.textContent = newDescription.trim();
-                } else {
-                    const descriptionElement = element.parentElement.nextElementSibling;
-                    descriptionElement.textContent = newDescription.trim();
+            const input = element.querySelector('input');
+            input.focus();
+            input.select();
+        }
+
+        function editInteractionTarget(event) {
+            event.stopPropagation();
+            const element = document.getElementById('interaction-target-display');
+            const currentValue = element.textContent.replace(',', '');
+            
+            element.innerHTML = `<input type="number" value="${currentValue}" onkeypress="handleTopNumberKeyPress(event, this, 'interaction-target')" onblur="saveTopNumber(this, 'interaction-target')" min="1" max="99999" style="width: 60px; border: 1px solid #3b82f6; border-radius: 3px; padding: 2px 4px; font-size: inherit; font-weight: inherit;">`;
+            
+            const input = element.querySelector('input');
+            input.focus();
+            input.select();
+        }
+
+        function handleTopNumberKeyPress(event, input, type) {
+            if (event.key === 'Enter') {
+                saveTopNumber(input, type);
+            } else if (event.key === 'Escape') {
+                cancelTopNumberEdit(input, type);
+            }
+        }
+
+        function saveTopNumber(input, type) {
+            const newValue = parseInt(input.value);
+            const element = input.parentElement;
+            
+            if (newValue >= 0 && newValue <= 99999) {
+                if (type === 'interaction-current') {
+                    element.textContent = newValue;
+                    localStorage.setItem('interactionProgress', newValue.toString());
+                } else if (type === 'interaction-target') {
+                    element.textContent = newValue.toLocaleString();
+                    localStorage.setItem('interactionCount', newValue.toString());
                 }
-                saveTierData();
+                
+                // Immediately update overall progress calculation
+                updateOverallProgress();
+            } else {
+                cancelTopNumberEdit(input, type);
             }
+        }
+
+        function cancelTopNumberEdit(input, type) {
+            const element = input.parentElement;
+            if (type === 'interaction-current') {
+                const savedValue = localStorage.getItem('interactionProgress') || '500';
+                element.textContent = savedValue;
+            } else if (type === 'interaction-target') {
+                const savedValue = localStorage.getItem('interactionCount') || '2000';
+                element.textContent = parseInt(savedValue).toLocaleString();
+            }
+        }
+
+
+
+
+
+        // Update description titles when tier names change
+        function updateDescriptionTitles() {
+            const descriptionItems = document.querySelectorAll('.description-item');
+            const tierNameInputs = document.querySelectorAll('.tier-name-input');
+            descriptionItems.forEach((item, index) => {
+                const title = item.querySelector('strong');
+                if (tierNameInputs[index]) {
+                    title.textContent = tierNameInputs[index].value;
+                }
+            });
         }
 
         // Save tier data to localStorage
         function saveTierData() {
             const tierData = {
                 names: {},
+                counts: {},
                 descriptions: {}
             };
             
-            // Save tier names
-            const tierNames = document.querySelectorAll('.tier-name');
-            tierNames.forEach((name, index) => {
-                tierData.names[`tier${index}`] = name.textContent;
+            // Save tier names and counts
+            const tierNameInputs = document.querySelectorAll('.tier-name-input');
+            const tierCountInputs = document.querySelectorAll('.tier-count-input');
+            tierNameInputs.forEach((nameInput, index) => {
+                tierData.names[`tier${index}`] = nameInput.value;
+                tierData.counts[`tier${index}`] = tierCountInputs[index].value;
             });
             
             // Save descriptions
-            const descriptions = document.querySelectorAll('.description-text');
+            const descriptions = document.querySelectorAll('.description-textarea');
             descriptions.forEach((desc, index) => {
-                tierData.descriptions[`tier${index}`] = desc.textContent;
+                tierData.descriptions[`tier${index}`] = desc.value;
             });
+            
+            // Update description titles
+            updateDescriptionTitles();
             
             localStorage.setItem('projectRalphTierData', JSON.stringify(tierData));
         }
@@ -1165,48 +1223,41 @@
             if (savedData) {
                 const tierData = JSON.parse(savedData);
                 
-                // Load tier names
-                const tierNames = document.querySelectorAll('.tier-name');
-                tierNames.forEach((name, index) => {
+                // Load tier names and counts
+                const tierNameInputs = document.querySelectorAll('.tier-name-input');
+                const tierCountInputs = document.querySelectorAll('.tier-count-input');
+                tierNameInputs.forEach((nameInput, index) => {
                     if (tierData.names[`tier${index}`]) {
-                        name.textContent = tierData.names[`tier${index}`];
+                        nameInput.value = tierData.names[`tier${index}`];
+                    }
+                    if (tierData.counts[`tier${index}`]) {
+                        tierCountInputs[index].value = tierData.counts[`tier${index}`];
                     }
                 });
                 
                 // Load descriptions
-                const descriptions = document.querySelectorAll('.description-text');
+                const descriptions = document.querySelectorAll('.description-textarea');
                 descriptions.forEach((desc, index) => {
                     if (tierData.descriptions[`tier${index}`]) {
-                        desc.textContent = tierData.descriptions[`tier${index}`];
+                        desc.value = tierData.descriptions[`tier${index}`];
                     }
                 });
                 
                 // Update description titles to match tier names
                 const descriptionItems = document.querySelectorAll('.description-item');
-                const tierNameElements = document.querySelectorAll('.tier-name');
+                const tierNameInputsForTitles = document.querySelectorAll('.tier-name-input');
                 descriptionItems.forEach((item, index) => {
                     const title = item.querySelector('strong');
-                    if (tierNameElements[index]) {
-                        title.textContent = tierNameElements[index].textContent;
+                    if (tierNameInputsForTitles[index]) {
+                        title.textContent = tierNameInputsForTitles[index].value;
                     }
                 });
             }
         }
 
-        // Feature toggle
-        function toggleFeature(element) {
-            element.style.opacity = element.style.opacity === '0.5' ? '1' : '0.5';
-        }
 
-        // Chart bar updates
-        function updateChartBar(element) {
-            const currentHeight = parseInt(element.style.height);
-            const newHeight = Math.min(currentHeight + 5, 100);
-            element.style.height = `${newHeight}%`;
-            
-            const valueElement = element.querySelector('.chart-value');
-            valueElement.textContent = `${newHeight}%`;
-        }
+
+
 
         // Todo list functionality
         function addNewTaskRow(taskType) {
@@ -1368,6 +1419,132 @@
             }
         }
 
+        // Feature editing functionality
+        function editFeature(element) {
+            const currentText = element.textContent;
+            const featureItem = element.closest('.feature-item');
+            
+            // Convert to editing mode
+            featureItem.classList.add('editing');
+            featureItem.innerHTML = `
+                <i class="fas fa-edit"></i>
+                <input type="text" class="feature-input-inline" value="${currentText}" onkeypress="handleFeatureKeyPress(event, this)" onblur="saveFeature(this)" style="flex: 1; padding: 8px 12px; border: 1px solid #3b82f6; border-radius: 4px; font-size: 0.875rem; outline: none; background: white;">
+                <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+            `;
+            
+            // Focus and select all text
+            const input = featureItem.querySelector('.feature-input-inline');
+            input.focus();
+            input.select();
+        }
+
+        function handleFeatureKeyPress(event, input) {
+            if (event.key === 'Enter') {
+                saveFeature(input);
+            } else if (event.key === 'Escape') {
+                cancelFeatureEdit(input);
+            }
+        }
+
+        function saveFeature(input) {
+            const text = input.value.trim();
+            const featureItem = input.closest('.feature-item');
+            
+            if (text) {
+                // Convert to regular feature item
+                featureItem.classList.remove('editing');
+                featureItem.innerHTML = `
+                    <i class="fas fa-cog"></i>
+                    <span class="feature-text" onclick="editFeature(this)">${text}</span>
+                    <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                `;
+                saveFeatures();
+            } else {
+                // Remove empty feature
+                featureItem.remove();
+            }
+        }
+
+        function cancelFeatureEdit(input) {
+            const featureItem = input.closest('.feature-item');
+            const savedFeatures = loadFeatures();
+            const index = Array.from(featureItem.parentElement.children).indexOf(featureItem);
+            
+            if (savedFeatures[index]) {
+                featureItem.classList.remove('editing');
+                featureItem.innerHTML = `
+                    <i class="fas fa-cog"></i>
+                    <span class="feature-text" onclick="editFeature(this)">${savedFeatures[index]}</span>
+                    <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                `;
+            } else {
+                featureItem.remove();
+            }
+        }
+
+        function deleteFeature(button) {
+            button.parentElement.remove();
+            saveFeatures();
+        }
+
+        function addNewFeature() {
+            const featureList = document.getElementById('feature-list');
+            const li = document.createElement('li');
+            li.className = 'feature-item editing';
+            li.innerHTML = `
+                <i class="fas fa-edit"></i>
+                <input type="text" class="feature-input-inline" placeholder="Type your feature here..." onkeypress="handleFeatureKeyPress(event, this)" onblur="saveFeature(this)" style="flex: 1; padding: 8px 12px; border: 1px solid #3b82f6; border-radius: 4px; font-size: 0.875rem; outline: none; background: white;">
+                <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+            `;
+            featureList.appendChild(li);
+            
+            // Focus on the input
+            const input = li.querySelector('.feature-input-inline');
+            input.focus();
+        }
+
+        // Save features to localStorage
+        function saveFeatures() {
+            const featureItems = document.querySelectorAll('.feature-item');
+            const features = [];
+            
+            featureItems.forEach(item => {
+                const text = item.querySelector('.feature-text');
+                if (text) {
+                    features.push(text.textContent);
+                }
+            });
+            
+            localStorage.setItem('projectRalphFeatures', JSON.stringify(features));
+        }
+
+        // Load features from localStorage
+        function loadFeatures() {
+            const savedFeatures = localStorage.getItem('projectRalphFeatures');
+            if (savedFeatures) {
+                const features = JSON.parse(savedFeatures);
+                const featureList = document.getElementById('feature-list');
+                
+                // Clear existing features
+                featureList.innerHTML = '';
+                
+                // Add saved features
+                features.forEach(feature => {
+                    const li = document.createElement('li');
+                    li.className = 'feature-item';
+                    li.innerHTML = `
+                        <i class="fas fa-cog"></i>
+                        <span class="feature-text" onclick="editFeature(this)">${feature}</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    `;
+                    featureList.appendChild(li);
+                });
+                
+                return features;
+            }
+            return [];
+        }
+
         // Load saved metric values
         function loadSavedMetrics() {
             const savedDealershipCount = localStorage.getItem('dealershipCount');
@@ -1388,6 +1565,7 @@
         updateTodoStats();
         loadTodos(); // Load todos from localStorage on page load
         loadTierData(); // Load tier data from localStorage on page load
+        loadFeatures(); // Load features from localStorage on page load
 
         // Update date display every minute
         setInterval(updateDateDisplay, 60000);
