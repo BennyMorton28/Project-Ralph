@@ -961,6 +961,271 @@
     </div>
 
     <script>
+        // Cloud storage configuration
+        const JSONBIN_API_KEY = '$2a$10$SEnNfh62rZ5cbmvsRc5iGu5FElaadU.JCpjWywSTIWkdZWEWvt3.i'; // You'll need to get this from jsonbin.io
+        let JSONBIN_BIN_ID = localStorage.getItem('projectRalphBinId') || null; // This will be created when you first save data
+        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b';
+
+        // Data structure for cloud storage
+        let projectData = {
+            interactions: {
+                current: 500,
+                target: 2000
+            },
+            dealerships: {
+                current: 50,
+                target: 200
+            },
+            todos: [],
+            features: [],
+            tierData: {
+                names: {},
+                counts: {},
+                descriptions: {}
+            },
+            lastUpdated: new Date().toISOString()
+        };
+
+        // Save data to both localStorage and cloud
+        async function saveDataToCloud() {
+            try {
+                // Update projectData with current values
+                updateProjectDataFromDOM();
+                
+                // Save to localStorage as backup
+                localStorage.setItem('projectRalphData', JSON.stringify(projectData));
+                
+                // Save to cloud if API key is configured
+                if (JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY') {
+                    let url = JSONBIN_URL;
+                    let method = 'POST';
+                    
+                    // If we have a bin ID, update it; otherwise create a new one
+                    if (JSONBIN_BIN_ID) {
+                        url = `${JSONBIN_URL}/${JSONBIN_BIN_ID}`;
+                        method = 'PUT';
+                    }
+                    
+                    const response = await fetch(url, {
+                        method: method,
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-Master-Key': JSONBIN_API_KEY
+                        },
+                        body: JSON.stringify(projectData)
+                    });
+                    
+                    if (response.ok) {
+                        const result = await response.json();
+                        // If this was a new bin creation, save the bin ID
+                        if (!JSONBIN_BIN_ID && result.metadata && result.metadata.id) {
+                            JSONBIN_BIN_ID = result.metadata.id;
+                            localStorage.setItem('projectRalphBinId', JSONBIN_BIN_ID);
+                            console.log('New bin created with ID:', JSONBIN_BIN_ID);
+                        }
+                        console.log('Data saved to cloud successfully');
+                    } else {
+                        console.error('Failed to save to cloud:', response.statusText);
+                    }
+                }
+            } catch (error) {
+                console.error('Error saving data:', error);
+            }
+        }
+
+        // Load data from cloud and localStorage
+        async function loadDataFromCloud() {
+            try {
+                let data = null;
+                
+                // Try to load from cloud first if API key is configured and we have a bin ID
+                if (JSONBIN_API_KEY !== 'YOUR_JSONBIN_API_KEY' && JSONBIN_BIN_ID) {
+                    try {
+                        const response = await fetch(`${JSONBIN_URL}/${JSONBIN_BIN_ID}/latest`, {
+                            headers: {
+                                'X-Master-Key': JSONBIN_API_KEY
+                            }
+                        });
+                        
+                        if (response.ok) {
+                            const result = await response.json();
+                            data = result.record;
+                            console.log('Data loaded from cloud successfully');
+                        }
+                    } catch (error) {
+                        console.log('Could not load from cloud, using localStorage:', error);
+                    }
+                }
+                
+                // Fallback to localStorage if cloud load failed
+                if (!data) {
+                    const localData = localStorage.getItem('projectRalphData');
+                    if (localData) {
+                        data = JSON.parse(localData);
+                        console.log('Data loaded from localStorage');
+                    }
+                }
+                
+                // Apply loaded data
+                if (data) {
+                    projectData = data;
+                    applyProjectDataToDOM();
+                }
+                
+            } catch (error) {
+                console.error('Error loading data:', error);
+            }
+        }
+
+        // Update projectData object from current DOM values
+        function updateProjectDataFromDOM() {
+            // Update interactions
+            const interactionCurrent = document.getElementById('interaction-current-display');
+            const interactionTarget = document.getElementById('interaction-target-display');
+            if (interactionCurrent && interactionTarget) {
+                projectData.interactions.current = parseInt(interactionCurrent.textContent);
+                projectData.interactions.target = parseInt(interactionTarget.textContent.replace(',', ''));
+            }
+            
+            // Update dealerships
+            const dealershipCurrent = localStorage.getItem('dealershipProgress') || '50';
+            const dealershipTarget = localStorage.getItem('dealershipCount') || '200';
+            projectData.dealerships.current = parseInt(dealershipCurrent);
+            projectData.dealerships.target = parseInt(dealershipTarget);
+            
+            // Update todos
+            const todoItems = document.querySelectorAll('.todo-item');
+            projectData.todos = [];
+            todoItems.forEach(item => {
+                const checkbox = item.querySelector('.todo-checkbox');
+                const text = item.querySelector('.todo-text');
+                const type = item.getAttribute('data-type') || 'daily';
+                if (text) {
+                    projectData.todos.push({
+                        text: text.textContent,
+                        completed: checkbox ? checkbox.checked : false,
+                        type: type
+                    });
+                }
+            });
+            
+            // Update features
+            const featureItems = document.querySelectorAll('.feature-item');
+            projectData.features = [];
+            featureItems.forEach(item => {
+                const text = item.querySelector('.feature-text');
+                if (text) {
+                    projectData.features.push(text.textContent);
+                }
+            });
+            
+            // Update tier data
+            const tierNameInputs = document.querySelectorAll('.tier-name-input');
+            const tierCountInputs = document.querySelectorAll('.tier-count-input');
+            const descriptions = document.querySelectorAll('.description-textarea');
+            
+            projectData.tierData.names = {};
+            projectData.tierData.counts = {};
+            projectData.tierData.descriptions = {};
+            
+            tierNameInputs.forEach((nameInput, index) => {
+                projectData.tierData.names[`tier${index}`] = nameInput.value;
+                projectData.tierData.counts[`tier${index}`] = tierCountInputs[index].value;
+                projectData.tierData.descriptions[`tier${index}`] = descriptions[index].value;
+            });
+            
+            projectData.lastUpdated = new Date().toISOString();
+        }
+
+        // Apply projectData to DOM
+        function applyProjectDataToDOM() {
+            // Apply interactions
+            if (projectData.interactions) {
+                document.getElementById('interaction-current-display').textContent = projectData.interactions.current;
+                document.getElementById('interaction-target-display').textContent = projectData.interactions.target.toLocaleString();
+                localStorage.setItem('interactionProgress', projectData.interactions.current.toString());
+                localStorage.setItem('interactionCount', projectData.interactions.target.toString());
+            }
+            
+            // Apply dealerships
+            if (projectData.dealerships) {
+                localStorage.setItem('dealershipProgress', projectData.dealerships.current.toString());
+                localStorage.setItem('dealershipCount', projectData.dealerships.target.toString());
+            }
+            
+            // Apply todos
+            if (projectData.todos && projectData.todos.length > 0) {
+                // Clear existing todos
+                document.getElementById('daily-todo-list').innerHTML = '';
+                document.getElementById('weekly-todo-list').innerHTML = '';
+                document.getElementById('overall-todo-list').innerHTML = '';
+                
+                // Add todos from data
+                projectData.todos.forEach(todo => {
+                    const li = document.createElement('li');
+                    li.className = 'todo-item';
+                    li.setAttribute('data-type', todo.type || 'daily');
+                    if (todo.completed) {
+                        li.classList.add('completed');
+                    }
+                    
+                    li.innerHTML = `
+                        <input type="checkbox" class="todo-checkbox" onchange="toggleTodo(this)" ${todo.completed ? 'checked' : ''} aria-label="Mark task as complete">
+                        <span class="todo-text" onclick="editExistingTask(this)">${todo.text}</span>
+                        <button class="todo-delete" onclick="deleteTodo(this)" aria-label="Delete task">×</button>
+                    `;
+                    
+                    const targetList = document.getElementById(`${todo.type || 'daily'}-todo-list`);
+                    if (targetList) {
+                        targetList.appendChild(li);
+                    }
+                });
+                
+                updateTodoStats();
+            }
+            
+            // Apply features
+            if (projectData.features && projectData.features.length > 0) {
+                const featureList = document.getElementById('feature-list');
+                featureList.innerHTML = '';
+                
+                projectData.features.forEach(feature => {
+                    const li = document.createElement('li');
+                    li.className = 'feature-item';
+                    li.innerHTML = `
+                        <i class="fas fa-cog"></i>
+                        <span class="feature-text" onclick="editFeature(this)">${feature}</span>
+                        <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
+                    `;
+                    featureList.appendChild(li);
+                });
+            }
+            
+            // Apply tier data
+            if (projectData.tierData) {
+                const tierNameInputs = document.querySelectorAll('.tier-name-input');
+                const tierCountInputs = document.querySelectorAll('.tier-count-input');
+                const descriptions = document.querySelectorAll('.description-textarea');
+                
+                tierNameInputs.forEach((nameInput, index) => {
+                    if (projectData.tierData.names[`tier${index}`]) {
+                        nameInput.value = projectData.tierData.names[`tier${index}`];
+                    }
+                    if (projectData.tierData.counts[`tier${index}`]) {
+                        tierCountInputs[index].value = projectData.tierData.counts[`tier${index}`];
+                    }
+                    if (projectData.tierData.descriptions[`tier${index}`]) {
+                        descriptions[index].value = projectData.tierData.descriptions[`tier${index}`];
+                    }
+                });
+                
+                updateDescriptionTitles();
+            }
+            
+            // Update progress displays
+            updateProgress();
+        }
+
         // Initialize date display
         function updateDateDisplay() {
             const today = new Date();
@@ -982,19 +1247,38 @@
             const dealershipTarget = parseInt(localStorage.getItem('dealershipCount') || '200');
             const interactionTarget = parseInt(localStorage.getItem('interactionCount') || '2000');
             
-            // Update Data Collection section
-            document.getElementById('dealership-progress').textContent = `${dealershipProgress}/${dealershipTarget}`;
-            document.getElementById('dealership-progress-bar').style.width = `${(dealershipProgress/dealershipTarget)*100}%`;
+            // Update Data Collection section (only if elements exist)
+            const dealershipProgressElement = document.getElementById('dealership-progress');
+            const dealershipProgressBarElement = document.getElementById('dealership-progress-bar');
+            const interactionProgressElement = document.getElementById('interaction-progress');
+            const interactionProgressBarElement = document.getElementById('interaction-progress-bar');
             
-            document.getElementById('interaction-progress').textContent = `${interactionProgress}/${interactionTarget.toLocaleString()}`;
-            document.getElementById('interaction-progress-bar').style.width = `${(interactionProgress/interactionTarget)*100}%`;
+            if (dealershipProgressElement) {
+                dealershipProgressElement.textContent = `${dealershipProgress}/${dealershipTarget}`;
+            }
+            if (dealershipProgressBarElement) {
+                dealershipProgressBarElement.style.width = `${(dealershipProgress/dealershipTarget)*100}%`;
+            }
+            if (interactionProgressElement) {
+                interactionProgressElement.textContent = `${interactionProgress}/${interactionTarget.toLocaleString()}`;
+            }
+            if (interactionProgressBarElement) {
+                interactionProgressBarElement.style.width = `${(interactionProgress/interactionTarget)*100}%`;
+            }
             
             // Update overall progress
             updateOverallProgress();
             
             // Update current status display
-            document.getElementById('interaction-current-display').textContent = interactionProgress;
-            document.getElementById('interaction-target-display').textContent = interactionTarget.toLocaleString();
+            const interactionCurrentDisplay = document.getElementById('interaction-current-display');
+            const interactionTargetDisplay = document.getElementById('interaction-target-display');
+            
+            if (interactionCurrentDisplay) {
+                interactionCurrentDisplay.textContent = interactionProgress;
+            }
+            if (interactionTargetDisplay) {
+                interactionTargetDisplay.textContent = interactionTarget.toLocaleString();
+            }
         }
 
         // Update overall progress bar based on interactions
@@ -1026,6 +1310,7 @@
                         localStorage.setItem('interactionProgress', numValue.toString());
                     }
                     updateProgress();
+                    saveDataToCloud(); // Save to cloud
                 } else {
                     alert(`Please enter a number between 0 and ${maxValue}`);
                 }
@@ -1094,6 +1379,8 @@
                 // Update top progress display targets
                 document.getElementById('dealership-target-display').textContent = newValue;
                 document.getElementById('interaction-target-display').textContent = (newValue * 10).toLocaleString();
+                
+                saveDataToCloud(); // Save to cloud
             } else {
                 // Invalid value, revert to original
                 cancelDealershipEdit(input);
@@ -1108,8 +1395,6 @@
         }
 
         // Edit top progress numbers
-
-
         function editInteractionCurrent(event) {
             event.stopPropagation();
             const element = document.getElementById('interaction-current-display');
@@ -1157,6 +1442,9 @@
                 
                 // Immediately update overall progress calculation
                 updateOverallProgress();
+                
+                // Save to cloud
+                saveDataToCloud();
             } else {
                 cancelTopNumberEdit(input, type);
             }
@@ -1173,10 +1461,6 @@
             }
         }
 
-
-
-
-
         // Update description titles when tier names change
         function updateDescriptionTitles() {
             const descriptionItems = document.querySelectorAll('.description-item');
@@ -1189,7 +1473,7 @@
             });
         }
 
-        // Save tier data to localStorage
+        // Save tier data to localStorage and cloud
         function saveTierData() {
             const tierData = {
                 names: {},
@@ -1215,9 +1499,10 @@
             updateDescriptionTitles();
             
             localStorage.setItem('projectRalphTierData', JSON.stringify(tierData));
+            saveDataToCloud(); // Save to cloud
         }
 
-        // Load tier data from localStorage
+        // Load tier data from localStorage and cloud
         function loadTierData() {
             const savedData = localStorage.getItem('projectRalphTierData');
             if (savedData) {
@@ -1254,10 +1539,6 @@
                 });
             }
         }
-
-
-
-
 
         // Todo list functionality
         function addNewTaskRow(taskType) {
@@ -1299,6 +1580,7 @@
                 `;
                 updateTodoStats();
                 saveTodos();
+                saveDataToCloud(); // Save to cloud
             } else {
                 // Remove empty task
                 todoItem.remove();
@@ -1337,12 +1619,14 @@
             }
             updateTodoStats();
             saveTodos();
+            saveDataToCloud(); // Save to cloud
         }
 
         function deleteTodo(button) {
             button.parentElement.remove();
             updateTodoStats();
             saveTodos();
+            saveDataToCloud(); // Save to cloud
         }
 
         function updateTodoStats() {
@@ -1354,7 +1638,7 @@
             document.getElementById('todo-completed').textContent = `${completedItems.length} completed`;
         }
 
-        // Save todos to localStorage
+        // Save todos to localStorage and cloud
         function saveTodos() {
             const todoItems = document.querySelectorAll('.todo-item');
             const todos = [];
@@ -1373,7 +1657,7 @@
             localStorage.setItem('projectRalphTodos', JSON.stringify(todos));
         }
 
-        // Load todos from localStorage
+        // Load todos from localStorage and cloud
         function loadTodos() {
             const savedTodos = localStorage.getItem('projectRalphTodos');
             if (savedTodos) {
@@ -1416,6 +1700,7 @@
                 document.getElementById('weekly-todo-list').innerHTML = '';
                 document.getElementById('overall-todo-list').innerHTML = '';
                 updateTodoStats();
+                saveDataToCloud(); // Save to cloud
             }
         }
 
@@ -1459,6 +1744,7 @@
                     <button class="feature-delete" onclick="deleteFeature(this)" aria-label="Delete feature">×</button>
                 `;
                 saveFeatures();
+                saveDataToCloud(); // Save to cloud
             } else {
                 // Remove empty feature
                 featureItem.remove();
@@ -1485,6 +1771,7 @@
         function deleteFeature(button) {
             button.parentElement.remove();
             saveFeatures();
+            saveDataToCloud(); // Save to cloud
         }
 
         function addNewFeature() {
@@ -1503,7 +1790,7 @@
             input.focus();
         }
 
-        // Save features to localStorage
+        // Save features to localStorage and cloud
         function saveFeatures() {
             const featureItems = document.querySelectorAll('.feature-item');
             const features = [];
@@ -1518,7 +1805,7 @@
             localStorage.setItem('projectRalphFeatures', JSON.stringify(features));
         }
 
-        // Load features from localStorage
+        // Load features from localStorage and cloud
         function loadFeatures() {
             const savedFeatures = localStorage.getItem('projectRalphFeatures');
             if (savedFeatures) {
@@ -1559,13 +1846,19 @@
         }
 
         // Initialize everything
-        updateDateDisplay();
-        loadSavedMetrics(); // Load saved metric values
-        updateProgress();
-        updateTodoStats();
-        loadTodos(); // Load todos from localStorage on page load
-        loadTierData(); // Load tier data from localStorage on page load
-        loadFeatures(); // Load features from localStorage on page load
+        async function initializeApp() {
+            updateDateDisplay();
+            await loadDataFromCloud(); // Load data from cloud first
+            loadSavedMetrics(); // Load saved metric values
+            updateProgress();
+            updateTodoStats();
+            loadTodos(); // Load todos from localStorage on page load
+            loadTierData(); // Load tier data from localStorage on page load
+            loadFeatures(); // Load features from localStorage on page load
+        }
+
+        // Initialize the app
+        initializeApp();
 
         // Update date display every minute
         setInterval(updateDateDisplay, 60000);
