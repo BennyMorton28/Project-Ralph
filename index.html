@@ -971,7 +971,8 @@
     <script>
         // Cloud storage configuration
         const JSONBIN_API_KEY = '$2a$10$SEnNfh62rZ5cbmvsRc5iGu5FElaadU.JCpjWywSTIWkdZWEWvt3.i';
-        let JSONBIN_BIN_ID = localStorage.getItem('projectRalphBinId') || null;
+        // Hardcode the bin ID so it works in all browsers/devices
+        let JSONBIN_BIN_ID = '689168af7b4b8670d8ad55e0';
         const JSONBIN_URL = 'https://api.jsonbin.io/v3/b';
 
         // Data structure for cloud storage
