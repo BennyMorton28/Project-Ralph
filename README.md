@@ -9,6 +9,22 @@ A comprehensive visual project tracker for your car buying assistant project tar
 3. **One-Click Deployment**: Use the deployment script (see below)
 4. **Persistent Tasks**: Todo list saves automatically using browser storage
 
+## Security Setup
+
+**⚠️ IMPORTANT: Before deploying, secure your sensitive data!**
+
+1. **Environment Variables**: Copy `env.example` to `.env` and fill in your actual credentials
+2. **Database Credentials**: Never commit real database passwords to git
+3. **API Keys**: Store JSONBin API keys in environment variables
+4. **Private Repository**: Make sure your GitHub repo is private to protect sensitive data
+
+**Example setup:**
+```bash
+cp env.example .env
+# Edit .env with your actual credentials
+# The .env file is already in .gitignore and won't be committed
+```
+
 ## One-Click Deployment
 
 ### Using the Deployment Script

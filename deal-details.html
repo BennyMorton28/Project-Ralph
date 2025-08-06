@@ -1,0 +1,1213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deal Details - Project Ralph</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .nav-link {
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: #2563eb;
+        }
+
+        .nav-link.secondary {
+            background: #64748b;
+        }
+
+        .nav-link.secondary:hover {
+            background: #475569;
+        }
+
+        .deal-summary {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .deal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .deal-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .deal-status {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .deal-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-bottom: 24px;
+        }
+
+        .deal-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+        }
+
+        .deal-card h3 {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .deal-card .value {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .tabs {
+            display: flex;
+            border-bottom: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+            background: white;
+            border-radius: 12px 12px 0 0;
+            overflow: hidden;
+        }
+
+        .tab {
+            padding: 16px 24px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab.active {
+            color: #3b82f6;
+            border-bottom-color: #3b82f6;
+            background: #f8fafc;
+        }
+
+        .tab:hover {
+            background: #f1f5f9;
+        }
+
+        .tab-content {
+            background: white;
+            border-radius: 0 0 12px 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            border-top: none;
+        }
+
+        .tab-pane {
+            display: none;
+        }
+
+        .tab-pane.active {
+            display: block;
+        }
+
+        .section {
+            margin-bottom: 32px;
+        }
+
+        .section h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            color: #374151;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .conversation-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .conversation-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .conversation-role {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .role-dealer {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .role-buyer {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .conversation-timestamp {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .conversation-content {
+            color: #374151;
+            line-height: 1.6;
+            white-space: pre-wrap;
+        }
+
+        .risk-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .risk-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .risk-label {
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .risk-amount {
+            font-weight: 600;
+            color: #dc2626;
+        }
+
+        .risk-assessment {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .assessment-normal {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .assessment-illegitimate {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .risk-comment {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-top: 8px;
+        }
+
+        .goal-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+        }
+
+        .goal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .goal-name {
+            font-weight: 600;
+            color: #0f172a;
+            text-transform: capitalize;
+        }
+
+        .goal-status {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .status-success {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .goal-details {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+        .loading h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+
+        .loading p {
+            font-size: 0.875rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .error {
+            text-align: center;
+            padding: 60px 20px;
+            color: #dc2626;
+        }
+
+        .error h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: #dc2626;
+        }
+
+        .error p {
+            font-size: 0.875rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        .grading-explanation {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 24px;
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .grade-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 32px;
+        }
+
+        .grade-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .grade-card.overall {
+            border: 2px solid #3b82f6;
+            background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+        }
+
+        .grade-card h4 {
+            margin: 0 0 16px 0;
+            color: #0f172a;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .grade-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            margin-bottom: 12px;
+            min-width: 120px;
+        }
+
+        .grade-amount {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .grade-score {
+            font-size: 0.875rem;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+
+        .grade-description {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .grading-thresholds {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 24px;
+        }
+
+        .grading-thresholds h4 {
+            margin: 0 0 16px 0;
+            color: #0f172a;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .threshold-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+        }
+
+        .threshold-section h5 {
+            margin: 0 0 12px 0;
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .threshold-section ul {
+            margin: 0;
+            padding-left: 20px;
+            color: #374151;
+        }
+
+        .threshold-section li {
+            margin-bottom: 4px;
+            line-height: 1.4;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .deal-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .tabs {
+                flex-wrap: wrap;
+            }
+
+            .tab {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .nav-links {
+                position: static;
+                justify-content: center;
+                margin-top: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Deal Details</h1>
+            <p>Comprehensive information for Deal <span id="deal-id">Loading...</span></p>
+            <div class="nav-links">
+                <a href="metrics.html" class="nav-link secondary">
+                    <i class="fas fa-arrow-left"></i> Back to Metrics
+                </a>
+                <a href="#" class="nav-link" onclick="refreshData()">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </a>
+            </div>
+        </div>
+
+        <div class="deal-summary">
+            <div class="deal-header">
+                <div class="deal-title" id="deal-title">Loading Deal Information...</div>
+                <div class="deal-status" id="deal-status">Loading...</div>
+            </div>
+            
+            <div class="deal-grid" id="deal-grid">
+                <div class="loading">
+                    <h3>Loading Deal Data...</h3>
+                    <p>Please wait while we fetch the deal information.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('overview')">Overview</button>
+            <button class="tab" onclick="showTab('grading')">Fee Grading</button>
+            <button class="tab" onclick="showTab('conversation')">Conversation</button>
+            <button class="tab" onclick="showTab('tasks')">Tasks</button>
+            <button class="tab" onclick="showTab('risk')">Risk Analysis</button>
+            <button class="tab" onclick="showTab('goals')">Goals</button>
+            <button class="tab" onclick="showTab('pricing')">Pricing</button>
+        </div>
+
+        <div class="tab-content">
+            <!-- Overview Tab -->
+            <div id="overview" class="tab-pane active">
+                <div class="loading">
+                    <h3>Loading Overview...</h3>
+                    <p>Please wait while we fetch the overview data.</p>
+                </div>
+            </div>
+
+            <!-- Conversation Tab -->
+            <div id="conversation" class="tab-pane">
+                <div class="loading">
+                    <h3>Loading Conversation...</h3>
+                    <p>Please wait while we fetch the conversation history.</p>
+                </div>
+            </div>
+
+            <!-- Tasks Tab -->
+            <div id="tasks" class="tab-pane">
+                <div class="loading">
+                    <h3>Loading Tasks...</h3>
+                    <p>Please wait while we fetch the task information.</p>
+                </div>
+            </div>
+
+            <!-- Risk Analysis Tab -->
+            <div id="risk" class="tab-pane">
+                <div class="loading">
+                    <h3>Loading Risk Analysis...</h3>
+                    <p>Please wait while we fetch the risk assessment data.</p>
+                </div>
+            </div>
+
+            <!-- Goals Tab -->
+            <div id="goals" class="tab-pane">
+                <div class="loading">
+                    <h3>Loading Goals...</h3>
+                    <p>Please wait while we fetch the goal tracking data.</p>
+                </div>
+            </div>
+
+            <!-- Fee Grading Tab -->
+            <div id="grading" class="tab-pane">
+                <div class="loading">
+                    <h3>Loading Fee Grading...</h3>
+                    <p>Please wait while we fetch the grading information.</p>
+                </div>
+            </div>
+
+            <!-- Pricing Tab -->
+            <div id="pricing" class="tab-pane">
+                <div class="loading">
+                    <h3>Loading Pricing...</h3>
+                    <p>Please wait while we fetch the pricing information.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let dealData = null;
+        const dealId = new URLSearchParams(window.location.search).get('id') || '3589';
+
+        // Initialize the page
+        async function initializeDealDetails() {
+            document.getElementById('deal-id').textContent = dealId;
+            await loadDealData();
+        }
+
+        // Load deal data
+        async function loadDealData() {
+            try {
+                console.log('Loading deal data for ID:', dealId);
+                
+                // Load comprehensive deal data
+                const response = await fetch(`/api/deal-details/${dealId}`);
+                if (response.ok) {
+                    dealData = await response.json();
+                    updateDealDisplay();
+                } else {
+                    console.error('Failed to load deal data');
+                    showError('Failed to load deal data. Please try again.');
+                }
+
+                // Load grading data
+                const gradingResponse = await fetch(`/api/deal-grading/${dealId}`);
+                if (gradingResponse.ok) {
+                    const gradingData = await gradingResponse.json();
+                    dealData.grading = gradingData.grading;
+                    updateGradingTab();
+                }
+            } catch (error) {
+                console.error('Error loading deal data:', error);
+                showError('Connection error. Please check your connection and try again.');
+            }
+        }
+
+        // Update the display with deal data
+        function updateDealDisplay() {
+            if (!dealData) return;
+
+            // Update deal header
+            updateDealHeader();
+            
+            // Update deal summary grid
+            updateDealGrid();
+            
+            // Update all tabs
+            updateOverviewTab();
+            updateConversationTab();
+            updateTasksTab();
+            updateRiskTab();
+            updateGoalsTab();
+            updatePricingTab();
+        }
+
+        // Update deal header
+        function updateDealHeader() {
+            const deal = dealData.deal;
+            const dealer = dealData.dealer;
+            
+            document.getElementById('deal-title').textContent = 
+                `${deal.vehicle_year || ''} ${deal.vehicle_make || ''} ${deal.vehicle_model || ''} - ${dealer?.name || 'Unknown Dealer'}`;
+            
+            const statusElement = document.getElementById('deal-status');
+            statusElement.textContent = deal.state || 'Unknown';
+            statusElement.className = `deal-status status-${getStatusClass(deal.state)}`;
+        }
+
+        // Update deal summary grid
+        function updateDealGrid() {
+            const deal = dealData.deal;
+            const dealer = dealData.dealer;
+            
+            const gridHtml = `
+                <div class="deal-card">
+                    <h3>Deal State</h3>
+                    <div class="value">${deal.state || 'Unknown'}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Vehicle</h3>
+                    <div class="value">${deal.vehicle_year || ''} ${deal.vehicle_make || ''} ${deal.vehicle_model || ''}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>VIN</h3>
+                    <div class="value">${deal.vehicle_vin || 'N/A'}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Dealer</h3>
+                    <div class="value">${dealer?.name || 'Unknown'}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Location</h3>
+                    <div class="value">${dealer?.city || ''}, ${dealer?.state_code || ''}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Total Price</h3>
+                    <div class="value">$${deal.total_price ? deal.total_price.toLocaleString() : 'N/A'}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Created</h3>
+                    <div class="value">${formatDate(deal.created)}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Last Updated</h3>
+                    <div class="value">${formatDate(deal.updated)}</div>
+                </div>
+            `;
+            
+            document.getElementById('deal-grid').innerHTML = gridHtml;
+        }
+
+        // Update overview tab
+        function updateOverviewTab() {
+            const deal = dealData.deal;
+            const dealer = dealData.dealer;
+            const tasks = dealData.tasks;
+            
+            const overviewHtml = `
+                <div class="section">
+                    <h3>Deal Information</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Deal ID</td>
+                            <td>${deal.id}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>${deal.state}</td>
+                        </tr>
+                        <tr>
+                            <td>Active</td>
+                            <td>${deal.is_active ? 'Yes' : 'No'}</td>
+                        </tr>
+                        <tr>
+                            <td>Created</td>
+                            <td>${formatDate(deal.created)}</td>
+                        </tr>
+                        <tr>
+                            <td>Updated</td>
+                            <td>${formatDate(deal.updated)}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <h3>Vehicle Information</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Year</td>
+                            <td>${deal.vehicle_year || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>Make</td>
+                            <td>${deal.vehicle_make || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>Model</td>
+                            <td>${deal.vehicle_model || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>VIN</td>
+                            <td>${deal.vehicle_vin || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>Color</td>
+                            <td>${deal.vehicle_color || 'N/A'}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <h3>Dealer Information</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Field</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Name</td>
+                            <td>${dealer?.name || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>City</td>
+                            <td>${dealer?.city || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>State</td>
+                            <td>${dealer?.state_code || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>Phone</td>
+                            <td>${dealer?.phone || 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>Email</td>
+                            <td>${dealer?.email || 'N/A'}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <h3>Task Summary</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Task Type</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                        </tr>
+                        ${tasks.map(task => `
+                            <tr>
+                                <td>${task.task_type}</td>
+                                <td>${task.state}</td>
+                                <td>${formatDate(task.created)}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+            `;
+            
+            document.getElementById('overview').innerHTML = overviewHtml;
+        }
+
+        // Update conversation tab
+        function updateConversationTab() {
+            const conversation = dealData.conversation || [];
+            
+            if (conversation.length === 0) {
+                document.getElementById('conversation').innerHTML = `
+                    <div class="error">
+                        <h3>No Conversation Data</h3>
+                        <p>No conversation history found for this deal.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const conversationHtml = conversation.map(msg => `
+                <div class="conversation-item">
+                    <div class="conversation-header">
+                        <div class="conversation-role role-${msg.role}">${msg.role}</div>
+                        <div class="conversation-timestamp">${formatDate(msg.timestamp)}</div>
+                    </div>
+                    <div class="conversation-content">${msg.content}</div>
+                </div>
+            `).join('');
+            
+            document.getElementById('conversation').innerHTML = conversationHtml;
+        }
+
+        // Update tasks tab
+        function updateTasksTab() {
+            const tasks = dealData.tasks || [];
+            
+            if (tasks.length === 0) {
+                document.getElementById('tasks').innerHTML = `
+                    <div class="error">
+                        <h3>No Tasks Found</h3>
+                        <p>No tasks found for this deal.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const tasksHtml = tasks.map(task => `
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-name">${task.task_type}</div>
+                        <div class="goal-status status-${task.state === 'COMPLETED' ? 'success' : 'pending'}">${task.state}</div>
+                    </div>
+                    <div class="goal-details">
+                        <strong>Created:</strong> ${formatDate(task.created)}<br>
+                        <strong>Updated:</strong> ${formatDate(task.updated)}<br>
+                        <strong>Trace ID:</strong> ${task.trace_id || 'N/A'}
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('tasks').innerHTML = tasksHtml;
+        }
+
+        // Update risk analysis tab
+        function updateRiskTab() {
+            const riskData = dealData.risk_analysis;
+            
+            if (!riskData) {
+                document.getElementById('risk').innerHTML = `
+                    <div class="error">
+                        <h3>No Risk Analysis</h3>
+                        <p>No risk analysis data found for this deal.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const riskHtml = `
+                <div class="section">
+                    <h3>Risk Summary</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Metric</th>
+                            <th>Value</th>
+                        </tr>
+                        <tr>
+                            <td>Risk Gauge</td>
+                            <td>${riskData.gauge_value || 'N/A'}/10</td>
+                        </tr>
+                        <tr>
+                            <td>Offer Price</td>
+                            <td>$${riskData.offer_price ? riskData.offer_price.toLocaleString() : 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>Bottom Line Price</td>
+                            <td>$${riskData.bottom_line_price ? riskData.bottom_line_price.toLocaleString() : 'N/A'}</td>
+                        </tr>
+                        <tr>
+                            <td>Tax Amount</td>
+                            <td>$${riskData.tax ? riskData.tax.toLocaleString() : 'N/A'}</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div class="section">
+                    <h3>Fee Analysis</h3>
+                    ${riskData.fees ? riskData.fees.map(fee => `
+                        <div class="risk-item">
+                            <div class="risk-header">
+                                <div class="risk-label">${fee.label}</div>
+                                <div class="risk-amount">$${fee.amount.toLocaleString()}</div>
+                                <div class="risk-assessment assessment-${fee.assessment.toLowerCase()}">${fee.assessment}</div>
+                            </div>
+                            <div class="risk-comment">${fee.comment || 'No comment available'}</div>
+                        </div>
+                    `).join('') : '<p>No fee analysis available</p>'}
+                </div>
+            `;
+            
+            document.getElementById('risk').innerHTML = riskHtml;
+        }
+
+        // Update goals tab
+        function updateGoalsTab() {
+            const goals = dealData.goals || [];
+            
+            if (goals.length === 0) {
+                document.getElementById('goals').innerHTML = `
+                    <div class="error">
+                        <h3>No Goals Found</h3>
+                        <p>No goal tracking data found for this deal.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const goalsHtml = goals.map(goal => `
+                <div class="goal-item">
+                    <div class="goal-header">
+                        <div class="goal-name">${goal.goal}</div>
+                        <div class="goal-status status-${goal.success ? 'success' : 'pending'}">${goal.completed ? 'Completed' : 'Pending'}</div>
+                    </div>
+                    <div class="goal-details">
+                        <strong>Success:</strong> ${goal.success ? 'Yes' : 'No'}<br>
+                        <strong>Completed:</strong> ${goal.completed ? 'Yes' : 'No'}<br>
+                        <strong>Messages:</strong> ${goal.completion_buyer_messages || 0}<br>
+                        <strong>Elapsed Time:</strong> ${goal.completion_elapsed_seconds ? Math.round(goal.completion_elapsed_seconds / 60) + ' minutes' : 'N/A'}
+                    </div>
+                </div>
+            `).join('');
+            
+            document.getElementById('goals').innerHTML = goalsHtml;
+        }
+
+        // Update grading tab
+        function updateGradingTab() {
+            const container = document.getElementById('grading');
+            
+            if (!dealData.grading) {
+                container.innerHTML = `
+                    <div class="section">
+                        <h3>Fee Transparency Grading</h3>
+                        <p>No grading data available for this deal. This may be because:</p>
+                        <ul>
+                            <li>The deal is not at the analysis stage</li>
+                            <li>No fee assessment has been completed</li>
+                            <li>The deal is still in progress</li>
+                        </ul>
+                    </div>
+                `;
+                return;
+            }
+
+            const grading = dealData.grading;
+            
+            const gradingHtml = `
+                <div class="section">
+                    <h3>Fee Transparency Grading</h3>
+                    <p class="grading-explanation">
+                        This grading system is based on analysis of 2,267 analysis-stage deals. 
+                        Grades are calculated using excessive fees (40% weight) and illegitimate fees (60% weight).
+                    </p>
+                    
+                    <div class="grade-cards">
+                        <div class="grade-card overall">
+                            <h4>Overall Grade</h4>
+                            <div class="grade-badge" style="background: ${grading.overall.color};">
+                                ${grading.overall.grade} (${grading.overall.label})
+                            </div>
+                            <div class="grade-score">Score: ${grading.scores.overall.toFixed(1)}/100</div>
+                        </div>
+                        
+                        <div class="grade-card">
+                            <h4>Excessive Fees</h4>
+                            <div class="grade-badge" style="background: ${grading.excessive.color};">
+                                ${grading.excessive.grade} (${grading.excessive.label})
+                            </div>
+                            <div class="grade-amount">$${grading.excessive.amount.toFixed(2)}</div>
+                            <div class="grade-score">Score: ${grading.scores.excessive.toFixed(1)}/100</div>
+                            <div class="grade-description">${grading.excessive.description}</div>
+                        </div>
+                        
+                        <div class="grade-card">
+                            <h4>Illegitimate Fees</h4>
+                            <div class="grade-badge" style="background: ${grading.illegitimate.color};">
+                                ${grading.illegitimate.grade} (${grading.illegitimate.label})
+                            </div>
+                            <div class="grade-amount">$${grading.illegitimate.amount.toFixed(2)}</div>
+                            <div class="grade-score">Score: ${grading.scores.illegitimate.toFixed(1)}/100</div>
+                            <div class="grade-description">${grading.illegitimate.description}</div>
+                        </div>
+                    </div>
+                    
+                    <div class="grading-thresholds">
+                        <h4>Grading Thresholds</h4>
+                        <div class="threshold-grid">
+                            <div class="threshold-section">
+                                <h5>Excessive Fees</h5>
+                                <ul>
+                                    <li><strong>A (Excellent):</strong> $0 - $450</li>
+                                    <li><strong>B (Good):</strong> $450 - $550</li>
+                                    <li><strong>C (Average):</strong> $550 - $1,248</li>
+                                    <li><strong>D (Poor):</strong> $1,248 - $12,767</li>
+                                    <li><strong>F (Failing):</strong> > $12,767</li>
+                                </ul>
+                            </div>
+                            <div class="threshold-section">
+                                <h5>Illegitimate Fees</h5>
+                                <ul>
+                                    <li><strong>A (Excellent):</strong> $0 - $451.50</li>
+                                    <li><strong>B (Good):</strong> $451.50 - $1,231.25</li>
+                                    <li><strong>C (Average):</strong> $1,231.25 - $2,674.25</li>
+                                    <li><strong>D (Poor):</strong> $2,674.25 - $19,039.45</li>
+                                    <li><strong>F (Failing):</strong> > $19,039.45</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = gradingHtml;
+        }
+
+        // Update pricing tab
+        function updatePricingTab() {
+            const pricing = dealData.pricing;
+            
+            if (!pricing) {
+                document.getElementById('pricing').innerHTML = `
+                    <div class="error">
+                        <h3>No Pricing Data</h3>
+                        <p>No pricing information found for this deal.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const pricingHtml = `
+                <div class="section">
+                    <h3>Pricing Breakdown</h3>
+                    <table class="data-table">
+                        <tr>
+                            <th>Item</th>
+                            <th>Amount</th>
+                        </tr>
+                        ${Object.entries(pricing).map(([key, value]) => `
+                            <tr>
+                                <td>${key.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}</td>
+                                <td>$${typeof value === 'number' ? value.toLocaleString() : value}</td>
+                            </tr>
+                        `).join('')}
+                    </table>
+                </div>
+            `;
+            
+            document.getElementById('pricing').innerHTML = pricingHtml;
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tab panes
+            const tabPanes = document.querySelectorAll('.tab-pane');
+            tabPanes.forEach(pane => pane.classList.remove('active'));
+            
+            // Remove active class from all tabs
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => tab.classList.remove('active'));
+            
+            // Show selected tab pane
+            document.getElementById(tabName).classList.add('active');
+            
+            // Add active class to clicked tab
+            event.target.classList.add('active');
+        }
+
+        // Utility functions
+        function getStatusClass(state) {
+            if (state === 'analysis') return 'active';
+            if (state === 'vin_sold') return 'completed';
+            return 'pending';
+        }
+
+        function formatDate(dateString) {
+            if (!dateString) return 'N/A';
+            return new Date(dateString).toLocaleString();
+        }
+
+        function showError(message) {
+            document.getElementById('deal-grid').innerHTML = `
+                <div class="error">
+                    <h3>Error</h3>
+                    <p>${message}</p>
+                </div>
+            `;
+        }
+
+        function refreshData() {
+            loadDealData();
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeDealDetails);
+        } else {
+            initializeDealDetails();
+        }
+    </script>
+</body>
+</html> 

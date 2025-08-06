@@ -1,0 +1,1881 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Ralph - Metrics Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #f8fafc;
+            min-height: 100vh;
+            color: #1e293b;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 40px 20px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 30px;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #0f172a;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            color: #64748b;
+            font-weight: 400;
+        }
+
+        .nav-links {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 16px;
+        }
+
+        .nav-link {
+            background: #3b82f6;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: background 0.2s ease;
+        }
+
+        .nav-link:hover {
+            background: #2563eb;
+        }
+
+        .nav-link.secondary {
+            background: #64748b;
+        }
+
+        .nav-link.secondary:hover {
+            background: #475569;
+        }
+
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+            margin-bottom: 40px;
+        }
+
+        .metric-card {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            transition: all 0.2s ease;
+        }
+
+        .metric-card:hover {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
+        }
+
+        .metric-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .metric-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 16px;
+            font-size: 1.25rem;
+            color: white;
+            background: #3b82f6;
+        }
+
+        .metric-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .metric-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 0.875rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        .metric-change {
+            display: flex;
+            align-items: center;
+            margin-top: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .metric-change.positive {
+            color: #10b981;
+        }
+
+        .metric-change.negative {
+            color: #ef4444;
+        }
+
+        .metric-change.neutral {
+            color: #64748b;
+        }
+
+        .chart-container {
+            background: white;
+            border-radius: 12px;
+            padding: 32px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            border: 1px solid #e2e8f0;
+            margin-bottom: 24px;
+        }
+
+        .chart-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 24px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid #f1f5f9;
+        }
+
+        .chart-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #0f172a;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .data-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .data-table td {
+            color: #374151;
+        }
+
+        .data-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .status-badge {
+            display: inline-block;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-active {
+            background: #dbeafe;
+            color: #1d4ed8;
+        }
+
+        .status-completed {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .status-pending {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #3b82f6;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .progress-fill.success {
+            background: #10b981;
+        }
+
+        .progress-fill.warning {
+            background: #f59e0b;
+        }
+
+        .progress-fill.danger {
+            background: #ef4444;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #64748b;
+        }
+
+
+
+        .empty-state h3 {
+            font-size: 1.25rem;
+            margin-bottom: 8px;
+            color: #475569;
+        }
+
+        .empty-state p {
+            font-size: 0.875rem;
+            max-width: 400px;
+            margin: 0 auto;
+        }
+
+        /* Enhanced table styles */
+        .enhanced-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 16px;
+            font-size: 0.875rem;
+        }
+
+        .enhanced-table th,
+        .enhanced-table td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .enhanced-table th {
+            background: #f8fafc;
+            font-weight: 600;
+            color: #0f172a;
+            font-size: 0.875rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+
+        .enhanced-table td {
+            color: #374151;
+        }
+
+        .enhanced-table tr:hover {
+            background: #f8fafc;
+        }
+
+        .enhanced-table .highlight {
+            background: #dbeafe;
+            font-weight: 600;
+        }
+
+        .enhanced-table .near-goal {
+            background: #fef3c7;
+            font-weight: 600;
+        }
+
+        .enhanced-table .achieved-goal {
+            background: #dcfce7;
+            font-weight: 600;
+        }
+
+        .table-container {
+            max-height: 600px;
+            overflow-y: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+        }
+
+        .table-stats {
+            display: flex;
+            gap: 24px;
+            margin-bottom: 16px;
+            flex-wrap: wrap;
+        }
+
+        .stat-card {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px 16px;
+            min-width: 120px;
+        }
+
+        .stat-value {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: #0f172a;
+            margin-bottom: 4px;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 500;
+        }
+
+        /* Grading Legend Styles */
+        .grading-legend {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+
+        .legend-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .grading-legend h4 {
+            margin: 0;
+            color: #0f172a;
+            font-size: 1.125rem;
+            font-weight: 600;
+        }
+
+        .legend-toggle {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background 0.2s ease;
+        }
+
+        .legend-toggle:hover {
+            background: #2563eb;
+        }
+
+        .toggle-icon {
+            font-size: 0.75rem;
+            transition: transform 0.2s ease;
+        }
+
+        .legend-grid.collapsed {
+            display: none;
+        }
+
+        .legend-toggle.collapsed .toggle-icon {
+            transform: rotate(-90deg);
+        }
+
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 24px;
+        }
+
+        .legend-section h5 {
+            margin: 0 0 12px 0;
+            color: #0f172a;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+
+        .legend-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            color: white;
+            font-weight: 600;
+            font-size: 0.875rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .legend-icon {
+            font-size: 1.25rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .legend-text {
+            font-size: 0.875rem;
+            color: #374151;
+            line-height: 1.4;
+        }
+
+        .threshold-legend {
+            font-size: 0.75rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        .threshold-item {
+            margin-bottom: 8px;
+            padding: 8px;
+            background: white;
+            border-radius: 4px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .threshold-item strong {
+            color: #0f172a;
+        }
+
+        .data-source-info {
+            font-size: 0.875rem;
+            color: #64748b;
+        }
+
+        .data-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 8px;
+            gap: 12px;
+        }
+
+        .data-icon {
+            font-size: 1.25rem;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .data-text {
+            line-height: 1.4;
+        }
+
+        .data-text strong {
+            color: #0f172a;
+        }
+
+        .progress-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+
+        .progress-excellent {
+            background: #10b981;
+        }
+
+        .progress-good {
+            background: #3b82f6;
+        }
+
+        .progress-average {
+            background: #f59e0b;
+        }
+
+        .progress-poor {
+            background: #ef4444;
+        }
+
+        /* Simple CSS-only tooltip styles */
+        .tooltip-container {
+            position: relative;
+            display: inline-block;
+        }
+
+        .tooltip-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 16px;
+            height: 16px;
+            background: #3b82f6;
+            color: white;
+            border-radius: 50%;
+            font-size: 10px;
+            font-weight: bold;
+            cursor: help;
+            margin-left: 8px;
+            transition: background 0.2s ease;
+        }
+
+        .tooltip-icon:hover {
+            background: #2563eb;
+        }
+
+        .tooltip-content {
+            position: absolute;
+            bottom: 125%;
+            left: -5px;
+            background: #1e293b;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            line-height: 1.4;
+            font-weight: 400;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.2s ease, visibility 0.2s ease;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+            z-index: 1000;
+            pointer-events: none;
+            width: 300px;
+            white-space: normal;
+        }
+
+        .tooltip-content::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 20px;
+            border: 5px solid transparent;
+            border-top-color: #1e293b;
+        }
+
+        .tooltip-container:hover .tooltip-content {
+            opacity: 1;
+            visibility: visible;
+        }
+
+
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 16px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .metric-card {
+                padding: 24px;
+            }
+
+            .nav-links {
+                position: static;
+                justify-content: center;
+                margin-top: 16px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Project Ralph - Metrics Dashboard</h1>
+            <div class="nav-links">
+                <a href="/" class="nav-link secondary">
+                    Back to Main
+                </a>
+                <a href="deal-details.html?id=3589" class="nav-link secondary">
+                    <i class="fas fa-search"></i> View Deal Details
+                </a>
+                <a href="#" class="nav-link" onclick="refreshData()">
+                    Refresh
+                </a>
+            </div>
+        </div>
+
+        <!-- Deal Summary -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Deal Summary</div>
+            </div>
+            
+            <!-- Progress Bar Section -->
+            <div class="progress-section" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 24px; margin-bottom: 24px;">
+                <div class="progress-header" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <h3 style="margin: 0; color: #0f172a; font-size: 1.125rem; font-weight: 600;">Analysis Stage Progress</h3>
+                    <div class="progress-stats" style="text-align: right;">
+                        <div style="font-size: 1.5rem; font-weight: 700; color: #3b82f6;" id="analysis-progress-percentage">23.29%</div>
+                        <div style="font-size: 0.875rem; color: #64748b; margin-top: 4px;" id="analysis-progress-text">239 of 1,026 deals</div>
+                    </div>
+                </div>
+                <div class="progress-bar-container">
+                    <div class="progress-bar" style="width: 100%; height: 12px; background: #e2e8f0; border-radius: 6px; overflow: hidden;">
+                        <div class="progress-fill" id="analysis-progress-fill" style="height: 100%; background: linear-gradient(90deg, #3b82f6, #1d4ed8); border-radius: 6px; transition: width 0.8s ease; width: 23.29%;"></div>
+                    </div>
+                </div>
+            </div>
+            
+
+
+        <!-- Mystery Shop Metrics -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Mystery Shop Metrics</div>
+            </div>
+            <div class="mystery-shop-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 24px; margin-bottom: 24px;">
+                <div class="summary-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;" id="scored-mystery-shops">594</div>
+                    <div style="font-size: 0.9rem; color: #64748b; font-weight: 500; line-height: 1.4;">
+                        Scored Mystery Shops
+                        <div class="tooltip-container">
+                            <div class="tooltip-icon">i</div>
+                            <div class="tooltip-content">
+                                Number of mystery shop evaluations that have been completed and scored. This represents deals that have reached the "Analysis" stage.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="summary-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;" id="target-dealerships-pct">29.7%</div>
+                    <div style="font-size: 0.9rem; color: #64748b; font-weight: 500; line-height: 1.4;">
+                        % of Target Dealerships
+                        <div class="tooltip-container">
+                            <div class="tooltip-icon">i</div>
+                            <div class="tooltip-content">
+                                Percentage of total dealerships that have at least one deal at the analysis stage. Calculated as: (Number of dealerships with analysis deals / Total dealerships) × 100. There are 269 total dealerships.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="summary-card" style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; text-align: center;">
+                    <div style="font-size: 2rem; font-weight: 700; color: #0f172a; margin-bottom: 8px;" id="avg-per-dealership">2.97</div>
+                    <div style="font-size: 0.9rem; color: #64748b; font-weight: 500; line-height: 1.4;">
+                        Average per Dealership
+                        <div class="tooltip-container">
+                            <div class="tooltip-icon">i</div>
+                            <div class="tooltip-content">
+                                Average number of analysis deals per dealership across all dealerships. Calculated as: Total analysis deals / Total dealerships (269). This shows the average analysis deals per dealership across the entire network.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Driver Metrics Section -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Driver Metrics</div>
+            </div>
+            
+            <!-- Scoreable Section -->
+            <div style="margin-bottom: 32px;">
+                <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1.125rem; font-weight: 600;">Scoreable</h4>
+                <div id="driver-metrics-scoreable">
+                    <div class="empty-state">
+                        <h3>Loading Driver Metrics...</h3>
+                        <p>Please wait while we fetch the latest performance data.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Scored Section (placeholder for next iteration) -->
+            <div style="margin-bottom: 32px;">
+                <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1.125rem; font-weight: 600;">Scored</h4>
+                <div class="empty-state">
+                    <h3>Coming Soon</h3>
+                    <p>Scored metrics will be available in the next update.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Funnel Metrics Section -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Funnel Metrics</div>
+            </div>
+            <div class="empty-state">
+                <h3>Coming Soon</h3>
+                <p>Funnel metrics will be available in the next update.</p>
+            </div>
+        </div>
+            
+            <div class="deal-states-table">
+                <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1rem; font-weight: 600;">Deal States Breakdown</h4>
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>State</th>
+                            <th>Count</th>
+                            <th>Percentage</th>
+                        </tr>
+                    </thead>
+                    <tbody id="deal-states-body">
+                        <tr>
+                            <td>Confirm Car</td>
+                            <td>241</td>
+                            <td>23.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Analysis</td>
+                            <td>239</td>
+                            <td>23.3%</td>
+                        </tr>
+                        <tr>
+                            <td>Vin Sold</td>
+                            <td>221</td>
+                            <td>21.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Convo Pending</td>
+                            <td>153</td>
+                            <td>14.9%</td>
+                        </tr>
+                        <tr>
+                            <td>Convo Established</td>
+                            <td>77</td>
+                            <td>7.5%</td>
+                        </tr>
+                        <tr>
+                            <td>Dealer Outreach</td>
+                            <td>39</td>
+                            <td>3.8%</td>
+                        </tr>
+                        <tr>
+                            <td>Clarify Fees</td>
+                            <td>36</td>
+                            <td>3.51%</td>
+                        </tr>
+                        <tr>
+                            <td>Confirm Price</td>
+                            <td>20</td>
+                            <td>1.95%</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Dealership Analysis Table -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Dealership Performance Analysis</div>
+                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label for="search-dealer" style="font-size: 0.875rem; color: #64748b; font-weight: 500;">Search:</label>
+                        <input type="text" id="search-dealer" placeholder="Search dealership name..." style="padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.875rem; min-width: 200px;">
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label for="analysis-filter" style="font-size: 0.875rem; color: #64748b; font-weight: 500;">Min Analysis Deals:</label>
+                        <select id="analysis-filter" style="padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.875rem;">
+                            <option value="0">All</option>
+                            <option value="1">1+</option>
+                            <option value="5">5+</option>
+                            <option value="8">8+</option>
+                            <option value="10">10+</option>
+                        </select>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+                        <label for="sort-by" style="font-size: 0.875rem; color: #64748b; font-weight: 500;">Sort by:</label>
+                        <select id="sort-by" style="padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.875rem;">
+                            <option value="analysis-desc">Analysis Deals (High to Low)</option>
+                            <option value="analysis-asc">Analysis Deals (Low to High)</option>
+                            <option value="total-desc">Total Deals (High to Low)</option>
+                            <option value="total-asc">Total Deals (Low to High)</option>
+                            <option value="conversion-desc">Conversion Rate (High to Low)</option>
+                            <option value="conversion-asc">Conversion Rate (Low to High)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div id="dealership-analysis-table">
+                <div class="empty-state">
+                    <h3>Loading Dealership Data...</h3>
+                    <p>Please wait while we fetch the latest performance data.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dealership Rankings Section -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Dealership Fee Transparency Rankings</div>
+                <div class="tooltip-container">
+                    <div class="tooltip-icon">i</div>
+                    <div class="tooltip-content">
+                        Dealerships are ranked based on their fee transparency across all analysis-stage deals. Grades are calculated using excessive fees (40% weight) and illegitimate fees (60% weight). Only dealerships with analysis-stage deals are included.
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Grading Legend -->
+            <div class="grading-legend">
+                <div class="legend-header">
+                    <h4>Grading System Legend</h4>
+                    <button class="legend-toggle" onclick="toggleLegend()">
+                        <span class="toggle-text">Hide</span>
+                        <span class="toggle-icon">▼</span>
+                    </button>
+                </div>
+                <div class="legend-grid">
+                    <div class="legend-section">
+                        <h5>Grade Levels</h5>
+                        <div class="grade-legend">
+                            <div class="legend-item">
+                                <span class="legend-badge" style="background: #10b981;">A</span>
+                                <span class="legend-text"><strong>Excellent</strong> - Very low fees, exceptional transparency</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-badge" style="background: #3b82f6;">B</span>
+                                <span class="legend-text"><strong>Good</strong> - Low fees, good transparency</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-badge" style="background: #f59e0b;">C</span>
+                                <span class="legend-text"><strong>Average</strong> - Typical fees, acceptable transparency</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-badge" style="background: #ef4444;">D</span>
+                                <span class="legend-text"><strong>Poor</strong> - High fees, concerning transparency</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-badge" style="background: #dc2626;">F</span>
+                                <span class="legend-text"><strong>Failing</strong> - Extremely high fees, poor transparency</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-section">
+                        <h5>Fee Categories</h5>
+                        <div class="fee-legend">
+                            <div class="legend-item">
+                                <span class="legend-icon excessive">💰</span>
+                                <span class="legend-text"><strong>Excessive Fees</strong> (40% weight)<br>Fees higher than typical market rates but may be legitimate</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-icon illegitimate">⚠️</span>
+                                <span class="legend-text"><strong>Illegitimate Fees</strong> (60% weight)<br>Unnecessary, deceptive, or potentially illegal fees</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-section">
+                        <h5>Grading Thresholds</h5>
+                        <div class="threshold-legend">
+                            <div class="threshold-item">
+                                <strong>Excessive Fees:</strong><br>
+                                A: $0-$450 | B: $450-$550 | C: $550-$1,248<br>
+                                D: $1,248-$12,767 | F: >$12,767
+                            </div>
+                            <div class="threshold-item">
+                                <strong>Illegitimate Fees:</strong><br>
+                                A: $0-$451.50 | B: $451.50-$1,231.25 | C: $1,231.25-$2,674.25<br>
+                                D: $2,674.25-$19,039.45 | F: >$19,039.45
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="legend-section">
+                        <h5>Data Source</h5>
+                        <div class="data-source-info">
+                            <div class="data-item">
+                                <span class="data-icon">📊</span>
+                                <span class="data-text">
+                                    <strong>Based on analysis-stage deals with fee data</strong><br>
+                                    Grades calculated from actual fee data for deals currently in analysis state
+                                </span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-icon">⚖️</span>
+                                <span class="data-text">
+                                    <strong>Weighted scoring system</strong><br>
+                                    Overall grade: (Excessive × 0.4) + (Illegitimate × 0.6)
+                                </span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-icon">🧮</span>
+                                <span class="data-text">
+                                    <strong>Dealership grading method</strong><br>
+                                    Each deal is graded individually, then dealership grade is the average of all deal scores
+                                </span>
+                            </div>
+                            <div class="data-item">
+                                <span class="data-icon">💡</span>
+                                <span class="data-text">
+                                    <strong>Hover for details</strong><br>
+                                    Hover over any grade badge to see average fee amounts per deal and detailed scores
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="dealership-rankings">
+                <div class="empty-state">
+                    <h3>Loading Rankings...</h3>
+                    <p>Please wait while we calculate dealership grades.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Data Table Section -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-title">Recent Activity</div>
+            </div>
+            <div id="activity-table">
+                <div class="empty-state">
+                    <h3>No Data Available</h3>
+                    <p>Start adding metrics and data to see your activity feed here.</p>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script>
+        // Cloud storage configuration (same as main page)
+        const JSONBIN_API_KEY = '$2a$10$SEnNfh62rZ5cbmvsRc5iGu5FElaadU.JCpjWywSTIWkdZWEWvt3.i';
+        let JSONBIN_BIN_ID = '689168af7b4b8670d8ad55e0';
+        const JSONBIN_URL = 'https://api.jsonbin.io/v3/b';
+
+        // Sample data structure for metrics
+        let metricsData = {
+            dealerships: {
+                total: 0,
+                change: 0,
+                target: 200
+            },
+            interactions: {
+                total: 0,
+                change: 0,
+                target: 2000
+            },
+            successRate: {
+                current: 0,
+                change: 0,
+                target: 85
+            },
+            responseTime: {
+                current: 0,
+                change: 0,
+                target: 2
+            },
+            dealSummary: {
+                totalDeals: 1026,
+                analysisDeals: 239,
+                analysisPct: 23.29,
+                pendingDeals: 225,
+                pendingPct: 21.93,
+                states: [
+                    { state: "Confirm Car", count: 241, percent: 23.5 },
+                    { state: "Analysis", count: 239, percent: 23.3 },
+                    { state: "Vin Sold", count: 221, percent: 21.5 },
+                    { state: "Convo Pending", count: 153, percent: 14.9 },
+                    { state: "Convo Established", count: 77, percent: 7.5 },
+                    { state: "Dealer Outreach", count: 39, percent: 3.8 },
+                    { state: "Clarify Fees", count: 36, percent: 3.51 },
+                    { state: "Confirm Price", count: 20, percent: 1.95 }
+                ]
+            },
+            mysteryShopMetrics: {
+                scoredMysteryShops: 594,
+                targetDealershipsPct: 29.7,
+                avgPerDealership: 2.97
+            },
+            recentActivity: [],
+            lastUpdated: new Date().toISOString()
+        };
+
+        // Load data from API
+        async function loadMetricsData() {
+            try {
+                console.log('Loading data from API...');
+                
+                let hasData = false;
+                
+                // Load deal summary from API
+                const dealSummaryResponse = await fetch('/api/deal-summary');
+                if (dealSummaryResponse.ok) {
+                    const dealSummaryData = await dealSummaryResponse.json();
+                    
+                    // Check if we got actual data (not error response)
+                    if (dealSummaryData && dealSummaryData.totalDeals !== undefined) {
+                        metricsData.dealSummary = {
+                            totalDeals: dealSummaryData.totalDeals,
+                            analysisDeals: dealSummaryData.analysisDeals,
+                            analysisPct: dealSummaryData.analysisPct,
+                            analysisProgressPct: dealSummaryData.analysisProgressPct,
+                            totalAnalysisNeeded: dealSummaryData.totalAnalysisNeeded,
+                            pendingDeals: dealSummaryData.pendingDeals,
+                            pendingPct: dealSummaryData.pendingPct,
+                            states: dealSummaryData.states
+                        };
+                        
+                        // Mystery shop metrics will be calculated after loading dealership analysis data
+                        metricsData.mysteryShopMetrics = {
+                            scoredMysteryShops: dealSummaryData.analysisDeals, // Number at analysis stage
+                            targetDealershipsPct: 0, // Will be updated with correct data
+                            avgPerDealership: 0 // Will be updated with correct data
+                        };
+                        
+                        hasData = true;
+                        console.log('Deal summary loaded:', dealSummaryData);
+                        console.log('Mystery shop metrics calculated:', metricsData.mysteryShopMetrics);
+                    }
+                } else {
+                    console.error('Deal summary API error:', dealSummaryResponse.status, dealSummaryResponse.statusText);
+                }
+
+                // Load recent activity from API
+                const activityResponse = await fetch('/api/recent-activity');
+                if (activityResponse.ok) {
+                    const activityData = await activityResponse.json();
+                    if (activityData && !activityData.error) {
+                        metricsData.recentActivity = activityData;
+                        console.log('Recent activity loaded:', activityData);
+                    }
+                } else {
+                    console.error('Recent activity API error:', activityResponse.status, activityResponse.statusText);
+                }
+                
+                if (hasData) {
+                    hideLoadingState();
+                    updateMetricsDisplay();
+                } else {
+                    console.error('No data received from APIs');
+                    showConnectionError();
+                }
+            } catch (error) {
+                console.error('Error loading metrics data:', error);
+                showConnectionError();
+            }
+        }
+
+        // Update the display with current metrics
+        function updateMetricsDisplay() {
+            // Update deal summary
+            updateDealSummary();
+
+            // Update mystery shop metrics
+            updateMysteryShopMetrics();
+
+            // Update activity table if there's data
+            if (metricsData.recentActivity && metricsData.recentActivity.length > 0) {
+                updateActivityTable();
+            }
+
+                            // Load dealership analysis data
+                loadDealershipAnalysisData().then(() => {
+                                    // Load driver metrics data
+                loadDriverMetricsData();
+
+                // Load dealership rankings
+                loadDealershipRankings();
+                });
+
+        }
+
+        // Update activity table
+        function updateActivityTable() {
+            const tableContainer = document.getElementById('activity-table');
+            tableContainer.innerHTML = `
+                <table class="data-table">
+                    <thead>
+                        <tr>
+                            <th>Date</th>
+                            <th>Activity</th>
+                            <th>State</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${metricsData.recentActivity.map(activity => `
+                            <tr>
+                                <td>${activity.date}</td>
+                                <td>
+                                    <div style="margin-bottom: 4px;">
+                                        <strong>Deal ${activity.deal_id}</strong> - ${activity.dealer_name}
+                                    </div>
+                                    <div style="font-size: 0.875rem; color: #64748b;">
+                                        ${activity.dealer_location}
+                                    </div>
+                                </td>
+                                <td><span class="status-badge status-${activity.status}">${activity.deal_state}</span></td>
+                                <td>
+                                    <a href="deal-details.html?id=${activity.deal_id}" 
+                                       class="nav-link" 
+                                       style="padding: 4px 8px; font-size: 0.75rem; text-decoration: none;">
+                                        <i class="fas fa-search"></i> View Details
+                                    </a>
+                                </td>
+                            </tr>
+                        `).join('')}
+                    </tbody>
+                </table>
+            `;
+        }
+
+        // Update deal summary
+        function updateDealSummary() {
+            const dealData = metricsData.dealSummary;
+            
+            // Add null checks to prevent errors
+            if (!dealData) {
+                console.error('dealData is undefined');
+                return;
+            }
+            
+
+            
+            // Update progress bar with null checks
+            const progressPercentage = document.getElementById('analysis-progress-percentage');
+            const progressText = document.getElementById('analysis-progress-text');
+            const progressFill = document.getElementById('analysis-progress-fill');
+            
+            const analysisProgressPct = dealData.analysisProgressPct || 0;
+            const analysisDeals = dealData.analysisDeals || 0;
+            const totalAnalysisNeeded = dealData.totalAnalysisNeeded || 0;
+            
+            progressPercentage.textContent = `${analysisProgressPct}%`;
+            progressText.textContent = `${analysisDeals.toLocaleString()} of ${totalAnalysisNeeded.toLocaleString()} needed`;
+            progressFill.style.width = `${analysisProgressPct}%`;
+            
+            // Update progress bar color based on percentage toward goal
+            if (analysisProgressPct >= 50) {
+                progressFill.style.background = 'linear-gradient(90deg, #10b981, #059669)'; // Green
+            } else if (analysisProgressPct >= 25) {
+                progressFill.style.background = 'linear-gradient(90deg, #3b82f6, #1d4ed8)'; // Blue
+            } else {
+                progressFill.style.background = 'linear-gradient(90deg, #f59e0b, #d97706)'; // Orange
+            }
+            
+            // Update deal states table with null checks
+            const tableBody = document.getElementById('deal-states-body');
+            
+            if (dealData.states && Array.isArray(dealData.states)) {
+                tableBody.innerHTML = dealData.states.map((state, index) => `
+                    <tr>
+                        <td>${state.state || ''}</td>
+                        <td>${(state.count || 0).toLocaleString()}</td>
+                        <td>${state.percent || 0}%</td>
+                    </tr>
+                `).join('');
+            } else {
+                tableBody.innerHTML = '<tr><td colspan="3">No data available</td></tr>';
+            }
+        }
+
+        // Update mystery shop metrics
+        function updateMysteryShopMetrics() {
+            const mysteryData = metricsData.mysteryShopMetrics;
+            
+            // Add null checks to prevent errors
+            if (!mysteryData) {
+                console.error('mysteryData is undefined');
+                return;
+            }
+            
+            // Update mystery shop metrics with null checks
+            document.getElementById('scored-mystery-shops').textContent = (mysteryData.scoredMysteryShops || 0).toLocaleString();
+            document.getElementById('target-dealerships-pct').textContent = `${mysteryData.targetDealershipsPct || 0}%`;
+            document.getElementById('avg-per-dealership').textContent = (mysteryData.avgPerDealership || 0).toFixed(2);
+        }
+
+        // Show loading state
+        function showLoadingState() {
+            // Remove any existing loading or error messages
+            const existingLoading = document.getElementById('loading-overlay');
+            const existingError = document.querySelector('.error-container');
+            if (existingLoading) existingLoading.remove();
+            if (existingError) existingError.remove();
+            
+            // Create overlay loading state
+            const loadingOverlay = document.createElement('div');
+            loadingOverlay.id = 'loading-overlay';
+            loadingOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.9);
+                backdrop-filter: blur(2px);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            `;
+            
+            loadingOverlay.innerHTML = `
+                <div style="text-align: center;">
+                    <div style="width: 50px; height: 50px; border: 3px solid #e2e8f0; border-top: 3px solid #3b82f6; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;"></div>
+                    <div style="color: #64748b; font-weight: 500; font-size: 1rem;">Loading data...</div>
+                </div>
+            `;
+            
+            // Add CSS animation if not already present
+            if (!document.querySelector('#loading-spinner-style')) {
+                const style = document.createElement('style');
+                style.id = 'loading-spinner-style';
+                style.textContent = `
+                    @keyframes spin {
+                        0% { transform: rotate(0deg); }
+                        100% { transform: rotate(360deg); }
+                    }
+                `;
+                document.head.appendChild(style);
+            }
+            
+            document.body.appendChild(loadingOverlay);
+        }
+
+        // Hide loading state
+        function hideLoadingState() {
+            const loadingOverlay = document.getElementById('loading-overlay');
+            if (loadingOverlay) {
+                loadingOverlay.style.opacity = '0';
+                loadingOverlay.style.transition = 'opacity 0.3s ease';
+                setTimeout(() => {
+                    if (loadingOverlay.parentNode) {
+                        loadingOverlay.parentNode.removeChild(loadingOverlay);
+                    }
+                }, 300);
+            }
+        }
+
+        // Show connection error message
+        function showConnectionError() {
+            // Hide loading state first
+            hideLoadingState();
+            
+            // Create overlay error state
+            const errorOverlay = document.createElement('div');
+            errorOverlay.className = 'error-container';
+            errorOverlay.style.cssText = `
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(255, 255, 255, 0.95);
+                backdrop-filter: blur(2px);
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                z-index: 9999;
+            `;
+            
+            errorOverlay.innerHTML = `
+                <div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 40px; text-align: center; max-width: 500px; box-shadow: 0 4px 12px rgba(0,0,0,0.1);">
+                    <div style="color: #dc2626; font-size: 3rem; margin-bottom: 16px;">⚠️</div>
+                    <h2 style="color: #dc2626; font-size: 1.5rem; margin-bottom: 12px; font-weight: 600;">Database Connection Error</h2>
+                    <p style="color: #7f1d1d; font-size: 1rem; margin-bottom: 20px; line-height: 1.5;">
+                        Unable to connect to the database. Please ensure you are connected to the VPN and try again.
+                    </p>
+                    <button onclick="location.reload()" style="
+                        background: #dc2626;
+                        color: white;
+                        border: none;
+                        padding: 12px 24px;
+                        border-radius: 6px;
+                        font-size: 0.875rem;
+                        font-weight: 500;
+                        cursor: pointer;
+                        transition: background 0.2s ease;
+                    " onmouseover="this.style.background='#b91c1c'" onmouseout="this.style.background='#dc2626'">
+                        Retry Connection
+                    </button>
+                </div>
+            `;
+            
+            document.body.appendChild(errorOverlay);
+        }
+
+
+
+        // Load dealership analysis data
+        async function loadDealershipAnalysisData() {
+            try {
+                const response = await fetch('/api/dealership-analysis');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDealershipAnalysisTable(data);
+                    
+                    // Update mystery shop metrics with correct data
+                    const totalDealerships = data.totalDealerships;
+                    const dealershipsWithAnalysis = data.dealershipsWithAnalysis;
+                    const analysisDeals = metricsData.dealSummary.analysisDeals;
+                    
+                    metricsData.mysteryShopMetrics = {
+                        scoredMysteryShops: analysisDeals,
+                        targetDealershipsPct: parseFloat(((dealershipsWithAnalysis / totalDealerships) * 100).toFixed(1)),
+                        avgPerDealership: parseFloat((analysisDeals / totalDealerships).toFixed(2))
+                    };
+                    
+                    // Update the display
+                    updateMysteryShopMetrics();
+                    
+                } else {
+                    console.error('Failed to load dealership analysis data');
+                    document.getElementById('dealership-analysis-table').innerHTML = `
+                        <div class="empty-state">
+                            <h3>Failed to Load Data</h3>
+                            <p>Unable to fetch dealership analysis data. Please try again.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading dealership analysis:', error);
+                document.getElementById('dealership-analysis-table').innerHTML = `
+                    <div class="empty-state">
+                        <h3>Connection Error</h3>
+                        <p>Unable to connect to the database. Please check your connection.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Update dealership analysis table
+        function updateDealershipAnalysisTable(data) {
+            const container = document.getElementById('dealership-analysis-table');
+            
+            // Create summary stats
+            const statsHtml = `
+                <div class="table-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${data.totalDealerships.toLocaleString()}</div>
+                        <div class="stat-label">Total Dealerships</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${data.dealershipsWithAnalysis.toLocaleString()}</div>
+                        <div class="stat-label">With Analysis Deals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${data.dealershipsWith5Plus.toLocaleString()}</div>
+                        <div class="stat-label">5+ Analysis Deals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${data.dealershipsWith10Plus.toLocaleString()}</div>
+                        <div class="stat-label">10+ Analysis Deals</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value">${data.avgAnalysisDeals.toFixed(1)}</div>
+                        <div class="stat-label">Avg Analysis Deals</div>
+                    </div>
+                </div>
+            `;
+
+            // Create table
+            const tableHtml = `
+                <div class="table-container">
+                    <table class="enhanced-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Dealership</th>
+                                <th>Location</th>
+                                <th>Analysis Deals</th>
+                                <th>Total Deals</th>
+                                <th>Conversion Rate</th>
+                                <th>Progress to 10</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.dealerships.map((dealer, index) => {
+                                const conversionRate = dealer.totalDeals > 0 ? ((dealer.analysisDeals / dealer.totalDeals) * 100).toFixed(1) : '0.0';
+                                const progressTo10 = dealer.analysisDeals >= 10 ? 'Achieved!' : `${10 - dealer.analysisDeals} more needed`;
+                                const status = getStatusIndicator(dealer.analysisDeals);
+                                
+                                let rowClass = '';
+                                if (dealer.analysisDeals >= 10) rowClass = 'achieved-goal';
+                                else if (dealer.analysisDeals >= 8) rowClass = 'near-goal';
+                                else if (dealer.analysisDeals >= 5) rowClass = 'highlight';
+                                
+                                return `
+                                    <tr class="${rowClass}">
+                                        <td>${index + 1}</td>
+                                        <td><strong>${dealer.dealerName}</strong><br><small style="color: #64748b;">ID: ${dealer.dealerId}</small></td>
+                                        <td>${dealer.city}, ${dealer.stateCode}</td>
+                                        <td><strong>${dealer.analysisDeals}</strong></td>
+                                        <td>${dealer.totalDeals}</td>
+                                        <td>${conversionRate}%</td>
+                                        <td>${progressTo10}</td>
+                                        <td>${status}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = statsHtml + tableHtml;
+            
+            // Add event listeners for filters
+            setupTableFilters(data);
+        }
+
+        // Get status indicator
+        function getStatusIndicator(analysisDeals) {
+            if (analysisDeals >= 10) {
+                return '<span class="progress-indicator progress-excellent"></span>Goal Achieved';
+            } else if (analysisDeals >= 8) {
+                return '<span class="progress-indicator progress-good"></span>Near Goal';
+            } else if (analysisDeals >= 5) {
+                return '<span class="progress-indicator progress-average"></span>Good Progress';
+            } else if (analysisDeals >= 1) {
+                return '<span class="progress-indicator progress-poor"></span>Needs Work';
+            } else {
+                return '<span class="progress-indicator progress-poor"></span>No Analysis Deals';
+            }
+        }
+
+        // Setup table filters
+        function setupTableFilters(originalData) {
+            const analysisFilter = document.getElementById('analysis-filter');
+            const sortBy = document.getElementById('sort-by');
+            const searchDealer = document.getElementById('search-dealer');
+            
+            analysisFilter.addEventListener('change', () => filterAndSortTable(originalData));
+            sortBy.addEventListener('change', () => filterAndSortTable(originalData));
+            searchDealer.addEventListener('input', () => filterAndSortTable(originalData));
+        }
+
+        // Load driver metrics data
+        async function loadDriverMetricsData() {
+            try {
+                const response = await fetch('/api/driver-metrics');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDriverMetricsTable(data);
+                } else {
+                    console.error('Failed to load driver metrics data');
+                    document.getElementById('driver-metrics-scoreable').innerHTML = `
+                        <div class="empty-state">
+                            <h3>Failed to Load Data</h3>
+                            <p>Unable to fetch driver metrics data. Please try again.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading driver metrics:', error);
+                document.getElementById('driver-metrics-scoreable').innerHTML = `
+                    <div class="empty-state">
+                        <h3>Connection Error</h3>
+                        <p>Unable to connect to the database. Please check your connection.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Update driver metrics table
+        function updateDriverMetricsTable(data) {
+            const container = document.getElementById('driver-metrics-scoreable');
+            const summary = data.summary;
+            const timeline = data.timeline;
+            
+            // Create summary stats
+            const statsHtml = `
+                <div class="table-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${timeline.daysUntilDeadline}</div>
+                        <div class="stat-label">Days until Sept. 1</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #10b981;">${summary.pctAchieved}%</div>
+                        <div class="stat-label">Achieved Goal (10+)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #3b82f6;">${summary.pctNearGoal}%</div>
+                        <div class="stat-label">Near Goal (8-9)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #f59e0b;">${summary.pctGoodProgress}%</div>
+                        <div class="stat-label">Good Progress (5-7)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #ef4444;">${timeline.dailyRateNeeded}</div>
+                        <div class="stat-label">Daily Rate Needed</div>
+                    </div>
+                </div>
+                
+                <div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                    <h5 style="margin: 0 0 8px 0; color: #0f172a; font-size: 0.875rem; font-weight: 600;">PROGRESS TOWARD GOAL</h5>
+                    <div style="display: flex; gap: 16px; flex-wrap: wrap; font-size: 0.875rem;">
+                        <div><strong>Total Needed:</strong> ${timeline.totalAnalysisNeeded.toLocaleString()} analysis deals</div>
+                        <div><strong>Current:</strong> ${timeline.currentAnalysis.toLocaleString()} analysis deals</div>
+                        <div><strong>Still Needed:</strong> ${timeline.analysisStillNeeded.toLocaleString()} analysis deals</div>
+                        <div><strong>Deadline:</strong> ${timeline.deadline}</div>
+                    </div>
+                </div>
+            `;
+
+            // Create table
+            const tableHtml = `
+                <div class="table-container">
+                    <table class="enhanced-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Dealership</th>
+                                <th>Location</th>
+                                <th>Analysis Deals</th>
+                                <th>Total Deals</th>
+                                <th>Progress to 10</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.dealerships.map((dealer, index) => {
+                                const progressTo10 = dealer.analysisDeals >= 10 ? '✅ ACHIEVED!' : `${dealer.dealsNeeded} more needed`;
+                                const status = getDriverStatusIndicator(dealer);
+                                
+                                let rowClass = '';
+                                if (dealer.analysisDeals >= 10) rowClass = 'achieved-goal'; // Green for achieved
+                                else if (dealer.analysisDeals >= 8) rowClass = 'near-goal'; // Blue for near goal
+                                else if (dealer.analysisDeals >= 5) rowClass = 'highlight'; // Yellow for good progress
+                                
+                                return `
+                                    <tr class="${rowClass}">
+                                        <td>${index + 1}</td>
+                                        <td><strong>${dealer.dealerName}</strong><br><small style="color: #64748b;">ID: ${dealer.dealerId}</small></td>
+                                        <td>${dealer.city}, ${dealer.stateCode}</td>
+                                        <td><strong style="color: #3b82f6;">${dealer.analysisDeals}/10</strong></td>
+                                        <td>${dealer.totalDeals}</td>
+                                        <td>${progressTo10}</td>
+                                        <td>${status}</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = statsHtml + tableHtml;
+        }
+
+        // Get driver status indicator
+        function getDriverStatusIndicator(dealer) {
+            if (dealer.analysisDeals >= 10) {
+                return '<span class="progress-indicator progress-excellent"></span>Goal Achieved';
+            } else if (dealer.analysisDeals >= 8) {
+                return '<span class="progress-indicator progress-good"></span>Near Goal';
+            } else if (dealer.analysisDeals >= 5) {
+                return '<span class="progress-indicator progress-average"></span>Good Progress';
+            } else if (dealer.analysisDeals >= 1) {
+                return '<span class="progress-indicator progress-poor"></span>Needs Work';
+            } else {
+                return '<span class="progress-indicator progress-poor"></span>No Analysis Deals';
+            }
+        }
+
+        // Filter and sort table
+        function filterAndSortTable(originalData) {
+            const analysisFilter = document.getElementById('analysis-filter').value;
+            const sortBy = document.getElementById('sort-by').value;
+            const searchTerm = document.getElementById('search-dealer').value.toLowerCase();
+            
+            let filteredData = [...originalData.dealerships];
+            
+            // Apply search filter
+            if (searchTerm) {
+                filteredData = filteredData.filter(dealer => 
+                    dealer.dealerName.toLowerCase().includes(searchTerm) ||
+                    dealer.city.toLowerCase().includes(searchTerm) ||
+                    dealer.stateCode.toLowerCase().includes(searchTerm) ||
+                    dealer.dealerId.toString().includes(searchTerm)
+                );
+            }
+            
+            // Apply analysis filter
+            if (analysisFilter > 0) {
+                filteredData = filteredData.filter(dealer => dealer.analysisDeals >= parseInt(analysisFilter));
+            }
+            
+            // Apply sorting
+            filteredData.sort((a, b) => {
+                switch (sortBy) {
+                    case 'analysis-desc':
+                        return b.analysisDeals - a.analysisDeals;
+                    case 'analysis-asc':
+                        return a.analysisDeals - b.analysisDeals;
+                    case 'total-desc':
+                        return b.totalDeals - a.totalDeals;
+                    case 'total-asc':
+                        return a.totalDeals - b.totalDeals;
+                    case 'conversion-desc':
+                        return (b.analysisDeals / b.totalDeals) - (a.analysisDeals / a.totalDeals);
+                    case 'conversion-asc':
+                        return (a.analysisDeals / a.totalDeals) - (b.analysisDeals / b.totalDeals);
+                    default:
+                        return b.analysisDeals - a.analysisDeals;
+                }
+            });
+            
+            // Update table with filtered data
+            updateDealershipAnalysisTable({
+                ...originalData,
+                dealerships: filteredData
+            });
+        }
+
+        // Load dealership rankings
+        async function loadDealershipRankings() {
+            try {
+                const response = await fetch('/api/dealership-rankings');
+                if (response.ok) {
+                    const data = await response.json();
+                    updateDealershipRankings(data);
+                } else {
+                    console.error('Failed to load dealership rankings');
+                    document.getElementById('dealership-rankings').innerHTML = `
+                        <div class="empty-state">
+                            <h3>Failed to Load Rankings</h3>
+                            <p>Unable to fetch dealership ranking data. Please try again.</p>
+                        </div>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error loading dealership rankings:', error);
+                document.getElementById('dealership-rankings').innerHTML = `
+                    <div class="empty-state">
+                        <h3>Connection Error</h3>
+                        <p>Unable to connect to the database. Please check your connection.</p>
+                    </div>
+                `;
+            }
+        }
+
+        // Update dealership rankings display
+        function updateDealershipRankings(data) {
+            const container = document.getElementById('dealership-rankings');
+            
+            if (!data.rankings || data.rankings.length === 0) {
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <h3>No Rankings Available</h3>
+                        <p>No dealerships with analysis-stage deals found.</p>
+                    </div>
+                `;
+                return;
+            }
+            
+
+
+            // Create summary stats
+            const gradeDistribution = { A: 0, B: 0, C: 0, D: 0, F: 0 };
+            data.rankings.forEach(dealer => {
+                if (dealer.grading.grade !== 'N/A') {
+                    gradeDistribution[dealer.grading.grade]++;
+                }
+            });
+
+            const summaryHtml = `
+                <div class="table-stats">
+                    <div class="stat-card">
+                        <div class="stat-value">${data.total_dealers}</div>
+                        <div class="stat-label">Total Dealerships</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #10b981;">${gradeDistribution.A}</div>
+                        <div class="stat-label">A Grade (Excellent)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #3b82f6;">${gradeDistribution.B}</div>
+                        <div class="stat-label">B Grade (Good)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #f59e0b;">${gradeDistribution.C}</div>
+                        <div class="stat-label">C Grade (Average)</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #ef4444;">${gradeDistribution.D + gradeDistribution.F}</div>
+                        <div class="stat-label">D/F Grade (Poor/Failing)</div>
+                    </div>
+                </div>
+            `;
+
+            // Create rankings table
+            const tableHtml = `
+                <div class="table-container">
+                    <table class="enhanced-table">
+                        <thead>
+                            <tr>
+                                <th>Rank</th>
+                                <th>Dealership</th>
+                                <th>Location</th>
+                                <th>Overall Grade</th>
+                                <th>Excessive Fees</th>
+                                <th>Illegitimate Fees</th>
+                                <th>Deals Analyzed</th>
+                                <th>Average Score</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${data.rankings.map((dealer, index) => {
+                                const grading = dealer.grading;
+                                const gradeColor = grading.color;
+                                
+                                return `
+                                    <tr>
+                                        <td><strong>${index + 1}</strong></td>
+                                        <td><strong>${dealer.dealer_name}</strong></td>
+                                        <td>${dealer.location}</td>
+                                        <td>
+                                            <div class="tooltip-container">
+                                                <span class="status-badge" style="background: ${gradeColor}; color: white;">
+                                                    ${grading.grade} (${grading.label})
+                                                </span>
+                                                <div class="tooltip-content">
+                                                    <strong>Overall Grade:</strong> ${grading.grade} (${grading.label})<br>
+                                                    <strong>Average Score:</strong> ${grading.averageScores.overall.toFixed(1)}/100<br>
+                                                    <strong>Excessive Score:</strong> ${grading.averageScores.excessive.toFixed(1)}/100<br>
+                                                    <strong>Illegitimate Score:</strong> ${grading.averageScores.illegitimate.toFixed(1)}/100<br>
+                                                    <strong>Based on:</strong> ${grading.dealCount} deals
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="tooltip-container">
+                                                <span class="status-badge" style="background: ${grading.dealGrades[0]?.excessive.color || '#64748b'}; color: white;">
+                                                    ${grading.dealGrades[0]?.excessive.grade || 'N/A'}
+                                                </span>
+                                                <div class="tooltip-content">
+                                                    <strong>Average Excessive Fees per Deal:</strong> $${grading.averageFees?.excessive?.toFixed(2) || '0.00'}<br>
+                                                    <strong>Grade:</strong> ${grading.dealGrades[0]?.excessive.grade || 'N/A'} (${grading.dealGrades[0]?.excessive.label || 'No Data'})<br>
+                                                    <strong>Based on:</strong> ${grading.dealCount} deals
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="tooltip-container">
+                                                <span class="status-badge" style="background: ${grading.dealGrades[0]?.illegitimate.color || '#64748b'}; color: white;">
+                                                    ${grading.dealGrades[0]?.illegitimate.grade || 'N/A'}
+                                                </span>
+                                                <div class="tooltip-content">
+                                                    <strong>Average Illegitimate Fees per Deal:</strong> $${grading.averageFees?.illegitimate?.toFixed(2) || '0.00'}<br>
+                                                    <strong>Grade:</strong> ${grading.dealGrades[0]?.illegitimate.grade || 'N/A'} (${grading.dealGrades[0]?.illegitimate.label || 'No Data'})<br>
+                                                    <strong>Based on:</strong> ${grading.dealCount} deals
+                                                </div>
+                                            </div>
+                                        </td>
+                                        <td>${grading.dealCount}</td>
+                                        <td>${grading.averageScores.overall.toFixed(1)}/100</td>
+                                    </tr>
+                                `;
+                            }).join('')}
+                        </tbody>
+                    </table>
+                </div>
+            `;
+
+            container.innerHTML = summaryHtml + tableHtml;
+        }
+
+        // Toggle legend visibility
+        function toggleLegend() {
+            const legendGrid = document.querySelector('.legend-grid');
+            const toggleButton = document.querySelector('.legend-toggle');
+            const toggleText = document.querySelector('.toggle-text');
+            const toggleIcon = document.querySelector('.toggle-icon');
+            
+            if (legendGrid.classList.contains('collapsed')) {
+                legendGrid.classList.remove('collapsed');
+                toggleButton.classList.remove('collapsed');
+                toggleText.textContent = 'Hide';
+            } else {
+                legendGrid.classList.add('collapsed');
+                toggleButton.classList.add('collapsed');
+                toggleText.textContent = 'Show';
+            }
+        }
+
+        // Refresh data function
+        function refreshData() {
+            showLoadingState();
+            loadMetricsData();
+        }
+
+        // Initialize the page
+        async function initializeMetricsPage() {
+            showLoadingState();
+            await loadMetricsData();
+        }
+
+        // Initialize when DOM is ready
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initializeMetricsPage);
+        } else {
+            initializeMetricsPage();
+        }
+
+
+
+
+    </script>
+</body>
+</html> 
