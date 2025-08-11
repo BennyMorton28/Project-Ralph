@@ -71,12 +71,248 @@
             background: #2563eb;
         }
 
-        .nav-link.secondary {
-            background: #64748b;
+        .floating-refresh {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
         }
 
-        .nav-link.secondary:hover {
-            background: #475569;
+        .floating-refresh .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            padding: 12px 16px;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            transition: all 0.2s ease;
+        }
+
+        .floating-refresh .nav-link:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        /* Issues Section Styles */
+        .add-issue-btn {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .add-issue-btn:hover {
+            background: #2563eb;
+            transform: translateY(-1px);
+        }
+
+        .chart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .issue-item {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 16px;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .issue-item:hover {
+            border-color: #cbd5e1;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .issue-checkbox {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #d1d5db;
+            border-radius: 4px;
+            cursor: pointer;
+            position: relative;
+            flex-shrink: 0;
+            transition: all 0.2s ease;
+        }
+
+        .issue-checkbox.checked {
+            background: #10b981;
+            border-color: #10b981;
+        }
+
+        .issue-checkbox.checked::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+
+        .issue-text {
+            flex: 1;
+            font-size: 0.9rem;
+            color: #374151;
+            border: none;
+            background: transparent;
+            outline: none;
+            padding: 4px 0;
+        }
+
+        .issue-text.completed {
+            text-decoration: line-through;
+            color: #9ca3af;
+        }
+
+        .issue-actions {
+            display: flex;
+            gap: 8px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        }
+
+        .issue-item:hover .issue-actions {
+            opacity: 1;
+        }
+
+        .issue-delete {
+            background: #dc2626;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: background 0.2s ease;
+        }
+
+        .issue-delete:hover {
+            background: #b91c1c;
+        }
+
+        #empty-issues {
+            display: block;
+        }
+
+        #empty-issues.hidden {
+            display: none;
+        }
+
+        /* Split Layout Styles */
+        .split-layout {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+            align-items: start;
+        }
+
+        .split-left,
+        .split-right {
+            background: white;
+            border-radius: 12px;
+            padding: 24px;
+            border: 1px solid #e2e8f0;
+            min-height: 400px;
+        }
+
+        .split-left .chart-header,
+        .split-right .chart-header {
+            margin: 0 0 20px 0;
+            padding: 0;
+            border: none;
+        }
+
+        /* Issue Filter Tabs */
+        .issue-filter-tabs {
+            display: flex;
+            gap: 2px;
+            margin-bottom: 20px;
+            background: #f1f5f9;
+            border-radius: 6px;
+            padding: 2px;
+        }
+
+        .filter-tab {
+            flex: 1;
+            padding: 8px 12px;
+            border: none;
+            background: transparent;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #64748b;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+        }
+
+        .filter-tab:hover {
+            color: #334155;
+            background: #e2e8f0;
+        }
+
+        .filter-tab.active {
+            background: #1e293b;
+            color: white;
+        }
+
+        /* Inline Add Issue Button */
+        .add-issue-container {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .add-issue-btn-inline {
+            width: 100%;
+            background: #f8fafc;
+            color: #64748b;
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 0.875rem;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+        }
+
+        .add-issue-btn-inline:hover {
+            background: #f1f5f9;
+            border-color: #9ca3af;
+            color: #374151;
+        }
+
+        /* Responsive design for split layout */
+        @media (max-width: 1024px) {
+            .split-layout {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
         }
 
         .metrics-grid {
@@ -609,6 +845,202 @@
             visibility: visible;
         }
 
+        /* Deal Flow Chart Styles */
+        .deal-flow-chart {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 20px 0;
+            border: 1px solid #e2e8f0;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        
+        .flow-container {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-around;
+            flex-wrap: nowrap;
+            padding: 20px 10px;
+            min-height: 350px;
+            max-width: 100%;
+            gap: 8px;
+            overflow-x: auto;
+        }
+        
+        .flow-stage {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 90px;
+            flex: 1;
+            max-width: 120px;
+            position: relative;
+        }
+        
+        .flow-stage.fork {
+            margin-left: 40px;
+        }
+        
+        .stage-node {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            color: white;
+            background: #64748b;
+            margin-bottom: 8px;
+            font-size: 0.7rem;
+            text-align: center;
+            line-height: 1.1;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        .stage-node.success {
+            background: #10b981;
+        }
+        
+        .stage-node.dead {
+            background: #ef4444;
+        }
+        
+        .stage-label {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: #374151;
+            text-align: center;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+        
+        .stage-percentage {
+            font-size: 0.7rem;
+            color: #64748b;
+            text-align: center;
+        }
+        
+        .flow-connector {
+            width: 30px;
+            height: 3px;
+            background: transparent;
+            flex-shrink: 0;
+            align-self: flex-start;
+            margin-top: 25px;
+            position: relative;
+        }
+        
+        .flow-connector::after {
+            content: '→';
+            position: absolute;
+            right: -15px;
+            top: -20px;
+            color: #94a3b8;
+            font-size: 36px;
+            font-weight: bold;
+            z-index: 10;
+            display: block;
+        }
+        
+        .fork-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: flex-start;
+            position: relative;
+        }
+        
+        .fork-connector {
+            position: absolute;
+            left: -40px;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 40px;
+            height: 2px;
+            background: #d1d5db;
+        }
+        
+        .fork-connector::before {
+            content: '';
+            position: absolute;
+            right: 0;
+            top: -20px;
+            width: 2px;
+            height: 40px;
+            background: #d1d5db;
+        }
+        
+        .fork-branch {
+            width: 2px;
+            height: 20px;
+            background: #d1d5db;
+            position: absolute;
+            right: 0;
+        }
+        
+        .fork-branch.top {
+            top: -20px;
+        }
+        
+        .fork-branch.bottom {
+            bottom: -20px;
+        }
+        
+        /* Side branch styles for VIN Sold */
+        .flow-stage-with-branch {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 90px;
+            flex: 1;
+            max-width: 120px;
+            position: relative;
+            margin-bottom: 120px;
+        }
+        
+        .main-flow-path {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .side-branch {
+            position: absolute;
+            top: 130px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 1;
+        }
+        
+        .branch-connector {
+            width: 2px;
+            height: 25px;
+            background: #94a3b8;
+            position: relative;
+        }
+        
+        .branch-connector::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: -4px;
+            width: 0;
+            height: 0;
+            border-top: 10px solid #94a3b8;
+            border-left: 5px solid transparent;
+            border-right: 5px solid transparent;
+        }
+        
+        .flow-stage.branch {
+            margin-top: 10px;
+        }
+
 
 
         @media (max-width: 768px) {
@@ -638,19 +1070,11 @@
 </head>
 <body>
     <div class="container">
-        <div class="header">
-            <h1>Project Ralph - Metrics Dashboard</h1>
-            <div class="nav-links">
-                <a href="/" class="nav-link secondary">
-                    Back to Main
-                </a>
-                <a href="deal-details.html?id=3589" class="nav-link secondary">
-                    <i class="fas fa-search"></i> View Deal Details
-                </a>
-                <a href="#" class="nav-link" onclick="refreshData()">
-                    Refresh
-                </a>
-            </div>
+        <!-- Floating Refresh Button -->
+        <div class="floating-refresh">
+            <a href="#" class="nav-link" onclick="refreshData()">
+                <i class="fas fa-sync-alt"></i> Refresh
+            </a>
         </div>
 
         <!-- Deal Summary -->
@@ -674,7 +1098,7 @@
                     </div>
                 </div>
             </div>
-            
+        </div>
 
 
         <!-- Mystery Shop Metrics -->
@@ -722,6 +1146,51 @@
             </div>
         </div>
 
+        <!-- Mystery Shop Scoring Section with Issues Split Layout -->
+        <div class="chart-container">
+            <div class="split-layout">
+                <!-- Left Side: Mystery Shop Scoring Distribution -->
+                <div class="split-left">
+                    <div class="chart-header">
+                        <div class="chart-title">Mystery Shop Scoring Distribution</div>
+                    </div>
+                    <div id="mystery-shop-metrics">
+                        <div class="empty-state">
+                            <h3>Loading Mystery Shop Metrics...</h3>
+                            <p>Please wait while we fetch the scoring distribution data.</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Right Side: Issues List -->
+                <div class="split-right">
+                    <div class="chart-header">
+                        <div class="chart-title">Issues</div>
+                    </div>
+                    
+                    <!-- Filter Tabs -->
+                    <div class="issue-filter-tabs">
+                        <button class="filter-tab" data-filter="all" onclick="setIssueFilter('all')">All Issues</button>
+                        <button class="filter-tab active" data-filter="incomplete" onclick="setIssueFilter('incomplete')">Need to Fix</button>
+                        <button class="filter-tab" data-filter="completed" onclick="setIssueFilter('completed')">Fixed</button>
+                    </div>
+                    
+                    <div id="issues-container">
+                        <div class="empty-state" id="empty-issues">
+                            <h3>No Issues</h3>
+                            <p>Start tracking problems and concerns.</p>
+                        </div>
+                        <div id="issues-list"></div>
+                        <div class="add-issue-container">
+                            <button class="add-issue-btn-inline" onclick="addNewIssue()">
+                                <i class="fas fa-plus"></i> Add Issue
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <!-- Driver Metrics Section -->
         <div class="chart-container">
             <div class="chart-header">
@@ -738,27 +1207,6 @@
                     </div>
                 </div>
             </div>
-            
-            <!-- Scored Section (placeholder for next iteration) -->
-            <div style="margin-bottom: 32px;">
-                <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1.125rem; font-weight: 600;">Scored</h4>
-                <div class="empty-state">
-                    <h3>Coming Soon</h3>
-                    <p>Scored metrics will be available in the next update.</p>
-                </div>
-            </div>
-        </div>
-
-        <!-- Funnel Metrics Section -->
-        <div class="chart-container">
-            <div class="chart-header">
-                <div class="chart-title">Funnel Metrics</div>
-            </div>
-            <div class="empty-state">
-                <h3>Coming Soon</h3>
-                <p>Funnel metrics will be available in the next update.</p>
-            </div>
-        </div>
             
             <div class="deal-states-table">
                 <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1rem; font-weight: 600;">Deal States Breakdown</h4>
@@ -814,47 +1262,81 @@
                     </tbody>
                 </table>
             </div>
+            
+            <!-- Deal Flow Progress Chart -->
+            <div style="margin-top: 32px;">
+                <h4 style="margin-bottom: 16px; color: #0f172a; font-size: 1rem; font-weight: 600;">Deal Progress Flow</h4>
+                <div class="deal-flow-chart">
+                    <div class="flow-container" id="deal-flow-container">
+                        <!-- Progressive stages -->
+                        <div class="flow-stage">
+                            <div class="stage-node" id="dealer-outreach-node">0%</div>
+                            <div class="stage-label">Dealer<br>Outreach</div>
+                            <div class="stage-percentage" id="dealer-outreach-percent">0 deals</div>
+                        </div>
+                        <div class="flow-connector"></div>
+                        
+                        <div class="flow-stage">
+                            <div class="stage-node" id="convo-pending-node">0%</div>
+                            <div class="stage-label">Convo<br>Pending</div>
+                            <div class="stage-percentage" id="convo-pending-percent">0 deals</div>
+                        </div>
+                        <div class="flow-connector"></div>
+                        
+                        <div class="flow-stage">
+                            <div class="stage-node" id="convo-established-node">0%</div>
+                            <div class="stage-label">Convo<br>Established</div>
+                            <div class="stage-percentage" id="convo-established-percent">0 deals</div>
+                        </div>
+                        <div class="flow-connector"></div>
+                        
+                        <!-- Confirm Car with VIN Sold branch -->
+                        <div class="flow-stage-with-branch">
+                            <div class="main-flow-path">
+                                <div class="flow-stage">
+                                    <div class="stage-node" id="confirm-car-node">0%</div>
+                                    <div class="stage-label">Confirm<br>Car</div>
+                                    <div class="stage-percentage" id="confirm-car-percent">0 deals</div>
+                                </div>
+                            </div>
+                            
+                            <!-- VIN Sold branch off -->
+                            <div class="side-branch">
+                                <div class="branch-connector"></div>
+                                <div class="flow-stage branch">
+                                    <div class="stage-node dead" id="vin-sold-node">0%</div>
+                                    <div class="stage-label">VIN Sold</div>
+                                    <div class="stage-percentage" id="vin-sold-percent">0 deals</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="flow-connector"></div>
+                        
+                        <div class="flow-stage">
+                            <div class="stage-node" id="confirm-price-node">0%</div>
+                            <div class="stage-label">Confirm<br>Price</div>
+                            <div class="stage-percentage" id="confirm-price-percent">0 deals</div>
+                        </div>
+                        <div class="flow-connector"></div>
+                        
+                        <div class="flow-stage">
+                            <div class="stage-node" id="clarify-fees-node">0%</div>
+                            <div class="stage-label">Clarify<br>Fees</div>
+                            <div class="stage-percentage" id="clarify-fees-percent">0 deals</div>
+                        </div>
+                        <div class="flow-connector"></div>
+                        
+                        <!-- Analysis as final step -->
+                        <div class="flow-stage">
+                            <div class="stage-node success" id="analysis-node">0%</div>
+                            <div class="stage-label">Analysis</div>
+                            <div class="stage-percentage" id="analysis-percent">0 deals</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <!-- Dealership Analysis Table -->
-        <div class="chart-container">
-            <div class="chart-header">
-                <div class="chart-title">Dealership Performance Analysis</div>
-                <div style="display: flex; gap: 12px; align-items: center; flex-wrap: wrap;">
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <label for="search-dealer" style="font-size: 0.875rem; color: #64748b; font-weight: 500;">Search:</label>
-                        <input type="text" id="search-dealer" placeholder="Search dealership name..." style="padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.875rem; min-width: 200px;">
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <label for="analysis-filter" style="font-size: 0.875rem; color: #64748b; font-weight: 500;">Min Analysis Deals:</label>
-                        <select id="analysis-filter" style="padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.875rem;">
-                            <option value="0">All</option>
-                            <option value="1">1+</option>
-                            <option value="5">5+</option>
-                            <option value="8">8+</option>
-                            <option value="10">10+</option>
-                        </select>
-                    </div>
-                    <div style="display: flex; align-items: center; gap: 8px;">
-                        <label for="sort-by" style="font-size: 0.875rem; color: #64748b; font-weight: 500;">Sort by:</label>
-                        <select id="sort-by" style="padding: 4px 8px; border: 1px solid #e2e8f0; border-radius: 4px; font-size: 0.875rem;">
-                            <option value="analysis-desc">Analysis Deals (High to Low)</option>
-                            <option value="analysis-asc">Analysis Deals (Low to High)</option>
-                            <option value="total-desc">Total Deals (High to Low)</option>
-                            <option value="total-asc">Total Deals (Low to High)</option>
-                            <option value="conversion-desc">Conversion Rate (High to Low)</option>
-                            <option value="conversion-asc">Conversion Rate (Low to High)</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div id="dealership-analysis-table">
-                <div class="empty-state">
-                    <h3>Loading Dealership Data...</h3>
-                    <p>Please wait while we fetch the latest performance data.</p>
-                </div>
-            </div>
-        </div>
 
         <!-- Dealership Rankings Section -->
         <div class="chart-container">
@@ -863,7 +1345,7 @@
                 <div class="tooltip-container">
                     <div class="tooltip-icon">i</div>
                     <div class="tooltip-content">
-                        Dealerships are ranked based on their fee transparency across all analysis-stage deals. Grades are calculated using excessive fees (40% weight) and illegitimate fees (60% weight). Only dealerships with analysis-stage deals are included.
+                        Dealerships are ranked based on their fee transparency and disclosure practices across all analysis-stage deals. Only dealerships with analysis-stage deals are included.
                     </div>
                 </div>
             </div>
@@ -878,91 +1360,111 @@
                     </button>
                 </div>
                 <div class="legend-grid">
-                    <div class="legend-section">
-                        <h5>Grade Levels</h5>
-                        <div class="grade-legend">
-                            <div class="legend-item">
-                                <span class="legend-badge" style="background: #10b981;">A</span>
-                                <span class="legend-text"><strong>Excellent</strong> - Very low fees, exceptional transparency</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-badge" style="background: #3b82f6;">B</span>
-                                <span class="legend-text"><strong>Good</strong> - Low fees, good transparency</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-badge" style="background: #f59e0b;">C</span>
-                                <span class="legend-text"><strong>Average</strong> - Typical fees, acceptable transparency</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-badge" style="background: #ef4444;">D</span>
-                                <span class="legend-text"><strong>Poor</strong> - High fees, concerning transparency</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-badge" style="background: #dc2626;">F</span>
-                                <span class="legend-text"><strong>Failing</strong> - Extremely high fees, poor transparency</span>
-                            </div>
+                    <div class="legend-section" style="grid-column: 1 / -1;">
+                        <h5>Dealership Fee Transparency Grading System</h5>
+                        <div class="grading-table-container">
+                            <table class="grading-legend-table" style="width: 100%; border-collapse: collapse; margin-top: 12px;">
+                                <thead>
+                                    <tr style="background: #f8fafc; border-bottom: 2px solid #e2e8f0;">
+                                        <th style="padding: 12px; text-align: left; font-weight: 600; color: #374151;">Grade</th>
+                                        <th style="padding: 12px; text-align: left; font-weight: 600; color: #374151;">
+                                            Illegitimate/Excessive Fees
+                                            <div class="tooltip-container">
+                                                <div class="tooltip-icon">i</div>
+                                                <div class="tooltip-content">
+                                                    The average amount of illegitimate and excessive fees (sum) a dealership charges per deal
+                                                </div>
+                                            </div>
+                                        </th>
+                                        <th style="padding: 12px; text-align: left; font-weight: 600; color: #374151;">Transparency/Compliance</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #059669; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">A+</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$0</td>
+                                        <td style="padding: 10px;">Properly Disclosed</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #10b981; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">A</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$1-$100</td>
+                                        <td style="padding: 10px;">Properly Disclosed</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #34d399; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">A-</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$101-$250</td>
+                                        <td style="padding: 10px;">Properly Disclosed</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #2563eb; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">B+</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$0</td>
+                                        <td style="padding: 10px;">Not Proper but Close</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #3b82f6; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">B</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$1-$100</td>
+                                        <td style="padding: 10px;">Not Proper but Close</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #60a5fa; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">B-</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$101-$250</td>
+                                        <td style="padding: 10px;">Not Proper but Close</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #d97706; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">C+</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$251-$499</td>
+                                        <td style="padding: 10px;">Proper and/or Not Proper But Close</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #f59e0b; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">C</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$500-$999</td>
+                                        <td style="padding: 10px;">Proper and/or Not Proper But Close</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #fbbf24; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">C-</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$1,000+</td>
+                                        <td style="padding: 10px;">Proper and/or Not Proper But Close</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #dc2626; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">D+</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$0-$250</td>
+                                        <td style="padding: 10px;">Guilty of Bait &amp; Switch Pricing</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #ef4444; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">D</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$251-$500</td>
+                                        <td style="padding: 10px;">Guilty of Bait &amp; Switch Pricing</td>
+                                    </tr>
+                                    <tr style="border-bottom: 1px solid #e5e7eb;">
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #f87171; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">D-</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$501-$749</td>
+                                        <td style="padding: 10px;">Guilty of Bait &amp; Switch Pricing</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 10px;"><span class="legend-badge" style="background: #991b1b; color: white; padding: 4px 8px; border-radius: 4px; font-weight: 600;">F</span></td>
+                                        <td style="padding: 10px; font-weight: 500;">$750+</td>
+                                        <td style="padding: 10px;">Guilty of Bait &amp; Switch Pricing</td>
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                     
                     <div class="legend-section">
-                        <h5>Fee Categories</h5>
-                        <div class="fee-legend">
-                            <div class="legend-item">
-                                <span class="legend-icon excessive">💰</span>
-                                <span class="legend-text"><strong>Excessive Fees</strong> (40% weight)<br>Fees higher than typical market rates but may be legitimate</span>
-                            </div>
-                            <div class="legend-item">
-                                <span class="legend-icon illegitimate">⚠️</span>
-                                <span class="legend-text"><strong>Illegitimate Fees</strong> (60% weight)<br>Unnecessary, deceptive, or potentially illegal fees</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="legend-section">
-                        <h5>Grading Thresholds</h5>
-                        <div class="threshold-legend">
-                            <div class="threshold-item">
-                                <strong>Excessive Fees:</strong><br>
-                                A: $0-$450 | B: $450-$550 | C: $550-$1,248<br>
-                                D: $1,248-$12,767 | F: >$12,767
-                            </div>
-                            <div class="threshold-item">
-                                <strong>Illegitimate Fees:</strong><br>
-                                A: $0-$451.50 | B: $451.50-$1,231.25 | C: $1,231.25-$2,674.25<br>
-                                D: $2,674.25-$19,039.45 | F: >$19,039.45
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="legend-section">
-                        <h5>Data Source</h5>
+                        <h5>Bait & Switch Pricing</h5>
                         <div class="data-source-info">
                             <div class="data-item">
-                                <span class="data-icon">📊</span>
+                                <span class="data-icon">⚠️</span>
                                 <span class="data-text">
-                                    <strong>Based on analysis-stage deals with fee data</strong><br>
-                                    Grades calculated from actual fee data for deals currently in analysis state
+                                    <strong>Failure to disclose fees properly on the VDP</strong><br>
+                                    Dealership does not properly disclose required fees on their Vehicle Description Page
                                 </span>
                             </div>
                             <div class="data-item">
-                                <span class="data-icon">⚖️</span>
+                                <span class="data-icon">🔍</span>
                                 <span class="data-text">
-                                    <strong>Weighted scoring system</strong><br>
-                                    Overall grade: (Excessive × 0.4) + (Illegitimate × 0.6)
-                                </span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-icon">🧮</span>
-                                <span class="data-text">
-                                    <strong>Dealership grading method</strong><br>
-                                    Each deal is graded individually, then dealership grade is the average of all deal scores
-                                </span>
-                            </div>
-                            <div class="data-item">
-                                <span class="data-icon">💡</span>
-                                <span class="data-text">
-                                    <strong>Hover for details</strong><br>
-                                    Hover over any grade badge to see average fee amounts per deal and detailed scores
+                                    <strong>Seem to disclose properly on the VDP but analysis reveals issues</strong><br>
+                                    Initial disclosure appears correct, but detailed analysis reveals additional fees and/or fees higher than $100
                                 </span>
                             </div>
                         </div>
@@ -981,8 +1483,29 @@
         <!-- Data Table Section -->
         <div class="chart-container">
             <div class="chart-header">
-                <div class="chart-title">Recent Activity</div>
+                <div class="chart-title">Recent Deal Activity</div>
             </div>
+            
+            <!-- Search Box -->
+            <div class="search-container" style="margin-bottom: 20px; padding: 0 24px;">
+                <div style="position: relative; max-width: 400px;">
+                    <input type="text" 
+                           id="deal-search-input" 
+                           placeholder="Search by deal ID, dealer name, customer, or location..."
+                           style="width: 100%; padding: 12px 16px 12px 40px; border: 1px solid #d1d5db; border-radius: 8px; font-size: 14px; background: #fff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);"
+                           oninput="filterDeals(this.value)"
+                           onkeypress="if(event.key==='Enter') event.preventDefault()">
+                    <i class="fas fa-search" style="position: absolute; left: 14px; top: 50%; transform: translateY(-50%); color: #9ca3af; font-size: 14px;"></i>
+                    <button onclick="clearSearch()" 
+                            id="clear-search-btn"
+                            style="position: absolute; right: 8px; top: 50%; transform: translateY(-50%); background: none; border: none; color: #9ca3af; cursor: pointer; padding: 4px; display: none;"
+                            title="Clear search">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div id="search-results-count" style="font-size: 12px; color: #6b7280; margin-top: 4px; display: none;"></div>
+            </div>
+            
             <div id="activity-table">
                 <div class="empty-state">
                     <h3>No Data Available</h3>
@@ -1094,6 +1617,7 @@
                     const activityData = await activityResponse.json();
                     if (activityData && !activityData.error) {
                         metricsData.recentActivity = activityData;
+                        originalActivityData = [...activityData]; // Store original data for search filtering
                         console.log('Recent activity loaded:', activityData);
                     }
                 } else {
@@ -1128,11 +1652,14 @@
 
                             // Load dealership analysis data
                 loadDealershipAnalysisData().then(() => {
-                                    // Load driver metrics data
-                loadDriverMetricsData();
+                    // Load mystery shop metrics data
+                    loadMysteryShopMetrics();
+                    
+                    // Load driver metrics data
+                    loadDriverMetricsData();
 
-                // Load dealership rankings
-                loadDealershipRankings();
+                    // Load dealership rankings
+                    loadDealershipRankings();
                 });
 
         }
@@ -1177,6 +1704,76 @@
             `;
         }
 
+        // Store original activity data for filtering
+        let originalActivityData = [];
+        let searchTimeout;
+
+        // Search all deals using the comprehensive API
+        async function filterDeals(searchTerm) {
+            const searchInput = document.getElementById('deal-search-input');
+            const clearBtn = document.getElementById('clear-search-btn');
+            const resultsCount = document.getElementById('search-results-count');
+            
+            // Clear existing timeout
+            if (searchTimeout) {
+                clearTimeout(searchTimeout);
+            }
+            
+            // Show/hide clear button
+            if (searchTerm.length > 0) {
+                clearBtn.style.display = 'block';
+                resultsCount.style.display = 'block';
+                resultsCount.textContent = 'Searching...';
+            } else {
+                clearBtn.style.display = 'none';
+                resultsCount.style.display = 'none';
+                // Reset to original recent activity data
+                metricsData.recentActivity = [...originalActivityData];
+                updateActivityTable();
+                return;
+            }
+            
+            // Debounce the search to avoid too many API calls
+            searchTimeout = setTimeout(async () => {
+                try {
+                    const response = await fetch(`/api/deals-search?q=${encodeURIComponent(searchTerm)}`);
+                    if (response.ok) {
+                        const searchData = await response.json();
+                        
+                        // Update results count
+                        resultsCount.textContent = `${searchData.total} deals found`;
+                        
+                        // Update the displayed data with search results
+                        metricsData.recentActivity = searchData.deals;
+                        updateActivityTable();
+                        
+                        console.log('Search completed:', searchData);
+                    } else {
+                        console.error('Search API error:', response.status, response.statusText);
+                        resultsCount.textContent = 'Search failed';
+                    }
+                } catch (error) {
+                    console.error('Search error:', error);
+                    resultsCount.textContent = 'Search error';
+                }
+            }, 300); // Wait 300ms after user stops typing
+        }
+
+        // Clear search
+        function clearSearch() {
+            const searchInput = document.getElementById('deal-search-input');
+            const clearBtn = document.getElementById('clear-search-btn');
+            const resultsCount = document.getElementById('search-results-count');
+            
+            searchInput.value = '';
+            clearBtn.style.display = 'none';
+            resultsCount.style.display = 'none';
+            
+            // Reset to original data
+            metricsData.recentActivity = [...originalActivityData];
+            updateActivityTable();
+        }
+
         // Update deal summary
         function updateDealSummary() {
             const dealData = metricsData.dealSummary;
@@ -1214,10 +1811,40 @@
             // Update deal states table with null checks
             const tableBody = document.getElementById('deal-states-body');
             
+            // Define tooltip descriptions for deal states
+            const stateDescriptions = {
+                'vin_sold': 'VIN is no longer for sale',
+                'open': "Dealer outreach hasn't been completed", 
+                'dealer_outreach': "We submitted form on dealer's website",
+                'convo_pending': 'Dealer outreach completed and waiting to get an email from the dealer',
+                'convo_established': 'Dealer outreach completed and waiting to get an email from the dealer',
+                'confirm_car': 'It is confirmed that the car is still available and now we are asking the dealer about price',
+                'confirm_price': "We've received a price from the dealer",
+                'clarify_fees': "We've received an OTD price and how we are asking the dealer questions about fees we've found",
+                'clarify_fees_answered': 'Dealer answered all of our questions about the fees found',
+                'clarify_fees_unanswered': "Dealer didn't answer our questions about the fees found",
+                'perform_analysis': 'We have all the info to begin the analysis',
+                'write_report': 'We are working on the analysis',
+                'send_report': 'Analysis complete',
+                'analysis': 'Analysis complete',
+                'credit_offer': 'Credit offer received from dealer',
+                'won': 'Deal completed successfully'
+            };
+            
             if (dealData.states && Array.isArray(dealData.states)) {
                 tableBody.innerHTML = dealData.states.map((state, index) => `
                     <tr>
-                        <td>${state.state || ''}</td>
+                        <td>
+                            ${state.state || ''}
+                            ${stateDescriptions[state.state] ? `
+                                <div class="tooltip-container">
+                                    <div class="tooltip-icon">i</div>
+                                    <div class="tooltip-content">
+                                        ${stateDescriptions[state.state]}
+                                    </div>
+                                </div>
+                            ` : ''}
+                        </td>
                         <td>${(state.count || 0).toLocaleString()}</td>
                         <td>${state.percent || 0}%</td>
                     </tr>
@@ -1225,6 +1852,79 @@
             } else {
                 tableBody.innerHTML = '<tr><td colspan="3">No data available</td></tr>';
             }
+            
+            // Update the deal flow chart
+            updateDealFlowChart(dealData);
+        }
+
+        // Update deal flow chart
+        function updateDealFlowChart(dealData) {
+            if (!dealData || !dealData.states || !Array.isArray(dealData.states)) {
+                console.error('dealData.states is not available for flow chart');
+                return;
+            }
+            
+            // Create a map for easy state lookup
+            const stateMap = {};
+            dealData.states.forEach(state => {
+                const normalizedKey = state.state.toLowerCase().replace(/\s+/g, '_');
+                stateMap[normalizedKey] = {
+                    count: state.count || 0,
+                    percent: state.percent || 0
+                };
+            });
+            
+            // Debug: log the state mapping
+            console.log('State mapping for flow chart:', stateMap);
+            
+            // Define the flow stages in order
+            const flowStages = [
+                { key: 'dealer_outreach', elementId: 'dealer-outreach' },
+                { key: 'convo_pending', elementId: 'convo-pending' },
+                { key: 'convo_established', elementId: 'convo-established' },
+                { key: 'confirm_car', elementId: 'confirm-car' },
+                { key: 'confirm_price', elementId: 'confirm-price' },
+                { key: 'clarify_fees', elementId: 'clarify-fees' },
+                { key: 'analysis', elementId: 'analysis' },
+                { key: 'vin_sold', elementId: 'vin-sold' }
+            ];
+            
+            // Calculate size scaling based on percentages
+            const getCircleSize = (percentage) => {
+                // Base size 40px, scale up to 80px based on percentage
+                // Max percentage gets 80px, min gets 40px
+                const maxPercent = Math.max(...dealData.states.map(s => s.percent || 0));
+                const minPercent = Math.min(...dealData.states.filter(s => s.percent > 0).map(s => s.percent || 0));
+                
+                if (maxPercent === minPercent) return 50; // Default size if all same
+                
+                const ratio = (percentage - minPercent) / (maxPercent - minPercent);
+                return Math.round(40 + (ratio * 40)); // Scale from 40px to 80px
+            };
+            
+            // Update each stage
+            flowStages.forEach(stage => {
+                const stateData = stateMap[stage.key];
+                if (stateData) {
+                    // Update percentage in circle
+                    const nodeElement = document.getElementById(`${stage.elementId}-node`);
+                    if (nodeElement) {
+                        nodeElement.textContent = `${stateData.percent}%`;
+                        
+                        // Scale circle size based on percentage
+                        const circleSize = getCircleSize(stateData.percent);
+                        nodeElement.style.width = `${circleSize}px`;
+                        nodeElement.style.height = `${circleSize}px`;
+                        nodeElement.style.fontSize = `${Math.max(0.6, circleSize / 80)}rem`;
+                    }
+                    
+                    // Update count below
+                    const percentElement = document.getElementById(`${stage.elementId}-percent`);
+                    if (percentElement) {
+                        percentElement.textContent = `${stateData.count.toLocaleString()} deals`;
+                    }
+                }
+            });
         }
 
         // Update mystery shop metrics
@@ -1361,7 +2061,6 @@
                 const response = await fetch('/api/dealership-analysis');
                 if (response.ok) {
                     const data = await response.json();
-                    updateDealershipAnalysisTable(data);
                     
                     // Update mystery shop metrics with correct data
                     const totalDealerships = data.totalDealerships;
@@ -1379,129 +2078,111 @@
                     
                 } else {
                     console.error('Failed to load dealership analysis data');
-                    document.getElementById('dealership-analysis-table').innerHTML = `
-                        <div class="empty-state">
-                            <h3>Failed to Load Data</h3>
-                            <p>Unable to fetch dealership analysis data. Please try again.</p>
-                        </div>
-                    `;
                 }
             } catch (error) {
                 console.error('Error loading dealership analysis:', error);
-                document.getElementById('dealership-analysis-table').innerHTML = `
-                    <div class="empty-state">
-                        <h3>Connection Error</h3>
-                        <p>Unable to connect to the database. Please check your connection.</p>
-                    </div>
-                `;
             }
         }
 
-        // Update dealership analysis table
-        function updateDealershipAnalysisTable(data) {
-            const container = document.getElementById('dealership-analysis-table');
-            
-            // Create summary stats
-            const statsHtml = `
-                <div class="table-stats">
-                    <div class="stat-card">
-                        <div class="stat-value">${data.totalDealerships.toLocaleString()}</div>
-                        <div class="stat-label">Total Dealerships</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${data.dealershipsWithAnalysis.toLocaleString()}</div>
-                        <div class="stat-label">With Analysis Deals</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${data.dealershipsWith5Plus.toLocaleString()}</div>
-                        <div class="stat-label">5+ Analysis Deals</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${data.dealershipsWith10Plus.toLocaleString()}</div>
-                        <div class="stat-label">10+ Analysis Deals</div>
-                    </div>
-                    <div class="stat-card">
-                        <div class="stat-value">${data.avgAnalysisDeals.toFixed(1)}</div>
-                        <div class="stat-label">Avg Analysis Deals</div>
-                    </div>
-                </div>
-            `;
 
-            // Create table
+        // Load mystery shop metrics data
+        async function loadMysteryShopMetrics() {
+            console.log('Loading mystery shop metrics...');
+            try {
+                const response = await fetch('/api/mystery-shop-metrics');
+                console.log('Mystery shop metrics response:', response.status, response.ok);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    console.log('Mystery shop metrics data:', data);
+                    updateMysteryShopTable(data);
+                } else {
+                    console.error('Failed to load mystery shop metrics, status:', response.status);
+                    showMysteryShopError();
+                }
+            } catch (error) {
+                console.error('Error loading mystery shop metrics:', error);
+                showMysteryShopError();
+            }
+        }
+
+        // Update mystery shop metrics table
+        function updateMysteryShopTable(data) {
+            console.log('Updating mystery shop table with data:', data);
+            const container = document.getElementById('mystery-shop-metrics');
+            
+            if (!container) {
+                console.error('Mystery shop metrics container not found!');
+                return;
+            }
+            
+            if (!data.mystery_shop_metrics || data.mystery_shop_metrics.length === 0) {
+                console.log('No mystery shop metrics data, showing error');
+                showMysteryShopError();
+                return;
+            }
+
+            // Ensure all ranges are present with 0 values if missing  
+            const allRanges = ['10', '8-9', '5-7', '1-4', '0'];
+            const metricsMap = {};
+            
+            data.mystery_shop_metrics.forEach(item => {
+                metricsMap[item.shop_range] = item;
+            });
+
+            // Fill in missing ranges with 0 values
+            allRanges.forEach(range => {
+                if (!metricsMap[range]) {
+                    metricsMap[range] = {
+                        shop_range: range,
+                        dealer_count: 0,
+                        percentage: 0.0
+                    };
+                }
+            });
+
             const tableHtml = `
                 <div class="table-container">
-                    <table class="enhanced-table">
+                    <table class="data-table">
                         <thead>
                             <tr>
-                                <th>Rank</th>
-                                <th>Dealership</th>
-                                <th>Location</th>
-                                <th>Analysis Deals</th>
-                                <th>Total Deals</th>
-                                <th>Conversion Rate</th>
-                                <th>Progress to 10</th>
-                                <th>Status</th>
+                                <th style="text-align: left;">No. of Scored Mystery Shops</th>
+                                <th style="text-align: right;">% of Dealers</th>
+                                <th style="text-align: right;">Number of Dealers</th>
                             </tr>
                         </thead>
                         <tbody>
-                            ${data.dealerships.map((dealer, index) => {
-                                const conversionRate = dealer.totalDeals > 0 ? ((dealer.analysisDeals / dealer.totalDeals) * 100).toFixed(1) : '0.0';
-                                const progressTo10 = dealer.analysisDeals >= 10 ? 'Achieved!' : `${10 - dealer.analysisDeals} more needed`;
-                                const status = getStatusIndicator(dealer.analysisDeals);
-                                
-                                let rowClass = '';
-                                if (dealer.analysisDeals >= 10) rowClass = 'achieved-goal';
-                                else if (dealer.analysisDeals >= 8) rowClass = 'near-goal';
-                                else if (dealer.analysisDeals >= 5) rowClass = 'highlight';
-                                
+                            ${allRanges.map(range => {
+                                const item = metricsMap[range];
                                 return `
-                                    <tr class="${rowClass}">
-                                        <td>${index + 1}</td>
-                                        <td><strong>${dealer.dealerName}</strong><br><small style="color: #64748b;">ID: ${dealer.dealerId}</small></td>
-                                        <td>${dealer.city}, ${dealer.stateCode}</td>
-                                        <td><strong>${dealer.analysisDeals}</strong></td>
-                                        <td>${dealer.totalDeals}</td>
-                                        <td>${conversionRate}%</td>
-                                        <td>${progressTo10}</td>
-                                        <td>${status}</td>
+                                    <tr>
+                                        <td style="font-weight: 600;">${range}</td>
+                                        <td style="text-align: right;">${item.percentage}%</td>
+                                        <td style="text-align: right;">${item.dealer_count.toLocaleString()}</td>
                                     </tr>
                                 `;
                             }).join('')}
                         </tbody>
                     </table>
+                    <div class="table-footer">
+                        <p>Total Dealers: ${data.total_dealers.toLocaleString()}</p>
+                        <p>Last Updated: ${new Date(data.last_updated).toLocaleString()}</p>
+                    </div>
                 </div>
             `;
-
-            container.innerHTML = statsHtml + tableHtml;
             
-            // Add event listeners for filters
-            setupTableFilters(data);
+            container.innerHTML = tableHtml;
         }
 
-        // Get status indicator
-        function getStatusIndicator(analysisDeals) {
-            if (analysisDeals >= 10) {
-                return '<span class="progress-indicator progress-excellent"></span>Goal Achieved';
-            } else if (analysisDeals >= 8) {
-                return '<span class="progress-indicator progress-good"></span>Near Goal';
-            } else if (analysisDeals >= 5) {
-                return '<span class="progress-indicator progress-average"></span>Good Progress';
-            } else if (analysisDeals >= 1) {
-                return '<span class="progress-indicator progress-poor"></span>Needs Work';
-            } else {
-                return '<span class="progress-indicator progress-poor"></span>No Analysis Deals';
-            }
-        }
-
-        // Setup table filters
-        function setupTableFilters(originalData) {
-            const analysisFilter = document.getElementById('analysis-filter');
-            const sortBy = document.getElementById('sort-by');
-            const searchDealer = document.getElementById('search-dealer');
-            
-            analysisFilter.addEventListener('change', () => filterAndSortTable(originalData));
-            sortBy.addEventListener('change', () => filterAndSortTable(originalData));
-            searchDealer.addEventListener('input', () => filterAndSortTable(originalData));
+        // Show error state for mystery shop metrics
+        function showMysteryShopError() {
+            const container = document.getElementById('mystery-shop-metrics');
+            container.innerHTML = `
+                <div class="error-state">
+                    <h3>Unable to Load Mystery Shop Metrics</h3>
+                    <p>Please check your connection and try refreshing the page.</p>
+                </div>
+            `;
         }
 
         // Load driver metrics data
@@ -1633,55 +2314,6 @@
             }
         }
 
-        // Filter and sort table
-        function filterAndSortTable(originalData) {
-            const analysisFilter = document.getElementById('analysis-filter').value;
-            const sortBy = document.getElementById('sort-by').value;
-            const searchTerm = document.getElementById('search-dealer').value.toLowerCase();
-            
-            let filteredData = [...originalData.dealerships];
-            
-            // Apply search filter
-            if (searchTerm) {
-                filteredData = filteredData.filter(dealer => 
-                    dealer.dealerName.toLowerCase().includes(searchTerm) ||
-                    dealer.city.toLowerCase().includes(searchTerm) ||
-                    dealer.stateCode.toLowerCase().includes(searchTerm) ||
-                    dealer.dealerId.toString().includes(searchTerm)
-                );
-            }
-            
-            // Apply analysis filter
-            if (analysisFilter > 0) {
-                filteredData = filteredData.filter(dealer => dealer.analysisDeals >= parseInt(analysisFilter));
-            }
-            
-            // Apply sorting
-            filteredData.sort((a, b) => {
-                switch (sortBy) {
-                    case 'analysis-desc':
-                        return b.analysisDeals - a.analysisDeals;
-                    case 'analysis-asc':
-                        return a.analysisDeals - b.analysisDeals;
-                    case 'total-desc':
-                        return b.totalDeals - a.totalDeals;
-                    case 'total-asc':
-                        return a.totalDeals - b.totalDeals;
-                    case 'conversion-desc':
-                        return (b.analysisDeals / b.totalDeals) - (a.analysisDeals / a.totalDeals);
-                    case 'conversion-asc':
-                        return (a.analysisDeals / a.totalDeals) - (b.analysisDeals / b.totalDeals);
-                    default:
-                        return b.analysisDeals - a.analysisDeals;
-                }
-            });
-            
-            // Update table with filtered data
-            updateDealershipAnalysisTable({
-                ...originalData,
-                dealerships: filteredData
-            });
-        }
 
         // Load dealership rankings
         async function loadDealershipRankings() {
@@ -1726,13 +2358,21 @@
             
 
 
-            // Create summary stats
-            const gradeDistribution = { A: 0, B: 0, C: 0, D: 0, F: 0 };
-            data.rankings.forEach(dealer => {
-                if (dealer.grading.grade !== 'N/A') {
-                    gradeDistribution[dealer.grading.grade]++;
-                }
-            });
+            // Create summary stats for new grading system
+            const gradeDistribution = { 
+                'A+': 0, A: 0, 'A-': 0, 
+                'B+': 0, B: 0, 'B-': 0, 
+                'C+': 0, C: 0, 'C-': 0, 
+                'D+': 0, D: 0, 'D-': 0, 
+                F: 0 
+            };
+            
+            // All grades will show N/A for now since we changed the system
+            // data.rankings.forEach(dealer => {
+            //     if (dealer.grading.grade !== 'N/A' && gradeDistribution.hasOwnProperty(dealer.grading.grade)) {
+            //         gradeDistribution[dealer.grading.grade]++;
+            //     }
+            // });
 
             const summaryHtml = `
                 <div class="table-stats">
@@ -1741,20 +2381,56 @@
                         <div class="stat-label">Total Dealerships</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" style="color: #10b981;">${gradeDistribution.A}</div>
-                        <div class="stat-label">A Grade (Excellent)</div>
+                        <div class="stat-value" style="color: #059669;">N/A</div>
+                        <div class="stat-label">A+ Grade</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" style="color: #3b82f6;">${gradeDistribution.B}</div>
-                        <div class="stat-label">B Grade (Good)</div>
+                        <div class="stat-value" style="color: #10b981;">N/A</div>
+                        <div class="stat-label">A Grade</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" style="color: #f59e0b;">${gradeDistribution.C}</div>
-                        <div class="stat-label">C Grade (Average)</div>
+                        <div class="stat-value" style="color: #34d399;">N/A</div>
+                        <div class="stat-label">A- Grade</div>
                     </div>
                     <div class="stat-card">
-                        <div class="stat-value" style="color: #ef4444;">${gradeDistribution.D + gradeDistribution.F}</div>
-                        <div class="stat-label">D/F Grade (Poor/Failing)</div>
+                        <div class="stat-value" style="color: #2563eb;">N/A</div>
+                        <div class="stat-label">B+ Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #3b82f6;">N/A</div>
+                        <div class="stat-label">B Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #60a5fa;">N/A</div>
+                        <div class="stat-label">B- Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #d97706;">N/A</div>
+                        <div class="stat-label">C+ Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #f59e0b;">N/A</div>
+                        <div class="stat-label">C Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #fbbf24;">N/A</div>
+                        <div class="stat-label">C- Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #dc2626;">N/A</div>
+                        <div class="stat-label">D+ Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #ef4444;">N/A</div>
+                        <div class="stat-label">D Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #f87171;">N/A</div>
+                        <div class="stat-label">D- Grade</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-value" style="color: #991b1b;">N/A</div>
+                        <div class="stat-label">F Grade</div>
                     </div>
                 </div>
             `;
@@ -1769,10 +2445,9 @@
                                 <th>Dealership</th>
                                 <th>Location</th>
                                 <th>Overall Grade</th>
-                                <th>Excessive Fees</th>
-                                <th>Illegitimate Fees</th>
+                                <th>Excessive/Illegitimate Fees</th>
+                                <th>Transparency/Compliance</th>
                                 <th>Deals Analyzed</th>
-                                <th>Average Score</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1786,45 +2461,62 @@
                                         <td><strong>${dealer.dealer_name}</strong></td>
                                         <td>${dealer.location}</td>
                                         <td>
-                                            <div class="tooltip-container">
-                                                <span class="status-badge" style="background: ${gradeColor}; color: white;">
-                                                    ${grading.grade} (${grading.label})
-                                                </span>
-                                                <div class="tooltip-content">
-                                                    <strong>Overall Grade:</strong> ${grading.grade} (${grading.label})<br>
-                                                    <strong>Average Score:</strong> ${grading.averageScores.overall.toFixed(1)}/100<br>
-                                                    <strong>Excessive Score:</strong> ${grading.averageScores.excessive.toFixed(1)}/100<br>
-                                                    <strong>Illegitimate Score:</strong> ${grading.averageScores.illegitimate.toFixed(1)}/100<br>
-                                                    <strong>Based on:</strong> ${grading.dealCount} deals
-                                                </div>
-                                            </div>
+                                            <span class="status-badge" style="background: #64748b; color: white;">
+                                                N/A
+                                            </span>
                                         </td>
                                         <td>
                                             <div class="tooltip-container">
-                                                <span class="status-badge" style="background: ${grading.dealGrades[0]?.excessive.color || '#64748b'}; color: white;">
-                                                    ${grading.dealGrades[0]?.excessive.grade || 'N/A'}
-                                                </span>
+                                                ${(() => {
+                                                    const totalFees = (grading.averageFees?.excessive || 0) + (grading.averageFees?.illegitimate || 0);
+                                                    let bracket = '';
+                                                    let color = '#64748b';
+                                                    
+                                                    if (totalFees === 0) {
+                                                        bracket = '$0';
+                                                        color = '#059669';
+                                                    } else if (totalFees >= 1000) {
+                                                        bracket = '$1,000+';
+                                                        color = '#fbbf24';
+                                                    } else if (totalFees >= 750) {
+                                                        bracket = '$750+';
+                                                        color = '#991b1b';
+                                                    } else if (totalFees >= 501) {
+                                                        bracket = '$501-$749';
+                                                        color = '#f87171';
+                                                    } else if (totalFees >= 500) {
+                                                        bracket = '$500-$999';
+                                                        color = '#f59e0b';
+                                                    } else if (totalFees >= 251) {
+                                                        bracket = '$251-$499';
+                                                        color = '#d97706';
+                                                    } else if (totalFees >= 101) {
+                                                        bracket = '$101-$250';
+                                                        color = '#34d399';
+                                                    } else if (totalFees >= 1) {
+                                                        bracket = '$1-$100';
+                                                        color = '#10b981';
+                                                    } else {
+                                                        bracket = '$0';
+                                                        color = '#059669';
+                                                    }
+                                                    
+                                                    return `<span class="status-badge" style="background: ${color}; color: white;">${bracket}</span>`;
+                                                })()}
                                                 <div class="tooltip-content">
                                                     <strong>Average Excessive Fees per Deal:</strong> $${grading.averageFees?.excessive?.toFixed(2) || '0.00'}<br>
-                                                    <strong>Grade:</strong> ${grading.dealGrades[0]?.excessive.grade || 'N/A'} (${grading.dealGrades[0]?.excessive.label || 'No Data'})<br>
+                                                    <strong>Average Illegitimate Fees per Deal:</strong> $${grading.averageFees?.illegitimate?.toFixed(2) || '0.00'}<br>
+                                                    <strong>Total Combined Fees:</strong> $${((grading.averageFees?.excessive || 0) + (grading.averageFees?.illegitimate || 0)).toFixed(2)}<br>
                                                     <strong>Based on:</strong> ${grading.dealCount} deals
                                                 </div>
                                             </div>
                                         </td>
                                         <td>
-                                            <div class="tooltip-container">
-                                                <span class="status-badge" style="background: ${grading.dealGrades[0]?.illegitimate.color || '#64748b'}; color: white;">
-                                                    ${grading.dealGrades[0]?.illegitimate.grade || 'N/A'}
-                                                </span>
-                                                <div class="tooltip-content">
-                                                    <strong>Average Illegitimate Fees per Deal:</strong> $${grading.averageFees?.illegitimate?.toFixed(2) || '0.00'}<br>
-                                                    <strong>Grade:</strong> ${grading.dealGrades[0]?.illegitimate.grade || 'N/A'} (${grading.dealGrades[0]?.illegitimate.label || 'No Data'})<br>
-                                                    <strong>Based on:</strong> ${grading.dealCount} deals
-                                                </div>
-                                            </div>
+                                            <span class="status-badge" style="background: #64748b; color: white;">
+                                                N/A
+                                            </span>
                                         </td>
                                         <td>${grading.dealCount}</td>
-                                        <td>${grading.averageScores.overall.toFixed(1)}/100</td>
                                     </tr>
                                 `;
                             }).join('')}
@@ -1866,16 +2558,692 @@
             await loadMetricsData();
         }
 
+        // Issues Management
+        let issues = [];
+        let currentFilter = 'incomplete'; // Default to "Need to fix"
+
+        async function loadIssues() {
+            try {
+                const response = await fetch('/api/mystery-shopping-issues');
+                if (response.ok) {
+                    const data = await response.json();
+                    issues = data.issues;
+                    renderIssues();
+                } else {
+                    console.error('Failed to load issues');
+                    showIssuesError();
+                }
+            } catch (error) {
+                console.error('Error loading issues:', error);
+                showIssuesError();
+            }
+        }
+
+        async function addNewIssue() {
+            try {
+                const response = await fetch('/api/mystery-shopping-issues', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ text: 'New issue...' })
+                });
+
+                if (response.ok) {
+                    await loadIssues();
+                    
+                    // Focus on the new issue text input
+                    setTimeout(() => {
+                        const issueInputs = document.querySelectorAll('.issue-text');
+                        if (issueInputs.length > 0) {
+                            const lastInput = issueInputs[issueInputs.length - 1];
+                            lastInput.select();
+                        }
+                    }, 100);
+                } else {
+                    console.error('Failed to create issue');
+                }
+            } catch (error) {
+                console.error('Error creating issue:', error);
+            }
+        }
+
+        async function deleteIssue(issueId) {
+            try {
+                const response = await fetch(`/api/mystery-shopping-issues/${issueId}`, {
+                    method: 'DELETE'
+                });
+
+                if (response.ok) {
+                    await loadIssues();
+                } else {
+                    console.error('Failed to delete issue');
+                }
+            } catch (error) {
+                console.error('Error deleting issue:', error);
+            }
+        }
+
+        async function toggleIssue(issueId) {
+            const issue = issues.find(i => i.id === issueId);
+            if (!issue) return;
+            
+            try {
+                const response = await fetch(`/api/mystery-shopping-issues/${issueId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        text: issue.text,
+                        completed: !issue.completed 
+                    })
+                });
+
+                if (response.ok) {
+                    await loadIssues();
+                } else {
+                    console.error('Failed to toggle issue');
+                }
+            } catch (error) {
+                console.error('Error toggling issue:', error);
+            }
+        }
+
+        async function updateIssueText(issueId, newText) {
+            const issue = issues.find(i => i.id === issueId);
+            if (!issue || issue.text === newText.trim()) return;
+            
+            try {
+                const response = await fetch(`/api/mystery-shopping-issues/${issueId}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({ 
+                        text: newText.trim(),
+                        completed: issue.completed 
+                    })
+                });
+
+                if (response.ok) {
+                    // Update local data without full reload for smoother UX
+                    issue.text = newText.trim();
+                } else {
+                    console.error('Failed to update issue text');
+                }
+            } catch (error) {
+                console.error('Error updating issue text:', error);
+            }
+        }
+
+        function setIssueFilter(filter) {
+            currentFilter = filter;
+            
+            // Update active tab
+            document.querySelectorAll('.filter-tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelector(`[data-filter="${filter}"]`).classList.add('active');
+            
+            renderIssues();
+        }
+
+        function getFilteredIssues() {
+            switch (currentFilter) {
+                case 'completed':
+                    return issues.filter(issue => issue.completed);
+                case 'incomplete':
+                    return issues.filter(issue => !issue.completed);
+                case 'all':
+                default:
+                    return issues;
+            }
+        }
+
+        function renderIssues() {
+            const issuesList = document.getElementById('issues-list');
+            const emptyState = document.getElementById('empty-issues');
+            const filteredIssues = getFilteredIssues();
+            
+            if (filteredIssues.length === 0) {
+                emptyState.classList.remove('hidden');
+                issuesList.innerHTML = '';
+                
+                // Update empty state message based on filter
+                const emptyTitle = emptyState.querySelector('h3');
+                const emptyText = emptyState.querySelector('p');
+                
+                switch (currentFilter) {
+                    case 'completed':
+                        emptyTitle.textContent = 'No Fixed Issues';
+                        emptyText.textContent = 'Completed issues will appear here.';
+                        break;
+                    case 'incomplete':
+                        emptyTitle.textContent = 'No Issues to Fix';
+                        emptyText.textContent = 'Great! All issues are resolved.';
+                        break;
+                    default:
+                        emptyTitle.textContent = 'No Issues';
+                        emptyText.textContent = 'Start tracking problems and concerns.';
+                }
+                return;
+            }
+            
+            emptyState.classList.add('hidden');
+            
+            // Sort by creation date (oldest first, newest at bottom)
+            const sortedIssues = [...filteredIssues].sort((a, b) => 
+                new Date(a.created_at) - new Date(b.created_at)
+            );
+            
+            issuesList.innerHTML = sortedIssues.map(issue => `
+                <div class="issue-item" data-issue-id="${issue.id}">
+                    <div class="issue-checkbox ${issue.completed ? 'checked' : ''}" 
+                         onclick="toggleIssue(${issue.id})">
+                    </div>
+                    <input type="text" 
+                           class="issue-text ${issue.completed ? 'completed' : ''}" 
+                           value="${issue.text}"
+                           onblur="updateIssueText(${issue.id}, this.value)"
+                           onkeypress="if(event.key==='Enter') this.blur()">
+                    <div class="issue-actions">
+                        <button class="issue-delete" onclick="deleteIssue(${issue.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function showIssuesError() {
+            const issuesList = document.getElementById('issues-list');
+            issuesList.innerHTML = `
+                <div class="empty-state">
+                    <h3>Failed to Load Issues</h3>
+                    <p>Please try refreshing the page.</p>
+                </div>
+            `;
+        }
+
         // Initialize when DOM is ready
         if (document.readyState === 'loading') {
-            document.addEventListener('DOMContentLoaded', initializeMetricsPage);
+            document.addEventListener('DOMContentLoaded', function() {
+                initializeMetricsPage();
+                loadIssues();
+            });
         } else {
             initializeMetricsPage();
+            loadIssues();
         }
 
 
 
 
+    </script>
+
+    <!-- AI Chat Overlay -->
+    <div id="chat-overlay" class="chat-overlay">
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="chat-title">
+                    <i class="fas fa-robot"></i>
+                    Ralph AI Assistant
+                </div>
+                <button class="chat-close" onclick="toggleChat()">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            
+            <div class="chat-messages" id="chat-messages">
+                <div class="message assistant-message">
+                    <div class="message-content">
+                        <strong>Hi! I'm your AI assistant for Project Ralph.</strong><br>
+                        Ask me questions about your deals data like:
+                        <ul>
+                            <li>"What percentage of dealers have at least 3 deals in analysis stage?"</li>
+                            <li>"Show me the top 10 dealers by deal count"</li>
+                            <li>"How many deals were created this month?"</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="chat-input" 
+                    placeholder="Ask me about your deals data..." 
+                    onkeypress="handleChatKeypress(event)"
+                />
+                <button id="chat-send" onclick="sendChatMessage()">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Chat Toggle Button -->
+    <button id="chat-toggle" class="chat-toggle" onclick="toggleChat()" title="Open AI Assistant">
+        <i class="fas fa-robot"></i>
+    </button>
+
+    <style>
+        /* Chat Overlay Styles */
+        .chat-overlay {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            width: 400px;
+            height: 500px;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.15);
+            border: 1px solid #e2e8f0;
+            display: none;
+            flex-direction: column;
+            z-index: 1000;
+            font-family: 'Inter', sans-serif;
+        }
+
+        .chat-overlay.open {
+            display: flex;
+        }
+
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 16px;
+            border-radius: 12px 12px 0 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .chat-title {
+            font-weight: 600;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .chat-close {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .chat-close:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+
+        .chat-messages {
+            flex: 1;
+            padding: 16px;
+            overflow-y: auto;
+            background: #f8fafc;
+        }
+
+        .message {
+            margin-bottom: 16px;
+        }
+
+        .assistant-message .message-content {
+            background: white;
+            padding: 12px 16px;
+            border-radius: 12px 12px 12px 4px;
+            border-left: 4px solid #667eea;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            line-height: 1.5;
+        }
+
+        .user-message .message-content {
+            background: #667eea;
+            color: white;
+            padding: 12px 16px;
+            border-radius: 12px 12px 4px 12px;
+            margin-left: 60px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .message-content ul {
+            margin: 8px 0;
+            padding-left: 20px;
+        }
+
+        .message-content li {
+            margin: 4px 0;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .query-results {
+            margin-top: 12px;
+            background: #f1f5f9;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            padding: 12px;
+        }
+
+        .query-results h4 {
+            margin: 0 0 8px 0;
+            color: #475569;
+            font-size: 0.875rem;
+        }
+
+        .results-table {
+            width: 100%;
+            font-size: 0.75rem;
+            border-collapse: collapse;
+        }
+
+        .results-table th,
+        .results-table td {
+            padding: 4px 8px;
+            text-align: left;
+            border-bottom: 1px solid #cbd5e1;
+        }
+
+        .results-table th {
+            background: #e2e8f0;
+            font-weight: 600;
+        }
+
+        .chat-input-container {
+            padding: 16px;
+            border-top: 1px solid #e2e8f0;
+            background: white;
+            border-radius: 0 0 12px 12px;
+            display: flex;
+            gap: 8px;
+        }
+
+        #chat-input {
+            flex: 1;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 0.875rem;
+            outline: none;
+            transition: border-color 0.2s;
+        }
+
+        #chat-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        #chat-send {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        #chat-send:hover {
+            background: #5a67d8;
+        }
+
+        #chat-send:disabled {
+            background: #9ca3af;
+            cursor: not-allowed;
+        }
+
+        .chat-toggle {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(102, 126, 234, 0.3);
+            font-size: 1.25rem;
+            z-index: 999;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .chat-toggle:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .chat-toggle.hidden {
+            display: none;
+        }
+
+        .typing-indicator {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            color: #64748b;
+            font-style: italic;
+            font-size: 0.875rem;
+        }
+
+        .typing-dots {
+            display: inline-flex;
+            gap: 2px;
+        }
+
+        .typing-dot {
+            width: 4px;
+            height: 4px;
+            background: #64748b;
+            border-radius: 50%;
+            animation: typing 1.5s infinite;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.4s; }
+
+        @keyframes typing {
+            0%, 60%, 100% { opacity: 0.3; }
+            30% { opacity: 1; }
+        }
+
+        .error-message {
+            background: #fef2f2;
+            border: 1px solid #fecaca;
+            color: #dc2626;
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 8px;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .chat-overlay {
+                width: calc(100vw - 40px);
+                height: calc(100vh - 40px);
+                bottom: 20px;
+                right: 20px;
+            }
+            
+            .user-message .message-content {
+                margin-left: 20px;
+            }
+        }
+    </style>
+
+    <script>
+        let chatOpen = false;
+
+        function toggleChat() {
+            const overlay = document.getElementById('chat-overlay');
+            const toggle = document.getElementById('chat-toggle');
+            
+            chatOpen = !chatOpen;
+            
+            if (chatOpen) {
+                overlay.classList.add('open');
+                toggle.classList.add('hidden');
+                document.getElementById('chat-input').focus();
+            } else {
+                overlay.classList.remove('open');
+                toggle.classList.remove('hidden');
+            }
+        }
+
+        function handleChatKeypress(event) {
+            if (event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault();
+                sendChatMessage();
+            }
+        }
+
+        async function sendChatMessage() {
+            const input = document.getElementById('chat-input');
+            const sendButton = document.getElementById('chat-send');
+            const messagesContainer = document.getElementById('chat-messages');
+            
+            const message = input.value.trim();
+            if (!message) return;
+            
+            // Clear input and disable send button
+            input.value = '';
+            sendButton.disabled = true;
+            
+            // Add user message to chat
+            addMessageToChat('user', message);
+            
+            // Add typing indicator
+            const typingId = addTypingIndicator();
+            
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                const data = await response.json();
+                
+                // Remove typing indicator
+                removeTypingIndicator(typingId);
+                
+                if (response.ok) {
+                    // Add assistant response
+                    addMessageToChat('assistant', data.message, data.sql, data.results);
+                } else {
+                    addMessageToChat('assistant', `Error: ${data.error || 'Failed to process your request'}`);
+                }
+                
+            } catch (error) {
+                console.error('Chat error:', error);
+                removeTypingIndicator(typingId);
+                addMessageToChat('assistant', 'Sorry, I encountered an error processing your request. Please try again.');
+            } finally {
+                sendButton.disabled = false;
+            }
+        }
+
+        function addMessageToChat(role, content, sql = null, results = null) {
+            const messagesContainer = document.getElementById('chat-messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${role}-message`;
+            
+            let messageContent = `<div class="message-content">${formatMessageContent(content)}`;
+            
+            // Add query results if available
+            if (results) {
+                messageContent += '<div class="query-results">';
+                
+                if (results.error) {
+                    messageContent += `<div class="error-message">Query Error: ${results.error}</div>`;
+                } else if (results.rows && results.rows.length > 0) {
+                    messageContent += '<h4>Query Results:</h4>';
+                    messageContent += '<table class="results-table">';
+                    
+                    // Add headers
+                    const headers = Object.keys(results.rows[0]);
+                    messageContent += '<tr>' + headers.map(h => `<th>${h}</th>`).join('') + '</tr>';
+                    
+                    // Add rows (limit to first 10 for display)
+                    const displayRows = results.rows.slice(0, 10);
+                    messageContent += displayRows.map(row => 
+                        '<tr>' + headers.map(h => `<td>${row[h] || ''}</td>`).join('') + '</tr>'
+                    ).join('');
+                    
+                    messageContent += '</table>';
+                    
+                    if (results.rows.length > 10) {
+                        messageContent += `<p style="font-size: 0.75rem; color: #64748b; margin-top: 8px;">Showing 10 of ${results.rowCount} results</p>`;
+                    }
+                } else {
+                    messageContent += '<p>No results found</p>';
+                }
+                
+                messageContent += '</div>';
+            }
+            
+            messageContent += '</div>';
+            messageDiv.innerHTML = messageContent;
+            
+            messagesContainer.appendChild(messageDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+
+        function formatMessageContent(content) {
+            // Convert markdown-style formatting to HTML
+            return content
+                .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+                .replace(/\*(.*?)\*/g, '<em>$1</em>')
+                .replace(/```sql\n([\s\S]*?)\n```/g, '<pre style="background: #f1f5f9; padding: 8px; border-radius: 4px; font-size: 0.75rem; overflow-x: auto;"><code>$1</code></pre>')
+                .replace(/\n/g, '<br>');
+        }
+
+        function addTypingIndicator() {
+            const messagesContainer = document.getElementById('chat-messages');
+            const typingDiv = document.createElement('div');
+            const typingId = 'typing-' + Date.now();
+            
+            typingDiv.id = typingId;
+            typingDiv.className = 'message assistant-message';
+            typingDiv.innerHTML = `
+                <div class="message-content">
+                    <div class="typing-indicator">
+                        AI is thinking
+                        <div class="typing-dots">
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                            <div class="typing-dot"></div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            messagesContainer.appendChild(typingDiv);
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+            
+            return typingId;
+        }
+
+        function removeTypingIndicator(typingId) {
+            const typingElement = document.getElementById(typingId);
+            if (typingElement) {
+                typingElement.remove();
+            }
+        }
     </script>
 </body>
 </html> 
