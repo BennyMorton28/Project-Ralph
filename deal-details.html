@@ -285,6 +285,12 @@
             color: #64748b;
         }
 
+        .conversation-direction {
+            font-size: 0.75rem;
+            color: #64748b;
+            font-style: italic;
+        }
+
         .conversation-content {
             color: #374151;
             line-height: 1.6;
@@ -526,6 +532,211 @@
             line-height: 1.4;
         }
 
+        /* Risk Analysis Styling */
+        .risk-analysis-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        .risk-header-section {
+            margin-bottom: 30px;
+        }
+
+        .risk-header-section h2 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 16px;
+        }
+
+        .risk-intro label {
+            display: block;
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .risk-intro input {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            background: #f9fafb;
+        }
+
+        .risk-content-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: start;
+        }
+
+        .risk-left-column, .risk-right-column {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+
+        .pricing-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .pricing-field, .fee-summary-field, .bottom-line-field, .date-field {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .pricing-field label, .fee-summary-field label, .bottom-line-field label, .date-field label {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: #374151;
+            margin-bottom: 6px;
+        }
+
+        .price-input-container, .fee-input-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        .currency-symbol {
+            position: absolute;
+            left: 12px;
+            color: #6b7280;
+            font-size: 0.875rem;
+            z-index: 1;
+        }
+
+        .price-input-container input, .fee-input-container input {
+            width: 200px;
+            padding: 8px 12px 8px 28px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            background: white;
+            text-align: right;
+        }
+
+        .date-field input {
+            width: 200px;
+            padding: 8px 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 4px;
+            font-size: 0.875rem;
+            background: #f9fafb;
+            color: #6b7280;
+        }
+
+        .edit-button {
+            background: none;
+            border: none;
+            color: #6b7280;
+            cursor: pointer;
+            padding: 4px 8px;
+            margin-left: 8px;
+            font-size: 0.875rem;
+        }
+
+        .edit-button:hover {
+            color: #374151;
+        }
+
+        .fee-line-items-section {
+            margin-top: 20px;
+        }
+
+        .fee-line-items-section h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #0f172a;
+            margin-bottom: 16px;
+        }
+
+        .fee-items-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .fee-item {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 6px;
+            padding: 12px;
+        }
+
+        .fee-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .fee-label {
+            font-weight: 500;
+            color: #0f172a;
+            flex: 1;
+        }
+
+        .fee-amount {
+            font-weight: 600;
+            color: #0f172a;
+            margin-right: 12px;
+        }
+
+        .fee-assessment {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .fee-normal {
+            background: #dcfce7;
+            color: #15803d;
+        }
+
+        .fee-excessive {
+            background: #fef3c7;
+            color: #d97706;
+        }
+
+        .fee-illegitimate {
+            background: #fef2f2;
+            color: #dc2626;
+        }
+
+        .fee-comment {
+            font-size: 0.875rem;
+            color: #64748b;
+            line-height: 1.4;
+        }
+
+        .fee-summary-section, .bottom-line-section {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .date-section {
+            margin: 20px 0;
+        }
+
+
+        .no-fees {
+            color: #6b7280;
+            font-style: italic;
+            text-align: center;
+            padding: 20px;
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 20px 16px;
@@ -552,6 +763,21 @@
                 position: static;
                 justify-content: center;
                 margin-top: 16px;
+            }
+
+            .risk-content-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .price-input-container input, .fee-input-container input {
+                width: 100%;
+                max-width: 250px;
+            }
+
+            .date-field input {
+                width: 100%;
+                max-width: 250px;
             }
         }
     </style>
@@ -728,15 +954,12 @@
         function updateDealGrid() {
             const deal = dealData.deal;
             const dealer = dealData.dealer;
+            const risk_analysis = dealData.risk_analysis;
             
             const gridHtml = `
                 <div class="deal-card">
                     <h3>Deal State</h3>
                     <div class="value">${deal.state || 'Unknown'}</div>
-                </div>
-                <div class="deal-card">
-                    <h3>Vehicle</h3>
-                    <div class="value">${deal.vehicle_year || ''} ${deal.vehicle_make || ''} ${deal.vehicle_model || ''}</div>
                 </div>
                 <div class="deal-card">
                     <h3>VIN</h3>
@@ -751,16 +974,20 @@
                     <div class="value">${dealer?.city || ''}, ${dealer?.state_code || ''}</div>
                 </div>
                 <div class="deal-card">
-                    <h3>Total Price</h3>
-                    <div class="value">$${deal.total_price ? deal.total_price.toLocaleString() : 'N/A'}</div>
-                </div>
-                <div class="deal-card">
                     <h3>Created</h3>
                     <div class="value">${formatDate(deal.created)}</div>
                 </div>
                 <div class="deal-card">
                     <h3>Last Updated</h3>
                     <div class="value">${formatDate(deal.updated)}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Internet Price</h3>
+                    <div class="value">$${risk_analysis?.internet_price ? risk_analysis.internet_price.toLocaleString() : 'N/A'}</div>
+                </div>
+                <div class="deal-card">
+                    <h3>Out the Door Price</h3>
+                    <div class="value">$${risk_analysis?.current_bottom_line_price ? risk_analysis.current_bottom_line_price.toLocaleString() : 'N/A'}</div>
                 </div>
             `;
             
@@ -900,17 +1127,99 @@
                 return;
             }
 
-            const conversationHtml = conversation.map(msg => `
+            const conversationHtml = conversation.map(msg => {
+                // Clean up the content display
+                const cleanContent = msg.content
+                    .replace(/\\n/g, '\n')  // Replace escaped newlines with real newlines
+                    .replace(/\\r/g, '\r')  // Replace escaped carriage returns
+                    .replace(/\\t/g, '\t')  // Replace escaped tabs
+                    .trim();
+                
+                // Handle attachments
+                let attachmentsHtml = '';
+                if (msg.attachments && msg.attachments.length > 0) {
+                    attachmentsHtml = `
+                    <div class="attachments-section" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e2e8f0;">
+                        <div style="font-size: 0.875rem; color: #64748b; margin-bottom: 8px; font-weight: 500;">
+                            <i class="fas fa-paperclip" style="margin-right: 4px;"></i>
+                            Attachments (${msg.attachments.length})
+                        </div>
+                        ${msg.attachments.map(attachment => `
+                            <div class="attachment-item" style="display: flex; align-items: center; gap: 8px; background: #f1f5f9; padding: 8px 12px; border-radius: 6px; margin-bottom: 6px;">
+                                <i class="fas ${getFileIcon(attachment.filename)}" style="color: #3b82f6; font-size: 1rem;"></i>
+                                <a href="${attachment.path}" target="_blank" rel="noopener noreferrer" 
+                                   style="color: #3b82f6; text-decoration: none; font-weight: 500; font-size: 0.875rem; flex: 1;"
+                                   onmouseover="this.style.textDecoration='underline'" 
+                                   onmouseout="this.style.textDecoration='none'">
+                                    ${attachment.filename}
+                                </a>
+                                <button onclick="downloadAttachment('${attachment.path}', '${attachment.filename}')"
+                                        style="background: #3b82f6; color: white; border: none; padding: 4px 8px; border-radius: 4px; font-size: 0.75rem; cursor: pointer;"
+                                        title="Download attachment">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        `).join('')}
+                    </div>
+                    `;
+                }
+                
+                return `
                 <div class="conversation-item">
                     <div class="conversation-header">
                         <div class="conversation-role role-${msg.role}">${msg.role}</div>
                         <div class="conversation-timestamp">${formatDate(msg.timestamp)}</div>
+                        ${msg.direction ? `<div class="conversation-direction">${msg.direction}</div>` : ''}
                     </div>
-                    <div class="conversation-content">${msg.content}</div>
+                    <div class="conversation-content">${cleanContent}</div>
+                    ${attachmentsHtml}
                 </div>
-            `).join('');
+                `;
+            }).join('');
             
             document.getElementById('conversation').innerHTML = conversationHtml;
+        }
+
+        // Helper function to get file icon based on filename
+        function getFileIcon(filename) {
+            const extension = filename.split('.').pop().toLowerCase();
+            switch (extension) {
+                case 'pdf':
+                    return 'fa-file-pdf';
+                case 'jpg':
+                case 'jpeg':
+                case 'png':
+                case 'gif':
+                case 'bmp':
+                case 'svg':
+                    return 'fa-file-image';
+                case 'doc':
+                case 'docx':
+                    return 'fa-file-word';
+                case 'xls':
+                case 'xlsx':
+                    return 'fa-file-excel';
+                case 'txt':
+                    return 'fa-file-text';
+                case 'zip':
+                case 'rar':
+                case '7z':
+                    return 'fa-file-archive';
+                default:
+                    return 'fa-file';
+            }
+        }
+
+        // Helper function to download attachment
+        function downloadAttachment(url, filename) {
+            // Create a temporary link element and trigger download
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = filename;
+            link.target = '_blank';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
         }
 
         // Update tasks tab
@@ -959,44 +1268,127 @@
             }
 
             const riskHtml = `
-                <div class="section">
-                    <h3>Risk Summary</h3>
-                    <table class="data-table">
-                        <tr>
-                            <th>Metric</th>
-                            <th>Value</th>
-                        </tr>
-                        <tr>
-                            <td>Risk Gauge</td>
-                            <td>${riskData.gauge_value || 'N/A'}/10</td>
-                        </tr>
-                        <tr>
-                            <td>Offer Price</td>
-                            <td>$${riskData.offer_price ? riskData.offer_price.toLocaleString() : 'N/A'}</td>
-                        </tr>
-                        <tr>
-                            <td>Bottom Line Price</td>
-                            <td>$${riskData.bottom_line_price ? riskData.bottom_line_price.toLocaleString() : 'N/A'}</td>
-                        </tr>
-                        <tr>
-                            <td>Tax Amount</td>
-                            <td>$${riskData.tax ? riskData.tax.toLocaleString() : 'N/A'}</td>
-                        </tr>
-                    </table>
-                </div>
-
-                <div class="section">
-                    <h3>Fee Analysis</h3>
-                    ${riskData.fees ? riskData.fees.map(fee => `
-                        <div class="risk-item">
-                            <div class="risk-header">
-                                <div class="risk-label">${fee.label}</div>
-                                <div class="risk-amount">$${fee.amount.toLocaleString()}</div>
-                                <div class="risk-assessment assessment-${fee.assessment.toLowerCase()}">${fee.assessment}</div>
-                            </div>
-                            <div class="risk-comment">${fee.comment || 'No comment available'}</div>
+                <div class="risk-analysis-container">
+                    <div class="risk-header-section">
+                        <h2>Deal Risk Analysis</h2>
+                        <div class="risk-intro">
+                            <label for="intro-text">Intro Text</label>
+                            <input type="text" id="intro-text" placeholder="Enter value" readonly value="Risk Analysis Complete">
                         </div>
-                    `).join('') : '<p>No fee analysis available</p>'}
+                    </div>
+
+                    <div class="risk-content-grid">
+                        <!-- Left Column: Pricing Information -->
+                        <div class="risk-left-column">
+                            <div class="pricing-section">
+                                <div class="pricing-field">
+                                    <label for="internet-price">Internet Price</label>
+                                    <div class="price-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="internet-price" readonly value="${(riskData.internet_price || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                        <button class="edit-button" onclick="enableEdit('internet-price')"><i class="fas fa-edit"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="pricing-field">
+                                    <label for="offer-price">Offer Price</label>
+                                    <div class="price-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="offer-price" readonly value="${(riskData.offer_price || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                        <button class="edit-button" onclick="enableEdit('offer-price')"><i class="fas fa-edit"></i></button>
+                                    </div>
+                                </div>
+
+                                <div class="pricing-field">
+                                    <label for="quoted-tax">Quoted Tax</label>
+                                    <div class="price-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="quoted-tax" readonly value="${(riskData.quoted_tax || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                        <button class="edit-button" onclick="enableEdit('quoted-tax')"><i class="fas fa-edit"></i></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="fee-line-items-section">
+                                <h3>Fee Line Items</h3>
+                                <div class="fee-items-list">
+                                    ${riskData.fees ? riskData.fees.map(fee => `
+                                        <div class="fee-item">
+                                            <div class="fee-item-header">
+                                                <span class="fee-label">${fee.label}</span>
+                                                <span class="fee-amount">$${fee.amount.toLocaleString('en-US', {minimumFractionDigits: 2})}</span>
+                                                <span class="fee-assessment fee-${fee.assessment.toLowerCase()}">${fee.assessment}</span>
+                                            </div>
+                                            <div class="fee-comment">${fee.comment || 'No comment available'}</div>
+                                        </div>
+                                    `).join('') : '<div class="no-fees">No fee items found</div>'}
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Fee Summary and Calculations -->
+                        <div class="risk-right-column">
+                            <div class="fee-summary-section">
+                                <div class="fee-summary-field">
+                                    <label for="normal-fees">Normal Fees</label>
+                                    <div class="fee-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="normal-fees" readonly value="${(riskData.normal_fees || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                    </div>
+                                </div>
+
+                                <div class="fee-summary-field">
+                                    <label for="excessive-fees">Excessive Fees</label>
+                                    <div class="fee-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="excessive-fees" readonly value="${(riskData.excessive_fees || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                    </div>
+                                </div>
+
+                                <div class="fee-summary-field">
+                                    <label for="illegitimate-fees">Illegitimate Fees</label>
+                                    <div class="fee-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="illegitimate-fees" readonly value="${(riskData.illegitimate_fees || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="date-section">
+                                <div class="date-field">
+                                    <label for="published-date">Published Date</label>
+                                    <input type="text" id="published-date" placeholder="MMM D, YYYY  H:MM A" readonly value="Not Published">
+                                </div>
+                            </div>
+
+                            <div class="bottom-line-section">
+                                <div class="bottom-line-field">
+                                    <label for="current-bottom-line">Current Bottom Line Price</label>
+                                    <div class="price-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="current-bottom-line" readonly value="${(riskData.current_bottom_line_price || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                    </div>
+                                </div>
+
+                                <div class="bottom-line-field">
+                                    <label for="price-difference">Bottom Line Price Difference</label>
+                                    <div class="price-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="price-difference" readonly value="${(riskData.bottom_line_price_difference || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                    </div>
+                                </div>
+
+                                <div class="bottom-line-field">
+                                    <label for="fair-bottom-line">Fair Bottom Line Price</label>
+                                    <div class="price-input-container">
+                                        <span class="currency-symbol">$</span>
+                                        <input type="text" id="fair-bottom-line" readonly value="${(riskData.fair_bottom_line_price || 0).toLocaleString('en-US', {minimumFractionDigits: 2})}">
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
                 </div>
             `;
             
@@ -1201,6 +1593,17 @@
         function refreshData() {
             loadDealData();
         }
+
+        // Risk Analysis Interactive Functions
+        function enableEdit(inputId) {
+            const input = document.getElementById(inputId);
+            if (input) {
+                input.readOnly = false;
+                input.focus();
+                input.select();
+            }
+        }
+
 
         // Initialize when DOM is ready
         if (document.readyState === 'loading') {

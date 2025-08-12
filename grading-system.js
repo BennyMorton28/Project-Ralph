@@ -23,6 +23,10 @@ function gradeDeal(excessiveFees, illegitimateFees) {
     const excessiveGrade = getGrade(excessiveFees, 'excessive_fees');
     const illegitimateGrade = getGrade(illegitimateFees, 'illegitimate_fees');
     
+    // Add fee type information to grade objects for scoring
+    excessiveGrade.feeType = 'excessive';
+    illegitimateGrade.feeType = 'illegitimate';
+    
     // Calculate overall grade (weighted average)
     const excessiveScore = getGradeScore(excessiveGrade);
     const illegitimateScore = getGradeScore(illegitimateGrade);
@@ -68,10 +72,24 @@ function getGrade(amount, feeType) {
     };
 }
 
-// Convert grade to numerical score
+// Convert grade to numerical score based on actual fee amounts
 function getGradeScore(gradeInfo) {
-    const gradeScores = { 'A': 95, 'B': 85, 'C': 75, 'D': 65, 'F': 55 };
-    return gradeScores[gradeInfo.grade] || 55;
+    // Calculate score based on actual fee amount relative to thresholds
+    const amount = gradeInfo.amount;
+    const feeType = gradeInfo.feeType; // 'excessive' or 'illegitimate'
+    
+    if (amount === 0) return 100; // Perfect score for $0 fees
+    
+    // Use more reasonable thresholds based on actual data ranges
+    // For excessive fees: use $1000 as the "high" threshold (instead of $12,767)
+    // For illegitimate fees: use $2000 as the "high" threshold (instead of $19,039)
+    const maxThreshold = feeType === 'excessive' ? 1000 : 2000;
+    
+    // Calculate score: 100 - (amount / max_threshold * 100)
+    // This gives 100 for $0 fees and decreases as fees increase
+    const score = Math.max(0, 100 - (amount / maxThreshold * 100));
+    
+    return Math.round(score);
 }
 
 // Convert numerical score back to grade
