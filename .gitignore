@@ -122,4 +122,8 @@ server.local.js
 # OAuth credentials and tokens
 credentials.json
 token.json
-mcp-google-sheets-token.json 
+mcp-google-sheets-token.json
+
+# MCP tools (local development only)
+mcp-google-sheets/
+negotiation-service-dashboard/ 
