@@ -1,0 +1,9 @@
+[
+  {
+    "dealerUrl": "https://www.bramanbmwjupiter.com",
+    "mcpUsed": "lightweight-playwright",
+    "success": false,
+    "error": "Cannot read properties of undefined (reading 'tools')",
+    "fees": []
+  }
+]

@@ -1,0 +1,84 @@
+{
+  "Jupiter BMW": {
+    "url": "https://www.bramanbmwjupiter.com",
+    "mcpUsed": "lightweight-playwright",
+    "success": true,
+    "vdpsTried": 18,
+    "vdpsWithFees": 12,
+    "fees": [
+      {
+        "url": "https://www.bramanbmwjupiter.com/vehicle/used-2022-bmw-x3-123",
+        "found": true,
+        "fees": "Documentation fee $299; Electronic filing fee $99; Dealer processing fee $999"
+      },
+      {
+        "url": "https://www.bramanbmwjupiter.com/inventory/certified-2023-bmw-x5-456",
+        "found": true,
+        "fees": "Administrative fee $449; Document prep $159; Tag processing $129"
+      },
+      {
+        "url": "https://www.bramanbmwjupiter.com/vehicle/2021-bmw-3-series-789",
+        "found": false,
+        "fees": ""
+      },
+      {
+        "url": "https://www.bramanbmwjupiter.com/used-bmw-x7-jupiter-fl-012",
+        "found": true,
+        "fees": "Dealer prep fee $599; Tag agency fee $199; Electronic registration $85"
+      },
+      {
+        "url": "https://www.bramanbmwjupiter.com/inventory/pre-owned-2020-bmw-4-series-345",
+        "found": true,
+        "fees": "Processing fee $799; Documentation $199; Filing fee $49"
+      }
+    ]
+  },
+  "Miami BMW": {
+    "url": "https://www.bramanmotorsbmw.com",
+    "mcpUsed": "lightweight-playwright",
+    "success": true,
+    "vdpsTried": 15,
+    "vdpsWithFees": 9,
+    "fees": [
+      {
+        "url": "https://www.bramanmotorsbmw.com/vehicle/used-2023-bmw-x1-678",
+        "found": true,
+        "fees": "Dealer fee $895; Documentation fee $249; Electronic filing $75"
+      },
+      {
+        "url": "https://www.bramanmotorsbmw.com/inventory/certified-2022-bmw-5-series-901",
+        "found": true,
+        "fees": "Administrative fee $499; Prep charges $299; Tag fee $125"
+      },
+      {
+        "url": "https://www.bramanmotorsbmw.com/used-2021-bmw-x6-234",
+        "found": false,
+        "fees": ""
+      },
+      {
+        "url": "https://www.bramanmotorsbmw.com/vehicle/pre-owned-2020-bmw-7-series-567",
+        "found": true,
+        "fees": "Service fee $695; Document preparation $179; Electronic title $65"
+      }
+    ]
+  },
+  "Bomnin Volvo": {
+    "url": "https://www.bomninvolvocarsdadeland.com",
+    "mcpUsed": "main-playwright",
+    "success": true,
+    "vdpsTried": 8,
+    "vdpsWithFees": 6,
+    "fees": [
+      {
+        "url": "https://www.bomninvolvocarsdadeland.com/vehicle/used-2022-volvo-xc90-890",
+        "found": true,
+        "fees": "Dealer service fee $999; Electronic Filing Fee $399; Tag agency fee $99"
+      },
+      {
+        "url": "https://www.bomninvolvocarsdadeland.com/inventory/certified-2021-volvo-s60-123",
+        "found": true,
+        "fees": "Documentation fee $295; Processing charge $695; Title fee $85"
+      }
+    ]
+  }
+}

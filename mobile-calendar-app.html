@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Calendar Events</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 500px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+            min-height: calc(100vh - 20px);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .header {
+            background: #4CAF50;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .chat-area {
+            flex: 1;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .messages {
+            flex: 1;
+            margin-bottom: 20px;
+            min-height: 300px;
+        }
+        
+        .message {
+            margin-bottom: 15px;
+            padding: 12px 16px;
+            border-radius: 18px;
+            max-width: 85%;
+            word-wrap: break-word;
+        }
+        
+        .user-message {
+            background: #007AFF;
+            color: white;
+            margin-left: auto;
+            margin-right: 0;
+        }
+        
+        .bot-message {
+            background: #F0F0F0;
+            color: #333;
+        }
+        
+        .input-area {
+            display: flex;
+            gap: 10px;
+            padding: 0 5px;
+        }
+        
+        #messageInput {
+            flex: 1;
+            padding: 12px 16px;
+            border: 2px solid #E0E0E0;
+            border-radius: 25px;
+            font-size: 16px;
+            outline: none;
+        }
+        
+        #messageInput:focus {
+            border-color: #4CAF50;
+        }
+        
+        #sendButton {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            font-size: 20px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        #sendButton:hover {
+            background: #45a049;
+        }
+        
+        .typing {
+            display: none;
+            color: #999;
+            font-style: italic;
+            padding: 10px 16px;
+        }
+        
+        .example-prompts {
+            background: #F8F8F8;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 10px;
+        }
+        
+        .example-prompts h3 {
+            margin-bottom: 10px;
+            color: #333;
+            font-size: 14px;
+        }
+        
+        .prompt-chip {
+            display: inline-block;
+            background: #E3F2FD;
+            color: #1976D2;
+            padding: 6px 12px;
+            margin: 3px;
+            border-radius: 15px;
+            font-size: 12px;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+        
+        .prompt-chip:hover {
+            background: #BBDEFB;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>📅 Quick Calendar</h1>
+            <p>Message me to create events</p>
+        </div>
+        
+        <div class="chat-area">
+            <div class="example-prompts">
+                <h3>Try these examples:</h3>
+                <div class="prompt-chip" onclick="setMessage('Meeting with John tomorrow at 2pm')">Meeting tomorrow 2pm</div>
+                <div class="prompt-chip" onclick="setMessage('Doctor appointment Friday at 10:30am')">Doctor appointment Friday</div>
+                <div class="prompt-chip" onclick="setMessage('Call mom Sunday at 7pm')">Call mom Sunday</div>
+                <div class="prompt-chip" onclick="setMessage('Team standup every Monday at 9am')">Weekly standup</div>
+            </div>
+            
+            <div class="messages" id="messages">
+                <div class="message bot-message">
+                    Hi! I can help you create calendar events. Just tell me what you need in natural language like "Meeting with Sarah tomorrow at 3pm" and I'll create it for you! 📅
+                </div>
+            </div>
+            
+            <div class="typing" id="typing">Claude is typing...</div>
+            
+            <div class="input-area">
+                <input type="text" id="messageInput" placeholder="Describe your event..." autocomplete="off">
+                <button id="sendButton" onclick="sendMessage()">➤</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isProcessing = false;
+
+        function setMessage(text) {
+            document.getElementById('messageInput').value = text;
+        }
+
+        function addMessage(text, isUser = false) {
+            const messagesDiv = document.getElementById('messages');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${isUser ? 'user-message' : 'bot-message'}`;
+            messageDiv.textContent = text;
+            messagesDiv.appendChild(messageDiv);
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function showTyping() {
+            document.getElementById('typing').style.display = 'block';
+            const messagesDiv = document.getElementById('messages');
+            messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        }
+
+        function hideTyping() {
+            document.getElementById('typing').style.display = 'none';
+        }
+
+        async function sendMessage() {
+            if (isProcessing) return;
+            
+            const input = document.getElementById('messageInput');
+            const message = input.value.trim();
+            
+            if (!message) return;
+            
+            // Add user message
+            addMessage(message, true);
+            input.value = '';
+            isProcessing = true;
+            
+            // Show typing indicator
+            showTyping();
+            
+            try {
+                // Parse the message and create calendar event
+                const result = await createCalendarEvent(message);
+                hideTyping();
+                addMessage(result.success ? 
+                    `✅ Event created: "${result.title}" on ${result.date} at ${result.time}. Check your calendar!` :
+                    `❌ Sorry, I couldn't create that event: ${result.error}`
+                );
+            } catch (error) {
+                hideTyping();
+                addMessage(`❌ Error: ${error.message}. Make sure you're connected to the internet and try again.`);
+            } finally {
+                isProcessing = false;
+            }
+        }
+
+        async function createCalendarEvent(message) {
+            try {
+                const response = await fetch('/api/create-event', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ message })
+                });
+                
+                const result = await response.json();
+                return result;
+            } catch (error) {
+                return { 
+                    success: false, 
+                    error: 'Network error. Make sure the server is running.' 
+                };
+            }
+        }
+
+        function parseEventMessage(message) {
+            // Basic parsing - you could enhance this with more sophisticated NLP
+            const title = message.replace(/\b(tomorrow|today|monday|tuesday|wednesday|thursday|friday|saturday|sunday)\b/gi, '').trim();
+            const timeMatch = message.match(/(\d{1,2}:\d{2}\s*(am|pm)|\d{1,2}\s*(am|pm))/i);
+            const time = timeMatch ? timeMatch[0] : null;
+            
+            return { title, time };
+        }
+
+        // Allow Enter key to send message
+        document.getElementById('messageInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    </script>
+</body>
+</html>

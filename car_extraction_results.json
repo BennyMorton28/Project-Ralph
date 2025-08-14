@@ -1,0 +1,49 @@
+{
+  "url": "https://www.bramanmotorsbmw.com/used-vehicles/",
+  "extractedAt": "2025-08-13T15:55:24.209Z",
+  "totalChunks": 8,
+  "carsFound": 0,
+  "chunks": [
+    {
+      "index": 0,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 0 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    },
+    {
+      "index": 1,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 1 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    },
+    {
+      "index": 2,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 2 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    },
+    {
+      "index": 3,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 3 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    },
+    {
+      "index": 4,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 4 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    },
+    {
+      "index": 5,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 5 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    },
+    {
+      "index": 6,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 6 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    },
+    {
+      "index": 7,
+      "textLength": 50,
+      "preview": "Mock filtered chunk 7 with car data: 2023 BMW X3 $45,000 25,000 miles..."
+    }
+  ],
+  "cars": []
+}

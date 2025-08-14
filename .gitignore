@@ -117,4 +117,9 @@ build/
 
 # Local configuration files
 config.local.js
-server.local.js 
+server.local.js
+
+# OAuth credentials and tokens
+credentials.json
+token.json
+mcp-google-sheets-token.json 

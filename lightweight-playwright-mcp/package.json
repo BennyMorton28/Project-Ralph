@@ -1,0 +1,18 @@
+{
+  "name": "lightweight-playwright-mcp",
+  "version": "1.0.0",
+  "description": "Minimal MCP Playwright server that returns tiny responses to avoid token limits",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --inspect index.js"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^0.6.0",
+    "playwright": "^1.48.0"
+  },
+  "keywords": ["mcp", "playwright", "browser", "automation"],
+  "author": "Claude Code Assistant",
+  "license": "MIT"
+}
